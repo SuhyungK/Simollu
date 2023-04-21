@@ -29,7 +29,11 @@
 
 ## ERD
 
+![ERDDiagram](https://user-images.githubusercontent.com/48821942/233518708-74efe7c1-e7c6-40ee-820c-959339012b15.PNG)
+
 ## Git branch 전략
+
+![GitLabBranchStrategy](https://user-images.githubusercontent.com/48821942/233518940-75bcaed2-94f1-4a55-b315-8cc6d3d5209a.PNG)
 
 ### 🐳팀원
 
