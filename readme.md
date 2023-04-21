@@ -25,6 +25,8 @@
 
 ## 🌈Figma
 
+![자율PRJ  A701](https://user-images.githubusercontent.com/50287759/233515425-641943b1-bca5-41fb-9cbf-aef934f76c94.png)
+
 ## ERD
 
 ## Git branch 전략
