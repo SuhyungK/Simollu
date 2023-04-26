@@ -31,9 +31,10 @@ class _CustomButtonState extends State<CustomButton> {
       ),
       child: Text(
         widget.text,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.black,
           fontFamily: 'Roboto',
+          fontSize: _isPressed ?  16 : 13,
           fontWeight: FontWeight.bold,
           fontStyle: FontStyle.normal,
           letterSpacing: 0,
