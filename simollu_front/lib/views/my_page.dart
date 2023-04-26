@@ -31,13 +31,12 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         toolbarHeight: 50,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Center(
-          child: Text(
-            '마이 페이지',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+        centerTitle: true,
+        title: Text(
+          '마이 페이지',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),
