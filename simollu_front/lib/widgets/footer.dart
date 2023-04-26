@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-Widget homeIcon = SvgPicture.asset(
+var icons = [
   "assets/home.svg",
-  width: 100,
-  height: 100,
-);
-
-Widget searchIcon = SvgPicture.asset(
   "assets/search.svg",
-  width: 100,
-  height: 100,
-);
-
-Widget personIcon = SvgPicture.asset(
   "assets/person.svg",
-  width: 100,
-  height: 100,
-);
-
-Widget moreIcon = SvgPicture.asset(
   "assets/more.svg",
-  width: 100,
-  height: 100,
-);
+];
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -34,6 +17,8 @@ class Footer extends StatefulWidget {
 
 class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
+  int selectedIdx = 0;
 
   @override
   void initState() {
@@ -55,21 +40,40 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          IconButton(
-            onPressed: () {},
-            icon: homeIcon,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: searchIcon,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: personIcon,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: moreIcon,
+          ...List.generate(
+            icons.length,
+            (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIdx = index;
+                  });
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AnimatedContainer(
+                      height: selectedIdx == index ? 50.0 : 0.0,
+                      width: selectedIdx == index ? 50.0 : 0.0,
+                      duration: Duration(milliseconds: 300),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: selectedIdx == index ? Color(0xFFFFD200) : null,
+                      ),
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: SvgPicture.asset(
+                        colorFilter: selectedIdx == index
+                            ? ColorFilter.mode(Colors.white, BlendMode.srcIn)
+                            : null,
+                        icons[index],
+                      ),
+                    )
+                  ],
+                )),
           ),
         ],
       ),
