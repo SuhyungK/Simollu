@@ -50,6 +50,46 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               ),
               color: Color(0xFFFFD200),
             ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child:
+                      // 프사
+                      CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/cat.jpg"),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "KOEHssssssssssssssssssssssssssssssss",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    softWrap: true,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    print("내 정보 수정");
+                  },
+                  style: ButtonStyle(
+                    splashFactory: NoSplash.splashFactory,
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(
+                      Colors.transparent,
+                    ),
+                    shadowColor: null,
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
           ),
           // 흰색 박스
           // 포크 수, 관심 매장 수, 작성 리뷰 수
