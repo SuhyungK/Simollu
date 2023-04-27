@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class WaitingRecordcard extends StatefulWidget {
-  const WaitingRecordcard({Key? key}) : super(key: key);
+  final bool isCanclled;
+
+  const WaitingRecordcard({Key? key,
+    this.isCanclled = false,
+  }) : super(key: key);
 
   @override
   State<WaitingRecordcard> createState() => _WaitingRecordcardState();

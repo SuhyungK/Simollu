@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
 
+import '../widgets/custom_appBar.dart';
+
 class WaitingRecord extends StatelessWidget {
   const WaitingRecord({Key? key}) : super(key: key);
 
@@ -10,7 +12,10 @@ class WaitingRecord extends StatelessWidget {
         initialIndex: 0,
         length: 2,
         child: Scaffold(
-          appBar: AppBar(
+          appBar: CustomAppBar(
+            title: "웨이팅 기록",
+            leading: Image.asset('assets/backBtn.png'),
+            actions: [Image.asset('assets/bell.png')],
             shape: Border(
               bottom: BorderSide(
                 color: Colors.black12,
@@ -50,6 +55,11 @@ class WaitingRecord extends StatelessWidget {
               Column(
                 children: [
                   WaitingRecordcard(),
+                ],
+              ),
+              Column(
+                children: [
+                  WaitingRecordcard(isCanclled: true,),
                 ],
               ),
             ],
