@@ -108,7 +108,6 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Center(
                 child: Container(
                   height: 100,
-                  width: 360,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
@@ -122,6 +121,129 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                         offset: Offset(0, 6),
                       )
                     ],
+                  ),
+                  child: IntrinsicWidth(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print("포크 수");
+                            },
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
+                              splashFactory: NoSplash.splashFactory,
+                              backgroundColor: MaterialStateProperty.all(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "포크",
+                                  style: TextStyle(
+                                    color: Color(0xFF555555),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  "2,000",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          indent: 10,
+                          endIndent: 10,
+                          color: Colors.grey.withOpacity(0.5),
+                          thickness: 1.0,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print("포크 수");
+                            },
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
+                              splashFactory: NoSplash.splashFactory,
+                              backgroundColor: MaterialStateProperty.all(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "관심 매장",
+                                  style: TextStyle(
+                                    color: Color(0xFF555555),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  "2,000",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          indent: 10,
+                          endIndent: 10,
+                          color: Colors.grey.withOpacity(0.5),
+                          thickness: 1.0,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print("포크 수");
+                            },
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
+                              splashFactory: NoSplash.splashFactory,
+                              backgroundColor: MaterialStateProperty.all(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "작성 리뷰",
+                                  style: TextStyle(
+                                    color: Color(0xFF555555),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  "2,000",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
