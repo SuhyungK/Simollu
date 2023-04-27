@@ -187,33 +187,35 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: TextButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.all(
-                  Color(0xFFFFD200),
-                ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: ElevatedButton(
+          onPressed: () {
+            print('로그아웃');
+          },
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            alignment: Alignment.center,
+            backgroundColor: MaterialStateProperty.all(
+              Color(0xFFFFD200),
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  '로그아웃',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              '로그아웃',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );
