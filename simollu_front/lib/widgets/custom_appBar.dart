@@ -22,7 +22,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   void _goBack(BuildContext context) {
-    Get.back();
+    // Get.back();
+    Navigator.pop(context);
   }
 
   void _showNotificationScreen(BuildContext context) {
@@ -38,17 +39,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
         color: Colors.black
       ),),
       centerTitle: true,
-      leading: GestureDetector(
-        onTap: () => _goBack(context),
-        child: widget.leading,
+      leading: IconButton(
+        onPressed: () => _goBack(context),
+        icon: widget.leading,
       ),
       actions: [
-        GestureDetector(
+        InkWell(
           onTap: () => _showNotificationScreen(context),
           child: widget.actions[0],
         ),
       ],
       backgroundColor: Colors.white,
+      elevation: 0,
     );
   }
 }
