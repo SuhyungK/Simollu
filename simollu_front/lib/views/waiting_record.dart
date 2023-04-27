@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/widgets/waiting_record_card.dart';
 
 class WaitingRecord extends StatelessWidget {
   const WaitingRecord({Key? key}) : super(key: key);
@@ -46,23 +47,15 @@ class WaitingRecord extends StatelessWidget {
           backgroundColor: Colors.white,
           body: TabBarView(
             children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffc4c4c4).withOpacity(0.6),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Text('바스버거 역삼점'),
-                  ],
-                ),
-              )
+              Column(
+                children: [
+                  WaitingRecordcard(),
+                ],
+              ),
             ],
-          ),
+          )
         )
     );
   }
 }
+
