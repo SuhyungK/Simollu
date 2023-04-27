@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -21,7 +22,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   void _goBack(BuildContext context) {
-    Navigator.pop(context);
+    Get.back();
   }
 
   void _showNotificationScreen(BuildContext context) {
