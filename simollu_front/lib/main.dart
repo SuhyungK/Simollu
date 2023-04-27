@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simollu_front/views/liking_things.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 
 import 'package:simollu_front/root.dart';
 import './views/my_page.dart';
