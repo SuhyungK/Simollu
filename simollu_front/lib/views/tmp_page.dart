@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
+import 'package:simollu_front/views/start_page.dart';
 
 class TmpPage extends StatelessWidget {
   const TmpPage({super.key});
@@ -37,12 +38,19 @@ class TmpPage extends StatelessWidget {
                   shadows: [],
                   decoration: TextDecoration.none,
                 )),
+
           ),
           OutlinedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => WritingReviewPage()));
             },
             child: Text('리뷰 쓰기'),
+          ),
+          OutlinedButton(
+            onPressed: () {
+              Get.to(StartPage());
+            },
+            child: Text('로그인'),
           ),
         ],
       ),
