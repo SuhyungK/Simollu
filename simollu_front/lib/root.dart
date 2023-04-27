@@ -15,26 +15,38 @@ class RootController extends GetxController {
 }
 
 class Root extends GetView<RootController> {
-  const Root({super.key});
+  Root({Key? key}) : super(key: key);
+
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Test'),
-        ),
-        body: IndexedStack(
-          index: controller.rootPageIndex.value,
-          children: [
-            TmpPage(),
-            LikingThings(),
-            MyPage(),
-          ],
-        ),
-        bottomNavigationBar: NavBar(
-          controller: controller,
+    return WillPopScope(
+      onWillPop: () async {
+        return !await navigatorKey.currentState!.maybePop();
+      },
+      child: Obx(
+        () => Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Test'),
+          ),
+          body: IndexedStack(
+            index: controller.rootPageIndex.value,
+            children: [
+              Navigator(
+                key: navigatorKey,
+                onGenerateRoute: (routeSettings) {
+                  return MaterialPageRoute(builder: (context) => const TmpPage());
+                },
+              ),
+              LikingThings(),
+              MyPage(),
+            ],
+          ),
+          bottomNavigationBar: NavBar(
+            controller: controller,
+          ),
         ),
       ),
     );

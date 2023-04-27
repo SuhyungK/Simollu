@@ -18,8 +18,15 @@ class TmpPage extends StatelessWidget {
           OutlinedButton(
             onPressed: () {
               print('취향 받기 페이지 이동!!!!!!!!');
-              Get.to(LikingThings()); //페이지이동
+              // Get.to(LikingThings()); //페이지이동
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LikingThings()));
             },
+            style: OutlinedButton.styleFrom(
+                side: BorderSide(
+              // 테두리 바꾸는 속성
+              color: Colors.black54,
+              width: 1.0,
+            )),
             child: Text('취향 받기 페이지',
                 style: TextStyle(
                   color: Colors.black,
@@ -32,16 +39,11 @@ class TmpPage extends StatelessWidget {
                   shadows: [],
                   decoration: TextDecoration.none,
                 )),
-            style: OutlinedButton.styleFrom(
-                side: BorderSide(
-              // 테두리 바꾸는 속성
-              color: Colors.black54,
-              width: 1.0,
-            )),
+
           ),
           OutlinedButton(
             onPressed: () {
-              Get.to(WritingReviewPage());
+              Navigator.push(context, MaterialPageRoute(builder: (context) => WritingReviewPage()));
             },
             child: Text('리뷰 쓰기'),
           ),
