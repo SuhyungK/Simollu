@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 import 'package:simollu_front/views/start_page.dart';
+import 'package:simollu_front/views/waiting_record.dart';
 
 class TmpPage extends StatelessWidget {
   const TmpPage({super.key});
@@ -49,6 +50,12 @@ class TmpPage extends StatelessWidget {
               Get.to(StartPage());
             },
             child: Text('로그인'),
+          ),
+          OutlinedButton(
+            onPressed: () {
+              Get.to(WaitingRecord());
+            },
+            child: Text('웨이팅 기록'),
           ),
         ],
       ),
