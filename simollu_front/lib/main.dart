@@ -18,9 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       defaultTransition: Transition.cupertino,
-      initialBinding: BindingsBuilder(() {
-        Get.put(RootController());
-      }),
+      initialBinding: BindingsBuilder(
+        () {
+          Get.put(RootController());
+        },
+      ),
       home: Root(),
     );
   }

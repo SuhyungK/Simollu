@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:simollu_front/views/liking_things_page.dart';
+import 'package:simollu_front/views/more_page.dart';
 import 'package:simollu_front/views/my_page.dart';
+import 'package:simollu_front/views/search_page.dart';
 import 'package:simollu_front/views/tmp_page.dart';
 import 'package:simollu_front/widgets/nav_bar.dart';
 
@@ -21,16 +22,13 @@ class Root extends GetView<RootController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Test'),
-        ),
         body: IndexedStack(
           index: controller.rootPageIndex.value,
-          children: [
+          children: const [
             TmpPage(),
-            LikingThings(),
+            SearchPage(),
             MyPage(),
+            MorePage(),
           ],
         ),
         bottomNavigationBar: NavBar(
