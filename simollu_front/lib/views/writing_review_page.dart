@@ -5,6 +5,16 @@ class WritingReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp (
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('리뷰 쓰기'),
+          centerTitle: true,
+          leading: Image.asset('assets/backBtn.png'),
+          actions: [Image.asset('assets/bell.png')],
+          backgroundColor: Colors.white,
+        ),
+      ),
+    );
   }
 }
