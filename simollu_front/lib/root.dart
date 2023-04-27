@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:simollu_front/views/liking_things.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/my_page.dart';
 import 'package:simollu_front/views/tmp_page.dart';
 import 'package:simollu_front/widgets/nav_bar.dart';
