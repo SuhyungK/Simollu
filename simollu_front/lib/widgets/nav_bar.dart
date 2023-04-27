@@ -6,19 +6,19 @@ import 'package:simollu_front/root.dart';
 
 List<Map<String, String>> icons = [
   {
-    "icon": "assets/home.svg",
+    "icon": "assets/icons/home.svg",
     "label": "home",
   },
   {
-    "icon": "assets/search.svg",
+    "icon": "assets/icons/search.svg",
     "label": "search",
   },
   {
-    "icon": "assets/person.svg",
+    "icon": "assets/icons/person.svg",
     "label": "person",
   },
   {
-    "icon": "assets/more.svg",
+    "icon": "assets/icons/more.svg",
     "label": "more",
   }
 ];
