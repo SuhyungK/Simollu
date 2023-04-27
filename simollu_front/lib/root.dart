@@ -27,10 +27,6 @@ class Root extends GetView<RootController> {
       },
       child: Obx(
         () => Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Test'),
-          ),
           body: IndexedStack(
             index: controller.rootPageIndex.value,
             children: [
