@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:simollu_front/views/liking_things.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 
 class TmpPage extends StatelessWidget {
   const TmpPage({super.key});
