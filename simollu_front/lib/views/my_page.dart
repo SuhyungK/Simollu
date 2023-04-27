@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/nav_bar.dart';
-
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
@@ -43,6 +41,8 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
       body: SizedBox(
         child: Column(
           children: [
+            // 노란색 박스
+            // 프로필 이미지, 닉네임, 화살표 버튼
             Container(
               height: 135,
               decoration: BoxDecoration(
@@ -52,6 +52,8 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 color: Color(0xFFFFD200),
               ),
             ),
+            // 흰색 박스
+            // 포크 수, 관심 매장 수, 작성 리뷰 수
             Container(
               height: 120,
               decoration: BoxDecoration(
@@ -76,15 +78,50 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 1.5,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: Offset(0, 6),
                         )
                       ],
                     ),
                   ),
                 ),
               ),
+            ),
+            // 리스트
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    print('웨이팅 기록');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFDDDDDD),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          '웨이팅 기록',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Icon(Icons.arrow_forward_ios_outlined),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
