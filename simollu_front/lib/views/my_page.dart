@@ -108,7 +108,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Center(
                 child: Container(
                   height: 100,
-                  width: 320,
+                  width: 360,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
