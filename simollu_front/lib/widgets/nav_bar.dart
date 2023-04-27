@@ -48,6 +48,16 @@ class NavBar extends StatelessWidget {
                     duration: Duration(milliseconds: 300),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      boxShadow: controller.rootPageIndex.value == index
+                          ? [
+                              BoxShadow(
+                                blurRadius: 7,
+                                color: Colors.grey.withOpacity(0.4),
+                                spreadRadius: 2,
+                                offset: Offset(0, 3),
+                              ),
+                            ]
+                          : null,
                       borderRadius: BorderRadius.circular(10),
                       color: controller.rootPageIndex.value == index
                           ? Color(0xFFFFD200)
