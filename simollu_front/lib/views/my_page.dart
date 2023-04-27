@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/footer.dart';
+import '../widgets/nav_bar.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -90,7 +90,6 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         ),
       ),
       // Footer
-      bottomNavigationBar: Footer(),
     );
   }
 }
