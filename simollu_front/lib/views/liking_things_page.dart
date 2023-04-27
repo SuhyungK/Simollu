@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simollu_front/views/liking_things_button.dart';
 
 class LikingThings extends StatelessWidget {
