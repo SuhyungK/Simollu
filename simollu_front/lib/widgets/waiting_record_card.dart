@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WaitingRecordcard extends StatefulWidget {
-  final bool isCanclled;
+  final bool? isCanclled;
 
   const WaitingRecordcard({Key? key,
     this.isCanclled = false,
@@ -15,7 +15,7 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(15.0),
       margin: EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width * 0.9,
       // height: 100,
@@ -41,22 +41,23 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
           _buildPadding("예약일시", "2023/03/18(목) 13:45"),
           _buildPadding("대기번호", "9번"),
           _buildPadding("인원", "2명"),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-            child: Center(
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    fixedSize: Size(
-                      MediaQuery.of(context).size.width * 0.95,
-                      40
+          if (widget.isCanclled == false)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+              child: Center(
+                child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      fixedSize: Size(
+                        MediaQuery.of(context).size.width * 0.95,
+                        40
+                      ),
                     ),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () {},
-                  child: Text('리뷰 작성 하기')
+                    onPressed: () {},
+                    child: Text('리뷰 작성 하기')
+                ),
               ),
-            ),
-          )
+            )
         ],
       ),
     );

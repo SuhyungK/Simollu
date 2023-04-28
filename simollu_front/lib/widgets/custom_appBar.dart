@@ -58,13 +58,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       ],
       backgroundColor: Colors.white,
-      bottom: PreferredSize(
-        preferredSize: Size(
-          MediaQuery.of(context).size.width,
-          200,
-        ),
-        child: widget.bottom,
-      )
+      bottom: widget.bottom
     );
   }
 }
