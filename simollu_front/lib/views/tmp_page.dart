@@ -53,12 +53,6 @@ class TmpPage extends StatelessWidget {
             },
             child: Text('로그인'),
           ),
-          OutlinedButton(
-            onPressed: () {
-              Get.to(WaitingRecord());
-            },
-            child: Text('웨이팅 기록'),
-          ),
         ],
       ),
     );
