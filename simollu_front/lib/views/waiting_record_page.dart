@@ -19,10 +19,9 @@ class _WaitingRecordState extends State<WaitingRecord> with TickerProviderStateM
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
-        appBar:CustomAppBar(
+        appBar: CustomAppBar(
           title: '웨이팅 기록',
           leading: Image.asset('assets/backBtn.png'),
           actions: [Image.asset('assets/bell.png')],
@@ -33,10 +32,8 @@ class _WaitingRecordState extends State<WaitingRecord> with TickerProviderStateM
             Expanded(child: _buildTabBarView()),
           ],
         ),
-      ),
-    );
-  }
-
+      );
+    }
 
   Widget _buildTabBar() {
     return Container(
@@ -87,11 +84,14 @@ class _WaitingRecordState extends State<WaitingRecord> with TickerProviderStateM
     return TabBarView(
       controller: _tabController,
       children: [
-        Column(
-          children: [
-            WaitingRecordcard(),
-            WaitingRecordcard(),
-          ],
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              WaitingRecordcard(),
+              WaitingRecordcard(),
+              WaitingRecordcard(),
+            ],
+          ),
         ),
         Column(
           children: [
