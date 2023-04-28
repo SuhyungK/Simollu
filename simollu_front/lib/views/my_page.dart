@@ -57,8 +57,8 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child:
-                    // 프사
-                    CircleAvatar(
+                        // 프사
+                        CircleAvatar(
                       radius: 50,
                       backgroundImage: AssetImage("assets/cat.jpg"),
                     ),
@@ -257,9 +257,9 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WaitingRecord())
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WaitingRecordPage()));
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),

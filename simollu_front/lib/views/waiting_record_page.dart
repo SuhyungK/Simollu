@@ -3,14 +3,14 @@ import 'package:simollu_front/widgets/custom_appBar.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
-class WaitingRecord extends StatefulWidget {
-  const WaitingRecord({Key? key}) : super(key: key);
+class WaitingRecordPage extends StatefulWidget {
+  const WaitingRecordPage({Key? key}) : super(key: key);
 
   @override
-  State<WaitingRecord> createState() => _WaitingRecordState();
+  State<WaitingRecordPage> createState() => _WaitingRecordPageState();
 }
 
-class _WaitingRecordState extends State<WaitingRecord> {
+class _WaitingRecordPageState extends State<WaitingRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
