@@ -125,7 +125,7 @@ class WritingReviewPage extends StatelessWidget {
                 ),
                 Container(
                   height: 200,
-                  margin: EdgeInsets.only(top: 20, left: 19, right: 19),
+                  margin: EdgeInsets.only(top: 20, left: 19, right: 19,bottom: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
@@ -138,9 +138,11 @@ class WritingReviewPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextField(
+                    maxLength: 100,
                     decoration: InputDecoration(
+                      alignLabelWithHint: true,
                       contentPadding: EdgeInsets.symmetric(vertical: 10.0),
                       hintText: '음식 맛이나 서비스 만족도에 대해 작성해주세요. (100자 이내)',
                       hintStyle: TextStyle(
@@ -155,8 +157,13 @@ class WritingReviewPage extends StatelessWidget {
                         decoration: TextDecoration.none,
                       ),
                       border: InputBorder.none,
-
+                      hintMaxLines: 2,
                     ),
+                    maxLines: null, // 여러 줄 입력을 가능하게 함
+                    keyboardType: TextInputType.multiline, // 키보드 타입을 멀티라인으로 설정
+                    expands: true, // 텍스트 필드가 사용 가능한 최대 공간을 차지하도록 함
+                    textAlignVertical: TextAlignVertical.top, // 힌트 텍스트를 위쪽으로 정렬
+                    style: TextStyle(fontSize: 16), // 입력 텍스트 스타일 설정
                   ),
                 ),
               ],
