@@ -5,20 +5,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Widget leading;
   final List<Widget> actions;
-  final Border? shape;
-  final Color? backgroundColor;
-  final double? elevation;
-  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     Key? key,
     required this.title,
     required this.leading,
     required this.actions,
-    this.shape,
-    this.backgroundColor,
-    this.elevation,
-    this.bottom,
   }) : super(key: key);
 
   @override
@@ -30,7 +22,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   void _goBack(BuildContext context) {
-    Get.back();
+    // Get.back();
+    Navigator.pop(context);
   }
 
   void _showNotificationScreen(BuildContext context) {
@@ -41,24 +34,23 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-          widget.title,
-          style: TextStyle(
+        widget.title,
+        style: TextStyle(
             color: Colors.black
-          ),
-      ),
+        ),),
       centerTitle: true,
-      leading: GestureDetector(
-        onTap: () => _goBack(context),
-        child: widget.leading,
+      leading: IconButton(
+        onPressed: () => _goBack(context),
+        icon: widget.leading,
       ),
       actions: [
-        GestureDetector(
+        InkWell(
           onTap: () => _showNotificationScreen(context),
           child: widget.actions[0],
         ),
       ],
       backgroundColor: Colors.white,
-      bottom: widget.bottom
+      elevation: 0,
     );
   }
 }
