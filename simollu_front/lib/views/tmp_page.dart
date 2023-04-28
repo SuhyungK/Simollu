@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:simollu_front/views/liking_things_page.dart';
+import 'package:simollu_front/views/restaurant_detail_page.dart';
+
 import 'package:simollu_front/views/review_management_page.dart';
+import 'package:simollu_front/views/test_restaurant_detail_page.dart';
+
 import 'package:simollu_front/views/writing_review_page.dart';
 import 'package:simollu_front/views/start_page.dart';
-import 'package:simollu_front/views/waiting_record_page.dart';
+
 
 class TmpPage extends StatelessWidget {
   const TmpPage({super.key});
@@ -56,12 +60,6 @@ class TmpPage extends StatelessWidget {
                 },
                 child: Text('로그인'),
               ),
-              OutlinedButton(
-                onPressed: () {
-                  Get.to(WaitingRecord());
-                },
-                child: Text('웨이팅 기록'),
-              ),
             ],
           ),
           Row(
@@ -71,6 +69,18 @@ class TmpPage extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewManagement()));
                 },
                 child: Text('내 리뷰 관리'),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Get.to(RestaurantDetailpage());
+                },
+                child: Text('가게 정보'),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Get.to(TestRestaurantDetailpage());
+                },
+                child: Text('임시 가게정보'),
               ),
             ],
           )

@@ -5,7 +5,8 @@ class CustomTabBar extends StatefulWidget {
   final List<String> tabs;
   final List<Widget> tabViews;
 
-  const CustomTabBar({Key? key,
+  const CustomTabBar({
+    Key? key,
     required this.length,
     required this.tabs,
     required this.tabViews,
@@ -15,7 +16,8 @@ class CustomTabBar extends StatefulWidget {
   State<CustomTabBar> createState() => _CustomTabBarState();
 }
 
-class _CustomTabBarState extends State<CustomTabBar> with TickerProviderStateMixin {
+class _CustomTabBarState extends State<CustomTabBar>
+    with TickerProviderStateMixin {
   late TabController? _tabController;
 
   @override
@@ -23,7 +25,7 @@ class _CustomTabBarState extends State<CustomTabBar> with TickerProviderStateMix
     super.initState();
     _tabController = TabController(length: widget.length, vsync: this);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,37 +40,21 @@ class _CustomTabBarState extends State<CustomTabBar> with TickerProviderStateMix
   Widget _buildTabBar() {
     return Container(
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color: Colors.black12,
-                  width: 0.5
-              )
-          )
-      ),
+          border:
+              Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
       child: TabBar(
         controller: _tabController,
-        tabs: List<Widget>.generate(
-          widget.length, (index) {
-            return Tab(
+        tabs: List<Widget>.generate(widget.length, (index) {
+          return Tab(
               child: Text(
-                widget.tabs[index],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17
-                ),
-              )
-            );
-          }
-        ),
+            widget.tabs[index],
+            style: TextStyle(color: Colors.black, fontSize: 17),
+          ));
+        }),
         indicatorColor: Colors.black,
         labelPadding: EdgeInsets.all(5.0),
-        labelStyle: TextStyle(
-            fontWeight: FontWeight.bold
-        ),
-        unselectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.normal
-        ),
-
+        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
       ),
     );
   }
@@ -77,13 +63,11 @@ class _CustomTabBarState extends State<CustomTabBar> with TickerProviderStateMix
   Widget _buildTabBarView() {
     return TabBarView(
       controller: _tabController,
-      children: List<Widget>.generate(
-        widget.length, (index) {
-          return SingleChildScrollView(
-            child: widget.tabViews[index],
-          );
-        }
-      ),
+      children: List<Widget>.generate(widget.length, (index) {
+        return SingleChildScrollView(
+          child: widget.tabViews[index],
+        );
+      }),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/views/writing_review_page.dart';
 
 class WaitingRecordcard extends StatefulWidget {
   final bool? isCanclled;
@@ -53,7 +54,12 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
                         40
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => WritingReviewPage()),
+                      );
+                    },
                     child: Text('리뷰 작성 하기')
                 ),
               ),
