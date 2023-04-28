@@ -16,7 +16,7 @@ class LikingThings extends StatelessWidget {
                 children: [
                   Center(
                     child: Container(
-                      margin: const EdgeInsets.only(top: 100), // marginTop 설정
+                      margin: const EdgeInsets.only(top: 100, bottom: 10), // marginTop 설정
                       child: Column(
                         children: [
                           const Text(
