@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -255,7 +256,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('웨이팅 기록');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WaitingRecordPage()));
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
