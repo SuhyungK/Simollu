@@ -112,7 +112,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
                                           43),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(20.0))),
+
+                                              BorderRadius.circular(20.0))),
+
                                   child: Text(
                                     '예상대기시간',
                                     maxLines: 1,
@@ -149,18 +151,18 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
       children: menuList
           .map(
             (menu) => Row(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.asset('assets/${menu[0]}'),
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.asset('assets/${menu[0]}'),
+                ),
+                Column(
+                  children: [Text(menu[1]), Text(menu[2])],
+                )
+              ],
             ),
-            Column(
-              children: [Text(menu[1]), Text(menu[2])],
-            )
-          ],
-        ),
-      )
+          )
           .toList(),
     );
   }
@@ -192,31 +194,3 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
     );
   }
 }
-
-
-// return ListView.builder(
-//   itemCount: menuList.length,
-//   itemBuilder: (context, index) {
-//     final menu = menuList[index];
-//     return SizedBox(
-//       height: 100,
-//       child: Row(
-//         children: [
-//           SizedBox(
-//             width: 100,
-//             height: 100,
-//             child: Image.asset('assets/${menu[0]}'),
-//           ),
-//           Column(
-//             children: [
-//               Text(menu[1]),
-//               Text(menu[2]),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   },
-// );
-
-
