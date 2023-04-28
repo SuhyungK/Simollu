@@ -6,19 +6,19 @@ import 'package:simollu_front/root.dart';
 
 List<Map<String, String>> icons = [
   {
-    "icon": "assets/home.svg",
+    "icon": "assets/icons/home.svg",
     "label": "home",
   },
   {
-    "icon": "assets/search.svg",
+    "icon": "assets/icons/search.svg",
     "label": "search",
   },
   {
-    "icon": "assets/person.svg",
+    "icon": "assets/icons/person.svg",
     "label": "person",
   },
   {
-    "icon": "assets/more.svg",
+    "icon": "assets/icons/more.svg",
     "label": "more",
   }
 ];
@@ -48,6 +48,16 @@ class NavBar extends StatelessWidget {
                     duration: Duration(milliseconds: 300),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      boxShadow: controller.rootPageIndex.value == index
+                          ? [
+                              BoxShadow(
+                                blurRadius: 7,
+                                color: Colors.grey.withOpacity(0.4),
+                                spreadRadius: 2,
+                                offset: Offset(0, 3),
+                              ),
+                            ]
+                          : null,
                       borderRadius: BorderRadius.circular(10),
                       color: controller.rootPageIndex.value == index
                           ? Color(0xFFFFD200)
