@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:simollu_front/views/waiting_log_page.dart';
+import 'package:simollu_front/root.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -25,19 +30,6 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 50,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          '마이 페이지',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -255,7 +247,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('웨이팅 기록');
+                    RootController.to.setRootPageTitle("웨이팅 기록");
+                    RootController.to.setIsMainPage(false);
+                    Navigator.push(
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => WaitingLogPage(),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
