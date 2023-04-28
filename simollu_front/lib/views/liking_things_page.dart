@@ -15,7 +15,7 @@ class LikingThings extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    margin: const EdgeInsets.only(top: 30), // marginTop 설정
+                    margin: const EdgeInsets.only(top: 100), // marginTop 설정
                     child: Column(
                       children: [
                         const Text(
@@ -142,10 +142,11 @@ class LikingThings extends StatelessWidget {
               padding: EdgeInsets.only(left: 10, right: 10),
               child: SizedBox(
                 width: double.infinity,
-                height: 45,
+                height: 50,
                 child: ElevatedButton(
                   onPressed: () {  },
                   style: ElevatedButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
                     // backgroundColor: Colors.yellow
                       backgroundColor: Color(0xFFFFD200)
                   ),
