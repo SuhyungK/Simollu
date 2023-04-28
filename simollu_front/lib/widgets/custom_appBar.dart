@@ -5,20 +5,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Widget leading;
   final List<Widget> actions;
-  final Border? shape;
-  final Color? backgroundColor;
-  final double? elevation;
-  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     Key? key,
     required this.title,
     required this.leading,
     required this.actions,
-    this.shape,
-    this.backgroundColor,
-    this.elevation,
-    this.bottom,
   }) : super(key: key);
 
   @override
@@ -42,11 +34,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-          widget.title,
-          style: TextStyle(
+        widget.title,
+        style: TextStyle(
             color: Colors.black
-          ),
-      ),
+        ),),
       centerTitle: true,
       leading: IconButton(
         onPressed: () => _goBack(context),

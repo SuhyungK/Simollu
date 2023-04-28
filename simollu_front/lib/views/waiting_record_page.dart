@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/widgets/custom_appBar.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
+import 'package:simollu_front/widgets/custom_tabBar.dart';
 
 class WaitingRecord extends StatefulWidget {
   const WaitingRecord({Key? key}) : super(key: key);
@@ -19,24 +20,44 @@ class _WaitingRecordState extends State<WaitingRecord> with TickerProviderStateM
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
-        appBar:CustomAppBar(
+        appBar: CustomAppBar(
           title: '웨이팅 기록',
           leading: Image.asset('assets/backBtn.png'),
           actions: [Image.asset('assets/bell.png')],
         ),
-        body: Column(
-          children: [
-            _buildTabBar(),
-            Expanded(child: _buildTabBarView()),
-          ],
-        ),
-      ),
+        body: CustomTabBar(
+          length: 2,
+          tabs: ['사용 내역', '이용 취소'],
+          tabViews: [ // 위젯 리스트
+            usageHistory(),
+            cancelWaiting()
+          ]
+        )
+      );
+    }
+
+  Widget usageHistory() { // 사용 내역 tabView 내용 위젯
+    return Column(
+      children: [
+        WaitingRecordcard(),
+        WaitingRecordcard(),
+        WaitingRecordcard(),
+      ],
     );
   }
 
+  Widget cancelWaiting() { // 이용 취소 tabView 내용 위젯
+    return Column(
+      children: [
+        WaitingRecordcard(isCanclled: true,),
+        WaitingRecordcard(isCanclled: true,),
+        WaitingRecordcard(isCanclled: true,),
+        WaitingRecordcard(isCanclled: true,),
+      ],
+    );
+  }
 
   Widget _buildTabBar() {
     return Container(
@@ -87,16 +108,24 @@ class _WaitingRecordState extends State<WaitingRecord> with TickerProviderStateM
     return TabBarView(
       controller: _tabController,
       children: [
-        Column(
-          children: [
-            WaitingRecordcard(),
-            WaitingRecordcard(),
-          ],
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              WaitingRecordcard(),
+              WaitingRecordcard(),
+              WaitingRecordcard(),
+            ],
+          ),
         ),
-        Column(
-          children: [
-            WaitingRecordcard(isCanclled: true,),
-          ],
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              WaitingRecordcard(isCanclled: true,),
+              WaitingRecordcard(isCanclled: true,),
+              WaitingRecordcard(isCanclled: true,),
+              WaitingRecordcard(isCanclled: true,),
+            ],
+          ),
         ),
       ],
     );
