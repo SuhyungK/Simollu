@@ -24,7 +24,7 @@ class WritableReview extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,16 +72,18 @@ class WritableReview extends StatelessWidget {
               ),
             ),
             Expanded( // 나머지 공간을 차지하기 위한 Expanded 위젯
-              child: Container(),
+              child: Container(
+                // width: 20,
+              ),
             ),
             Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                    padding: EdgeInsets.only(top: 9),
-                    // margin: EdgeInsets.only(top: 19),
-                    child: OutlinedButton(
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => WritingReviewPage()));
                       },
@@ -92,22 +94,26 @@ class WritableReview extends StatelessWidget {
                           width: 1.0,
                         ),
                       ),
-                      child: Text(
-                        '리뷰 쓰러가기',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Roboto',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0,
-                          wordSpacing: 0,
-                          height: 1.0,
-                          shadows: [],
-                          decoration: TextDecoration.none,
+                      child: SizedBox(
+                        child: Text(
+                          '리뷰 쓰기',
+                          maxLines: 3,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Roboto',
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0,
+                            wordSpacing: 0,
+                            height: 1.0,
+                            shadows: [],
+                            decoration: TextDecoration.none,
+                          ),
                         ),
                       ),
-                    )
+                    ),
+                  ],
                 ),
               ],
             ),

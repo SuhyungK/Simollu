@@ -13,13 +13,19 @@ class MyReview extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start, // 위젯 위쪽 정렬
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/dongraejeong.png',
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+            SizedBox(
+              // height: 180,
+              child: Align(
+                alignment: Alignment.center,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/dongraejeong.png',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                  ),
+                ),
               ),
             ),
             Container(
@@ -31,8 +37,10 @@ class MyReview extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    width: 170,
                     child: Text(
-                      '동래정 선릉직영점',
+                      '동래정 선릉직영점rrrrrrrrrrrrrrrrr',
+                      maxLines: 2,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -48,9 +56,11 @@ class MyReview extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    width: 190,
                     margin: EdgeInsets.only(top: 6),
                     child: Text(
-                          '가나다라마바사아자차카타파하',
+                          '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나',
+                          maxLines: 8,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
