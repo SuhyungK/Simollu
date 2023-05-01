@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
@@ -26,19 +30,6 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 50,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          '마이 페이지',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -256,10 +247,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 GestureDetector(
                   onTap: () {
+                    RootController.to.setRootPageTitles("웨이팅 기록");
+                    RootController.to.setIsMainPage(false);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WaitingRecordPage()));
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => WaitingRecordPage(),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
