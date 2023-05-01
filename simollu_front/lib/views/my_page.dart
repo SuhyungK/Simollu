@@ -248,7 +248,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 GestureDetector(
                   onTap: () {
-                    RootController.to.setRootPageTitle("웨이팅 기록");
+                    RootController.to.setRootPageTitles("웨이팅 기록");
                     RootController.to.setIsMainPage(false);
                     Navigator.push(
                       context,
