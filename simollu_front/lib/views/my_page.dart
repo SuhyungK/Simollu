@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:simollu_front/views/waiting_log_page.dart';
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
