@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
@@ -66,7 +67,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      print("내 정보 수정");
+                      RootController.to.setRootPageTitles("내 정보 수정");
+                      RootController.to.setIsMainPage(false);
+                      Navigator.push(
+                        context,
+                        GetPageRoute(
+                          curve: Curves.fastOutSlowIn,
+                          page: () => MyPageEdit(),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       splashFactory: NoSplash.splashFactory,
