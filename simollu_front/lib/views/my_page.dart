@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:simollu_front/views/waiting_log_page.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
@@ -254,7 +253,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       context,
                       GetPageRoute(
                         curve: Curves.fastOutSlowIn,
-                        page: () => WaitingLogPage(),
+                        page: () => WaitingRecordPage(),
                       ),
                     );
                   },

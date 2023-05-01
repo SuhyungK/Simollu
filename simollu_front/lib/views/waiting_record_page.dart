@@ -15,11 +15,6 @@ class _WaitingRecordPageState extends State<WaitingRecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(
-          title: '웨이팅 기록',
-          leading: Image.asset('assets/backBtn.png'),
-          actions: [Image.asset('assets/bell.png')],
-        ),
         body: CustomTabBar(length: 2, tabs: [
           '이용 완료',
           '취소 내역'
