@@ -10,9 +10,10 @@ class TestRestaurantDetailpage extends StatefulWidget {
       _TestRestaurantDetailpageState();
 }
 
-class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
+class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> with SingleTickerProviderStateMixin {
+  late TabController? _tabController;
   final List<List<String>> _menuList = [
-    ['burgur.jpg', '햄버거', '15,000'],
+    ['burger.jpg', '햄버거', '15,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
@@ -22,6 +23,12 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,39 +41,48 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
         leading: Image.asset('assets/backBtn.png'),
         actions: [Image.asset('assets/bell.png')],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            // title: Text('asdf'),
-            // pinned: true,
-            automaticallyImplyLeading: false,
-            primary: false,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                'https://img.freepik.com/free-photo/chicken-wings-barbecue-sweetly-sour-sauce-picnic-summer-menu-tasty-food-top-view-flat-lay_2829-6471.jpg',
-                fit: BoxFit.cover,
-              ),
-              collapseMode: CollapseMode.parallax,
-            ),
-            expandedHeight: 200,
-            // backgroundColor: Colors.transparent,
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 1000,
-              color: Colors.white,
-              child: CustomTabBar(
-                length: 3,
-                tabs: ['메뉴', '매장 정보', '리뷰'],
-                tabViews: [
-                  _menuDetail(_menuList),
-                  _restaurantInfo(),
-                  Container()
-                ],
-              ),
+      body: DefaultTabController(
+        length: 3,
+        child: NestedScrollView(
+          headerSliverBuilder:
+              (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            // SliverAppBar(
+            //   pinned: false,
+            //   expandedHeight: 200,
+            //   automaticallyImplyLeading: false,
+            //   backgroundColor: Colors.white,
+            //   // flexibleSpace: FlexibleSpaceBar(
+            //   //   background: Image.asset(
+            //   //     'assets/Rectangle 42.png',
+            //   //     fit: BoxFit.cover,
+            //   //   ),
+            //   // ),
+            //
+            // ),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate:MyTabBarDelegate(
+                tabBar: TabBar(
+                  controller: _tabController,
+                  tabs: [
+                    Tab(icon: Icon(Icons.favorite, color: Colors.black12,)),
+                    Tab(icon: Icon(Icons.favorite)),
+                    Tab(icon: Icon(Icons.favorite)),
+                  ],
+                ),
+              )
             )
+          ];
+        },
+          body: TabBarView(
+            children: [
+              Icon(Icons.favorite),
+              Icon(Icons.favorite),
+              Icon(Icons.favorite),
+            ],
           ),
-        ],
+        )
       )
     );
   }
@@ -117,4 +133,27 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
       ],
     );
   }
+}
+
+class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  MyTabBarDelegate({required this.tabBar});
+
+  @override
+  Widget build(BuildContext context, double shrinkOffest, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }
