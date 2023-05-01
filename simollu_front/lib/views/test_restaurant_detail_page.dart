@@ -10,9 +10,10 @@ class TestRestaurantDetailpage extends StatefulWidget {
       _TestRestaurantDetailpageState();
 }
 
-class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
+class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> with SingleTickerProviderStateMixin {
+  late TabController? _tabController;
   final List<List<String>> _menuList = [
-    ['burgur.jpg', '햄버거', '15,000'],
+    ['burger.jpg', '햄버거', '15,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
@@ -24,6 +25,12 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
@@ -31,27 +38,176 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
         leading: Image.asset('assets/backBtn.png'),
         actions: [Image.asset('assets/bell.png')],
       ),
-      body: Text('asdf'),
+      body: CustomTabBar(
+        length: 3,
+        tabs: ['메뉴', '매장 정보', '리뷰'],
+        tabViews: [
+          _menuDetail(_menuList),
+          _restaurantInfo(),
+          Container()
+        ],
+        hasSliverAppBar: true,
+        flexibleImage: 'assets/Rectangle 42.png',
+        bottomWidget: Container(
+          color: Colors.white,
+          height: 100,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            '바스버거',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '양식',
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '서울특별시 강남구 역삼동 777',
+                        style: TextStyle(color: Colors.black38),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timer_outlined,
+                            color: Colors.amber,
+                            size: 22,
+                          ),
+                          Text(
+                            '기다릴만해요 87%',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: Colors.pink,
+                        ),
+                        ButtonTheme(
+                          child: OutlinedButton(
+                              onPressed: () {},
+                              style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  side: BorderSide(
+                                    color: Colors.black12,
+                                  ),
+                                  fixedSize: Size(
+                                      MediaQuery.of(context).size.width *
+                                          0.3,
+                                      43),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+
+                                      BorderRadius.circular(20.0))),
+
+                              child: Text(
+                                '예상대기시간',
+                                maxLines: 1,
+                              )),
+                        )
+                      ],
+                    ))
+              ],
+            ),
+          ),
+        )
+      ),
     );
   }
 
+  // DefaultTabController buildDefaultTabController() {
+    // return
+    // return DefaultTabController(
+    //   length: 3,
+    //   child: NestedScrollView(
+    //     headerSliverBuilder:
+    //         (BuildContext context, bool innerBoxIsScrolled) {
+    //     return <Widget>[
+    //       // SliverAppBar(
+    //       //   pinned: false,
+    //       //   expandedHeight: 200,
+    //       //   automaticallyImplyLeading: false,
+    //       //   backgroundColor: Colors.white,
+    //       //   // flexibleSpace: FlexibleSpaceBar(
+    //       //   //   background: Image.asset(
+    //       //   //     'assets/Rectangle 42.png',
+    //       //   //     fit: BoxFit.cover,
+    //       //   //   ),
+    //       //   // ),
+    //       //
+    //       // ),
+    //       SliverPersistentHeader(
+    //         pinned: true,
+    //         delegate:MyTabBarDelegate(
+    //           tabBar: TabBar(
+    //             controller: _tabController,
+    //             tabs: [
+    //               Tab(icon: Icon(Icons.favorite, color: Colors.black12,)),
+    //               Tab(icon: Icon(Icons.favorite)),
+    //               Tab(icon: Icon(Icons.favorite)),
+    //             ],
+    //           ),
+    //         )
+    //       )
+    //     ];
+    //   },
+    //     body: TabBarView(
+    //       children: [
+    //         Icon(Icons.favorite),
+    //         Icon(Icons.favorite),
+    //         Icon(Icons.favorite),
+    //       ],
+    //     ),
+    //   )
+    // );
+  // }
   Widget _menuDetail(List<List<String>> menuList) {
     return Column(
       children: menuList
           .map(
             (menu) => Row(
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset('assets/${menu[0]}'),
-                ),
-                Column(
-                  children: [Text(menu[1]), Text(menu[2])],
-                )
-              ],
+          children: [
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset('assets/${menu[0]}'),
             ),
-          )
+            Column(
+              children: [Text(menu[1]), Text(menu[2])],
+            )
+          ],
+        ),
+      )
           .toList(),
     );
   }
@@ -84,29 +240,25 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
   }
 }
 
+class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
 
-    // return ListView.builder(
-    //   itemCount: menuList.length,
-    //   itemBuilder: (context, index) {
-    //     final menu = menuList[index];
-    //     return SizedBox(
-    //       height: 100,
-    //       child: Row(
-    //         children: [
-    //           SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: Image.asset('assets/${menu[0]}'),
-    //           ),
-    //           Column(
-    //             children: [
-    //               Text(menu[1]),
-    //               Text(menu[2]),
-    //             ],
-    //           )
-    //         ],
-    //       ),
-    //     );
-    //   },
-    // );
+  MyTabBarDelegate({required this.tabBar});
 
+  @override
+  Widget build(BuildContext context, double shrinkOffest, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+}

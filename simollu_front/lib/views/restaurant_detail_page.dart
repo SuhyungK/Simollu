@@ -11,7 +11,7 @@ class RestaurantDetailpage extends StatefulWidget {
 
 class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
   final List<List<String>> _menuList = [
-    ['burgur.jpg', '햄버거', '15,000'],
+    ['burger.jpg', '햄버거', '15,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
