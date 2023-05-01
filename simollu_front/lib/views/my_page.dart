@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/views/interesting_restaurants_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
@@ -182,25 +183,38 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                   Colors.transparent,
                                 ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    "관심 매장",
-                                    style: TextStyle(
-                                      color: Color(0xFF555555),
-                                      fontSize: 16,
+                              child: GestureDetector(
+                                onTap: () {
+                                  RootController.to.setRootPageTitles("관심 식당");
+                                  RootController.to.setIsMainPage(false);
+                                  Navigator.push(
+                                    context,
+                                    GetPageRoute(
+                                      curve: Curves.fastOutSlowIn,
+                                      page: () => InterestingRestaurantsPage(),
                                     ),
-                                  ),
-                                  Text(
-                                    "2,000",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text(
+                                      "관심 식당",
+                                      style: TextStyle(
+                                        color: Color(0xFF555555),
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      "2,000",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
