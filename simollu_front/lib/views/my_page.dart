@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
+import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
@@ -295,7 +296,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print('최근 본 식당');
+                    RootController.to.setRootPageTitles("최근 본 식당");
+                    RootController.to.setIsMainPage(false);
+                    Navigator.push(
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => RecentlyViewedRestaurantsPage(),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
