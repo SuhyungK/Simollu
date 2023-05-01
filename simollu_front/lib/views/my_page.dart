@@ -131,17 +131,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                         children: [
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
+                            child: GestureDetector(
+                              onTap: () {
                                 print("포크 수");
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
@@ -172,49 +165,37 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           ),
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                print("포크 수");
+                            child: GestureDetector(
+                              onTap: () {
+                                RootController.to.setRootPageTitles("관심 식당");
+                                RootController.to.setIsMainPage(false);
+                                Navigator.push(
+                                  context,
+                                  GetPageRoute(
+                                    curve: Curves.fastOutSlowIn,
+                                    page: () => InterestingRestaurantsPage(),
+                                  ),
+                                );
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  RootController.to.setRootPageTitles("관심 식당");
-                                  RootController.to.setIsMainPage(false);
-                                  Navigator.push(
-                                    context,
-                                    GetPageRoute(
-                                      curve: Curves.fastOutSlowIn,
-                                      page: () => InterestingRestaurantsPage(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    "관심 식당",
+                                    style: TextStyle(
+                                      color: Color(0xFF555555),
+                                      fontSize: 16,
                                     ),
-                                  );
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text(
-                                      "관심 식당",
-                                      style: TextStyle(
-                                        color: Color(0xFF555555),
-                                        fontSize: 16,
-                                      ),
+                                  ),
+                                  Text(
+                                    "2,000",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Text(
-                                      "2,000",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -226,17 +207,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           ),
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
+                            child: GestureDetector(
+                              onTap: () {
                                 print("포크 수");
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
