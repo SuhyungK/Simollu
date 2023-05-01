@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/views/interesting_restaurants_page.dart';
+import 'package:simollu_front/views/my_page_edit.dart';
+import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
@@ -66,7 +69,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      print("내 정보 수정");
+                      RootController.to.setRootPageTitles("내 정보 수정");
+                      RootController.to.setIsMainPage(false);
+                      Navigator.push(
+                        context,
+                        GetPageRoute(
+                          curve: Curves.fastOutSlowIn,
+                          page: () => MyPageEdit(),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       splashFactory: NoSplash.splashFactory,
@@ -120,17 +131,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                         children: [
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
+                            child: GestureDetector(
+                              onTap: () {
                                 print("포크 수");
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
@@ -161,22 +165,23 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           ),
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                print("포크 수");
+                            child: GestureDetector(
+                              onTap: () {
+                                RootController.to.setRootPageTitles("관심 식당");
+                                RootController.to.setIsMainPage(false);
+                                Navigator.push(
+                                  context,
+                                  GetPageRoute(
+                                    curve: Curves.fastOutSlowIn,
+                                    page: () => InterestingRestaurantsPage(),
+                                  ),
+                                );
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
                                   Text(
-                                    "관심 매장",
+                                    "관심 식당",
                                     style: TextStyle(
                                       color: Color(0xFF555555),
                                       fontSize: 16,
@@ -202,17 +207,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           ),
                           SizedBox(
                             width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
+                            child: GestureDetector(
+                              onTap: () {
                                 print("포크 수");
                               },
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
@@ -286,7 +284,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print('최근 본 식당');
+                    RootController.to.setRootPageTitles("최근 본 식당");
+                    RootController.to.setIsMainPage(false);
+                    Navigator.push(
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => RecentlyViewedRestaurantsPage(),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
