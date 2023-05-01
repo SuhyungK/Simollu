@@ -25,33 +25,68 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: '바스 버거',
         leading: Image.asset('assets/backBtn.png'),
         actions: [Image.asset('assets/bell.png')],
       ),
-      body: Text('asdf'),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            // title: Text('asdf'),
+            // pinned: true,
+            automaticallyImplyLeading: false,
+            primary: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                'https://img.freepik.com/free-photo/chicken-wings-barbecue-sweetly-sour-sauce-picnic-summer-menu-tasty-food-top-view-flat-lay_2829-6471.jpg',
+                fit: BoxFit.cover,
+              ),
+              collapseMode: CollapseMode.parallax,
+            ),
+            expandedHeight: 200,
+            // backgroundColor: Colors.transparent,
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 1000,
+              color: Colors.white,
+              child: CustomTabBar(
+                length: 3,
+                tabs: ['메뉴', '매장 정보', '리뷰'],
+                tabViews: [
+                  _menuDetail(_menuList),
+                  _restaurantInfo(),
+                  Container()
+                ],
+              ),
+            )
+          ),
+        ],
+      )
     );
   }
-
   Widget _menuDetail(List<List<String>> menuList) {
     return Column(
       children: menuList
           .map(
             (menu) => Row(
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset('assets/${menu[0]}'),
-                ),
-                Column(
-                  children: [Text(menu[1]), Text(menu[2])],
-                )
-              ],
+          children: [
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset('assets/${menu[0]}'),
             ),
-          )
+            Column(
+              children: [Text(menu[1]), Text(menu[2])],
+            )
+          ],
+        ),
+      )
           .toList(),
     );
   }
@@ -83,30 +118,3 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> {
     );
   }
 }
-
-
-    // return ListView.builder(
-    //   itemCount: menuList.length,
-    //   itemBuilder: (context, index) {
-    //     final menu = menuList[index];
-    //     return SizedBox(
-    //       height: 100,
-    //       child: Row(
-    //         children: [
-    //           SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: Image.asset('assets/${menu[0]}'),
-    //           ),
-    //           Column(
-    //             children: [
-    //               Text(menu[1]),
-    //               Text(menu[2]),
-    //             ],
-    //           )
-    //         ],
-    //       ),
-    //     );
-    //   },
-    // );
-
