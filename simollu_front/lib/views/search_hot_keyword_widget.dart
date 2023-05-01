@@ -42,8 +42,8 @@ class SearchHotKeyword extends StatelessWidget {
           //   ),
           // ),
           Container(
-            height: 150,
-            padding: EdgeInsets.only(left: 10),
+            height: 190,
+            padding: EdgeInsets.only(left: 20),
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -52,6 +52,7 @@ class SearchHotKeyword extends StatelessWidget {
                 return Row(
                   children: [
                     Container(
+                      margin: EdgeInsets.only(bottom: 25),
                       child: Text("${keywordList[index]["order"]}. ",
                         style: TextStyle(
                           color: Colors.black,
@@ -66,9 +67,9 @@ class SearchHotKeyword extends StatelessWidget {
                           decoration: TextDecoration.none,
                         ),
                       ),
-                      margin: EdgeInsets.only(bottom: 15),
                     ),
                     Container(
+                      margin: EdgeInsets.only(bottom: 25),
                       child: Text("${keywordList[index]["keyword"]}",
                         style: TextStyle(
                           color: Colors.black,
@@ -83,7 +84,6 @@ class SearchHotKeyword extends StatelessWidget {
                           decoration: TextDecoration.none,
                         ),
                       ),
-                      margin: EdgeInsets.only(bottom: 15),
                     ),
                   ],
                 );
