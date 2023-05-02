@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simollu_front/views/fork_usage_page.dart';
 
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -81,6 +82,12 @@ class TmpPage extends StatelessWidget {
                   Get.to(TestRestaurantDetailpage());
                 },
                 child: Text('임시 가게정보'),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Get.to(ForkUsagePage());
+                },
+                child: Text('포크'),
               ),
             ],
           )
