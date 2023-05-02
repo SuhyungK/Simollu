@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/views/recent_search_keyword_widget.dart';
 import 'package:simollu_front/views/search_hot_keyword_widget.dart';
 import 'package:simollu_front/views/search_recommendation_button.dart';
 
@@ -33,26 +34,19 @@ class SearchPage extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search, color: Colors.grey),
-                        alignLabelWithHint: true,
-                        // contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-                        hintText: '매장을 검색해보세요',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15,
-                          fontFamily: 'Roboto',
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0,
-                          wordSpacing: 0,
-                          height: 1.0,
-                          shadows: [],
-                          decoration: TextDecoration.none,
-                        ),
-                        border: InputBorder.none,
-                        //
-                      ),
-                      style: TextStyle(fontSize: 15), // 입력 텍스트 스타일 설정
+                      onSubmitted: (value) async {
+                        // 사용자가 입력한 검색어 처리하는 코드 작성
+                        print('사용자 검색 엔터');
+                        print(value);
+
+                        // 최근 검색어 저장
+                        await RecentSearches.save(value);
+                        // setState(() {
+                        //   _recentSearches.insert(0, value);
+                        // });
+                        RecentSearches.printRecentSearches();
+                      },
+                      // TextField 구성 요소 생략
                     ),
                   ),
                   Container(
@@ -71,10 +65,10 @@ class SearchPage extends StatelessWidget {
                               fontWeight: FontWeight.bold
                           ),
                         ),
-                        Container(
-                          child: Row(
-                            children: [],
-                          ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 90, // 최근 검색어 목록이 표시될 높이를 지정합니다.
+                          child: RecentSearchKeywordWidget(),
                         )
                       ],
                     ),
@@ -267,5 +261,31 @@ class RecentSearches {
   static Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_key);
+  }
+
+  // 최근 검색어 목록을 출력하는 메소드
+  static Future<void> printRecentSearches() async {
+    final recentSearches = await load();
+    print('Recent searches:');
+    for (final query in recentSearches) {
+      print(query);
+    }
+  }
+
+  // 최근 검색어를 업데이트하는 메소드
+  static Future<void> update(String newQuery) async {
+    final prefs = await SharedPreferences.getInstance();
+    final recentSearches = prefs.getStringList(_key) ?? [];
+
+    // // 이전 검색어를 새 검색어로 대체
+    // final index = recentSearches.indexOf(oldQuery);
+    // if (index != -1) {
+    //   recentSearches[index] = newQuery;
+    // } else {
+    //   // 이전 검색어가 목록에 없으면 새 검색어를 최상단에 추가
+    //   recentSearches.insert(0, newQuery);
+    // }
+
+    await prefs.setStringList(_key, recentSearches);
   }
 }

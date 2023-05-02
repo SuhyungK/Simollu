@@ -34,22 +34,31 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 15),
+      // margin: const EdgeInsets.only(top: 15),
       child: Column(
         children: [
-          const Text(
-            '최근 검색어',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: _clearRecentSearches,
-            child: const Text('최근 검색어 삭제'),
+          Row(
+            children: [
+              const Expanded(child: SizedBox()),
+              Container(
+                margin: EdgeInsets.only(right: 15),
+                child: ElevatedButton(
+                  onPressed: _clearRecentSearches,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: Colors.grey),
+                    ),
+                  ),
+                  child: const Text('최근 검색어 삭제'),
+                ),
+              ),
+            ],
           ),
           Container(
-            child: Column(
+            child: Row(
               children: _recentSearches.map((query) {
                 return Row(
                   children: [
