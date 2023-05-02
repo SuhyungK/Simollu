@@ -5,9 +5,11 @@ class MyPageEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Padding(

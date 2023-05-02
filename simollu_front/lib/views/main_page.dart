@@ -24,6 +24,39 @@ class _MainPageState extends State<MainPage> {
       "state": false,
     }
   ];
+
+  List<Map<String, Object>> restaurants = [
+    {
+      "imagePath": "assets/basBurgerImg.png",
+      "name": "바스버거",
+      "likePercentages": 80.0,
+      "waitingMinutes": 15,
+    },
+    {
+      "imagePath": "assets/basBurgerImg.png",
+      "name": "바스버거",
+      "likePercentages": 80.0,
+      "waitingMinutes": 15,
+    },
+    {
+      "imagePath": "assets/basBurgerImg.png",
+      "name": "바스버거",
+      "likePercentages": 80.0,
+      "waitingMinutes": 15,
+    },
+    {
+      "imagePath": "assets/basBurgerImg.png",
+      "name": "바스버거",
+      "likePercentages": 80.0,
+      "waitingMinutes": 15,
+    },
+    {
+      "imagePath": "assets/basBurgerImg.png",
+      "name": "바스버거",
+      "likePercentages": 80.0,
+      "waitingMinutes": 15,
+    }
+  ];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -80,7 +113,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         Container(
-          height: 120,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Color(0xFFFFD200),
@@ -105,6 +137,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                 ),
+                // 식당 정렬 순서 토글 행
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -131,6 +164,27 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                   ],
+                ),
+                // 음식 리스트
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...List.generate(
+                        restaurants.length,
+                        (index) => Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                  restaurants[index]["imagePath"] as String),
+                              Text(restaurants[index]["name"] as String)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

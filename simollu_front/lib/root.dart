@@ -33,7 +33,7 @@ class RootController extends GetxController {
 
   Future<bool> onWillPop() async {
     rootPageTitles[rootPageIndex.value].pop();
-    return !(await navigatorKey.currentState!.maybePop() ||
+    return !(await mainPageKey.currentState!.maybePop() ||
         await myPageKey.currentState!.maybePop());
   }
 
@@ -139,12 +139,13 @@ class Root extends GetView<RootController> {
             index: controller.rootPageIndex.value,
             children: [
               Navigator(
-                  key: controller.mainPageKey,
-                  onGenerateRoute: (routeSettings) {
-                    return MaterialPageRoute(
-                      builder: (context) => const MainPage(),
-                    );
-                  }),
+                key: controller.mainPageKey,
+                onGenerateRoute: (routeSettings) {
+                  return MaterialPageRoute(
+                    builder: (context) => const MainPage(),
+                  );
+                },
+              ),
               // Navigator(
               //   key: controller.navigatorKey,
               //   onGenerateRoute: (routeSettings) {
