@@ -96,17 +96,15 @@ class Root extends GetView<RootController> {
                       )
                     ],
                   )
-                : Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      controller.rootPageTitles[controller.rootPageIndex.value]
-                          .peek()
-                          .value,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    )),
+                : Text(
+                    controller.rootPageTitles[controller.rootPageIndex.value]
+                        .peek()
+                        .value,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
             leading:
                 controller.isMainPages[controller.rootPageIndex.value].value
                     ? null
