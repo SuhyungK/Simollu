@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simollu_front/views/main_page.dart';
 
 import 'package:simollu_front/views/more_page.dart';
 import 'package:simollu_front/views/my_page.dart';
@@ -24,6 +25,7 @@ class RootController extends GetxController {
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> myPageKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> mainPageKey = GlobalKey<NavigatorState>();
 
   void changeRootPageIndex(int index) {
     rootPageIndex(index);
@@ -64,21 +66,50 @@ class Root extends GetView<RootController> {
         () => Scaffold(
           appBar: AppBar(
             toolbarHeight: 50,
-            backgroundColor: Colors.white,
+            backgroundColor: controller.rootPageIndex.value == 0 &&
+                    controller.isMainPages[0].value
+                ? Color(0xFFFFD200)
+                : Colors.white,
             elevation: 0,
-            centerTitle: true,
-            title: Text(
-              controller.rootPageTitles[controller.rootPageIndex.value]
-                  .peek()
-                  .value,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
+            centerTitle: controller.rootPageIndex.value == 0 &&
+                    controller.isMainPages[0].value
+                ? false
+                : true,
+            title: controller.rootPageIndex.value == 0 &&
+                    controller.isMainPages[0].value
+                ? Row(
+                    children: [
+                      Icon(
+                        Icons.gps_fixed,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "역삼동",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  )
+                : Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      controller.rootPageTitles[controller.rootPageIndex.value]
+                          .peek()
+                          .value,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    )),
             leading:
                 controller.isMainPages[controller.rootPageIndex.value].value
-                    ? Container()
+                    ? null
                     : GestureDetector(
                         onTap: () {
                           controller.back();
@@ -110,18 +141,26 @@ class Root extends GetView<RootController> {
             index: controller.rootPageIndex.value,
             children: [
               Navigator(
-                key: controller.navigatorKey,
-                onGenerateRoute: (routeSettings) {
-                  return MaterialPageRoute(
-                      builder: (context) => const TmpPage());
-                },
-              ),
+                  key: controller.mainPageKey,
+                  onGenerateRoute: (routeSettings) {
+                    return MaterialPageRoute(
+                      builder: (context) => const MainPage(),
+                    );
+                  }),
+              // Navigator(
+              //   key: controller.navigatorKey,
+              //   onGenerateRoute: (routeSettings) {
+              //     return MaterialPageRoute(
+              //         builder: (context) => const TmpPage());
+              //   },
+              // ),
               SearchPage(),
               Navigator(
                 key: controller.myPageKey,
                 onGenerateRoute: (routeSettings) {
                   return MaterialPageRoute(
-                      builder: (context) => const MyPage());
+                    builder: (context) => const MyPage(),
+                  );
                 },
               ),
               MorePage()
