@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simollu_front/views/fork_usage_page.dart';
+import 'package:simollu_front/views/fork_reward_page.dart';
 
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -85,7 +85,7 @@ class TmpPage extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  Get.to(ForkUsagePage());
+                  Get.to(ForkRewardPage());
                 },
                 child: Text('포크'),
               ),
