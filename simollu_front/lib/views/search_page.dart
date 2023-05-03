@@ -23,6 +23,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _filter = TextEditingController();
   FocusNode focusNode = FocusNode();
   String _searchText = "";
+  bool _canPop = false;
 
   _SearchPageState() {
     _filter.addListener(() {
@@ -30,6 +31,13 @@ class _SearchPageState extends State<SearchPage> {
         _searchText = _filter.text;
       });
     });
+  }
+
+  bool _onPopPage(Route<dynamic> route, dynamic result) {
+    setState(() {
+      _canPop = _navigatorKey.currentState?.canPop() ?? false;
+    });
+    return route.didPop(result);
   }
 
   MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
@@ -46,15 +54,24 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
-        // FocusScope.of(context).unfocus();
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          leading: _canPop
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: Colors.black54,
+                  onPressed: () {
+                    _navigatorKey.currentState?.pop();
+                    _canPop = false;
+                  },
+                )
+              : null,
           title: Container(
             height: 45,
             margin: EdgeInsets.only(top: 5),
@@ -89,6 +106,7 @@ class _SearchPageState extends State<SearchPage> {
                 setState(() {
                   // _hasNotSearchResult = false;
                   // _hasSearchResult = true;
+                  _canPop = true;
                 });
                 _navigatorKey.currentState?.pushNamed(routeB);
                 // RootController.to.setIsMainPage(false);
@@ -99,18 +117,18 @@ class _SearchPageState extends State<SearchPage> {
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
                 suffixIcon: focusNode.hasFocus
                     ? IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _filter.clear();
-                      _searchText = "";
-                    });
-                  },
-                )
+                        icon: Icon(
+                          Icons.cancel,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _filter.clear();
+                            _searchText = "";
+                          });
+                        },
+                      )
                     : Container(),
                 alignLabelWithHint: true,
                 // contentPadding: EdgeInsets.symmetric(vertical: 10.0),
@@ -143,17 +161,18 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         body: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(bottom: 13),
-            child: Scaffold(
-              body: Navigator(
-                  key: _navigatorKey,
-                  initialRoute: routeA,
-                  onGenerateRoute: _onGenerateRoute,
-                ),
+          color: Colors.white,
+          padding: EdgeInsets.only(bottom: 13),
+          child: Scaffold(
+            body: Navigator(
+              key: _navigatorKey,
+              onPopPage: _onPopPage,
+              initialRoute: routeA,
+              onGenerateRoute: _onGenerateRoute,
             ),
           ),
         ),
+      ),
     );
   }
 }
