@@ -25,11 +25,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: '바스 버거',
-        leading: Image.asset('assets/backBtn.png'),
-        actions: [Image.asset('assets/bell.png')],
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -112,9 +107,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
                                           43),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-
                                               BorderRadius.circular(20.0))),
-
                                   child: Text(
                                     '예상대기시간',
                                     maxLines: 1,
