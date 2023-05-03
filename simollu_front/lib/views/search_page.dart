@@ -109,9 +109,6 @@ class _SearchPageState extends State<SearchPage> {
                   _canPop = true;
                 });
                 _navigatorKey.currentState?.pushNamed(routeB);
-                // RootController.to.setIsMainPage(false);
-                // RootController.to.setRootPageTitles("검색 결과");
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultPage()));
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
