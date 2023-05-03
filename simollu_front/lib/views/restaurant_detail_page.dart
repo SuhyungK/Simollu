@@ -6,10 +6,12 @@ class RestaurantDetailpage extends StatefulWidget {
   const RestaurantDetailpage({super.key});
 
   @override
-  State<RestaurantDetailpage> createState() => _RestaurantDetailpageState();
+  State<RestaurantDetailpage> createState() =>
+      _RestaurantDetailpageState();
 }
 
-class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
+class _RestaurantDetailpageState extends State<RestaurantDetailpage> with SingleTickerProviderStateMixin {
+  late TabController? _tabController;
   final List<List<String>> _menuList = [
     ['burger.jpg', '햄버거', '15,000'],
     ['potato.jpg', '감자튀김', '13,000'],
@@ -23,140 +25,187 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.asset('assets/Rectangle 42.png'),
-            Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                '바스버거',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
+      body: CustomTabBar(
+          length: 3,
+          tabs: ['메뉴', '매장 정보', '리뷰'],
+          tabViews: [
+            _menuDetail(_menuList),
+            _restaurantInfo(),
+            _menuDetail(_menuList),
+          ],
+          hasSliverAppBar: true,
+          flexibleImage: 'assets/Rectangle 42.png',
+          bottomWidget: Container(
+            color: Colors.white,
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '바스버거',
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                '양식',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            '서울특별시 강남구 역삼동 777',
-                            style: TextStyle(color: Colors.black38),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.timer_outlined,
-                                color: Colors.amber,
-                                size: 22,
-                              ),
-                              Text(
-                                '기다릴만해요 87%',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.amber),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            ),
+                            Text(
+                              '양식',
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '서울특별시 강남구 역삼동 777',
+                          style: TextStyle(color: Colors.black38),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.favorite,
-                              color: Colors.pink,
+                              Icons.timer_outlined,
+                              color: Colors.amber,
+                              size: 22,
                             ),
-                            ButtonTheme(
-                              child: OutlinedButton(
-                                  onPressed: () {},
-                                  style: OutlinedButton.styleFrom(
-                                      foregroundColor: Colors.black,
-                                      side: BorderSide(
-                                        color: Colors.black12,
-                                      ),
-                                      fixedSize: Size(
-                                          MediaQuery.of(context).size.width *
-                                              0.3,
-                                          43),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0))),
-                                  child: Text(
-                                    '예상대기시간',
-                                    maxLines: 1,
-                                  )),
-                            )
+                            Text(
+                              '기다릴만해요 87%',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber),
+                            ),
                           ],
-                        ))
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            Icons.favorite,
+                            color: Colors.pink,
+                          ),
+                          ButtonTheme(
+                            child: OutlinedButton(
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    side: BorderSide(
+                                      color: Colors.black12,
+                                    ),
+                                    fixedSize: Size(
+                                        MediaQuery.of(context).size.width *
+                                            0.3,
+                                        43),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+
+                                        BorderRadius.circular(20.0))),
+
+                                child: Text(
+                                  '예상대기시간',
+                                  maxLines: 1,
+                                )),
+                          )
+                        ],
+                      ))
+                ],
               ),
             ),
-            SizedBox(height: 10),
-            Container(
-              height: 1000,
-              color: Colors.white,
-              // child: CustomTabBar(
-              //   length: 3,
-              //   tabs: ['메뉴', '매장 정보', '리뷰'],
-              //   tabViews: [
-              //     _menuDetail(_menuList),
-              //     _restaurantInfo(),
-              //     Container()
-              //   ],
-              // ),
-            )
-          ],
-        ),
+          )
       ),
     );
   }
 
+  // DefaultTabController buildDefaultTabController() {
+  // return
+  // return DefaultTabController(
+  //   length: 3,
+  //   child: NestedScrollView(
+  //     headerSliverBuilder:
+  //         (BuildContext context, bool innerBoxIsScrolled) {
+  //     return <Widget>[
+  //       // SliverAppBar(
+  //       //   pinned: false,
+  //       //   expandedHeight: 200,
+  //       //   automaticallyImplyLeading: false,
+  //       //   backgroundColor: Colors.white,
+  //       //   // flexibleSpace: FlexibleSpaceBar(
+  //       //   //   background: Image.asset(
+  //       //   //     'assets/Rectangle 42.png',
+  //       //   //     fit: BoxFit.cover,
+  //       //   //   ),
+  //       //   // ),
+  //       //
+  //       // ),
+  //       SliverPersistentHeader(
+  //         pinned: true,
+  //         delegate:MyTabBarDelegate(
+  //           tabBar: TabBar(
+  //             controller: _tabController,
+  //             tabs: [
+  //               Tab(icon: Icon(Icons.favorite, color: Colors.black12,)),
+  //               Tab(icon: Icon(Icons.favorite)),
+  //               Tab(icon: Icon(Icons.favorite)),
+  //             ],
+  //           ),
+  //         )
+  //       )
+  //     ];
+  //   },
+  //     body: TabBarView(
+  //       children: [
+  //         Icon(Icons.favorite),
+  //         Icon(Icons.favorite),
+  //         Icon(Icons.favorite),
+  //       ],
+  //     ),
+  //   )
+  // );
+  // }
   Widget _menuDetail(List<List<String>> menuList) {
-    return Column(
-      children: menuList
-          .map(
-            (menu) => Row(
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: menuList
+            .map(
+              (menu) => Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Row(
               children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset('assets/${menu[0]}'),
-                ),
+                Image.asset('assets/${menu[0]}', width: 100,),
                 Column(
                   children: [Text(menu[1]), Text(menu[2])],
                 )
               ],
             ),
-          )
-          .toList(),
+          ),
+        )
+            .toList(),
+      ),
     );
   }
 
@@ -186,4 +235,27 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
       ],
     );
   }
+}
+
+class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  MyTabBarDelegate({required this.tabBar});
+
+  @override
+  Widget build(BuildContext context, double shrinkOffest, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }

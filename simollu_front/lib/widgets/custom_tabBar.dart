@@ -116,10 +116,8 @@ class _CustomTabBarState extends State<CustomTabBar>
     return TabBarView(
       controller: _tabController,
       children: List<Widget>.generate(widget.length, (index) {
-        return Tab(
-          child: SingleChildScrollView(
-            child: widget.tabViews[index],
-          ),
+        return SingleChildScrollView(
+          child: widget.tabViews[index],
         );
       }),
     );
