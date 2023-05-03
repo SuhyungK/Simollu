@@ -44,7 +44,7 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> wit
         tabViews: [
           _menuDetail(_menuList),
           _restaurantInfo(),
-          Container()
+          _menuDetail(_menuList),
         ],
         hasSliverAppBar: true,
         flexibleImage: 'assets/Rectangle 42.png',
@@ -192,23 +192,25 @@ class _TestRestaurantDetailpageState extends State<TestRestaurantDetailpage> wit
     // );
   // }
   Widget _menuDetail(List<List<String>> menuList) {
-    return Column(
-      children: menuList
-          .map(
-            (menu) => Row(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.asset('assets/${menu[0]}'),
-            ),
-            Column(
-              children: [Text(menu[1]), Text(menu[2])],
-            )
-          ],
-        ),
-      )
-          .toList(),
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: menuList
+            .map(
+              (menu) => Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+            children: [
+                Image.asset('assets/${menu[0]}', width: 100,),
+                Column(
+                  children: [Text(menu[1]), Text(menu[2])],
+                )
+            ],
+          ),
+              ),
+        )
+            .toList(),
+      ),
     );
   }
 

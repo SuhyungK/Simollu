@@ -130,15 +130,15 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> {
             Container(
               height: 1000,
               color: Colors.white,
-              child: CustomTabBar(
-                length: 3,
-                tabs: ['메뉴', '매장 정보', '리뷰'],
-                tabViews: [
-                  _menuDetail(_menuList),
-                  _restaurantInfo(),
-                  Container()
-                ],
-              ),
+              // child: CustomTabBar(
+              //   length: 3,
+              //   tabs: ['메뉴', '매장 정보', '리뷰'],
+              //   tabViews: [
+              //     _menuDetail(_menuList),
+              //     _restaurantInfo(),
+              //     Container()
+              //   ],
+              // ),
             )
           ],
         ),

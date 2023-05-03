@@ -37,47 +37,47 @@ class _CustomTabBarState extends State<CustomTabBar>
     return DefaultTabController(
         length: widget.length ,
         child: NestedScrollView(
-          headerSliverBuilder:
-              (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              if (widget.hasSliverAppBar!)
-                SliverAppBar(
-                  pinned: false,
-                  expandedHeight: 200,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Colors.white,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Image.asset(
-                      widget.flexibleImage!,
-                      fit: BoxFit.cover,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                if (widget.hasSliverAppBar!)
+                  SliverAppBar(
+                    pinned: false,
+                    expandedHeight: 200,
+                    automaticallyImplyLeading: false,
+                    backgroundColor: Colors.white,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Image.asset(
+                        widget.flexibleImage!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
+                SliverToBoxAdapter(
+                  child: widget.bottomWidget,
                 ),
-              SliverToBoxAdapter(
-                child: widget.bottomWidget,
-              ),
-              SliverPersistentHeader(
-                  pinned: true,
-                  delegate:MyTabBarDelegate(
-                    tabBar: TabBar(
-                      controller: _tabController,
-                      tabs: List<Widget>.generate(widget.length, (index) {
-                        return Tab(
-                            child: Text(
-                              widget.tabs[index],
-                              style: TextStyle(color: Colors.black, fontSize: 17),
-                            ));
-                      }),
-                      indicatorColor: Colors.black,
-                      labelPadding: EdgeInsets.all(5.0),
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                  )
-              )
-            ];
-          },
-          body: _buildTabBarView()
+                SliverPersistentHeader(
+                    pinned: true,
+                    delegate:MyTabBarDelegate(
+                      tabBar: TabBar(
+                        controller: _tabController,
+                        tabs: List<Widget>.generate(widget.length, (index) {
+                          return Tab(
+                              child: Text(
+                                widget.tabs[index],
+                                style: TextStyle(color: Colors.black, fontSize: 17),
+                              ));
+                        }),
+                        indicatorColor: Colors.black,
+                        labelPadding: EdgeInsets.all(5.0),
+                        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    )
+                )
+              ];
+            },
+            body: _buildTabBarView()
         )
     );
     // return Column(
@@ -93,15 +93,15 @@ class _CustomTabBarState extends State<CustomTabBar>
     return Container(
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
       child: TabBar(
         controller: _tabController,
         tabs: List<Widget>.generate(widget.length, (index) {
           return Tab(
               child: Text(
-            widget.tabs[index],
-            style: TextStyle(color: Colors.black, fontSize: 17),
-          ));
+                widget.tabs[index],
+                style: TextStyle(color: Colors.black, fontSize: 17),
+              ));
         }),
         indicatorColor: Colors.black,
         labelPadding: EdgeInsets.all(5.0),
@@ -116,8 +116,10 @@ class _CustomTabBarState extends State<CustomTabBar>
     return TabBarView(
       controller: _tabController,
       children: List<Widget>.generate(widget.length, (index) {
-        return SingleChildScrollView(
-          child: widget.tabViews[index],
+        return Tab(
+          child: SingleChildScrollView(
+            child: widget.tabViews[index],
+          ),
         );
       }),
     );
@@ -134,13 +136,13 @@ class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
       bool overlapsContent) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 0.5,
-          )
-        ),
-        color: Colors.white
+          border: Border(
+              bottom: BorderSide(
+                color: Colors.black12,
+                width: 0.5,
+              )
+          ),
+          color: Colors.white
       ),
 
       child: tabBar,
