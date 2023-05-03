@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simollu_front/views/fork_usage_page.dart';
+import 'package:simollu_front/views/fork_reward_page.dart';
 
 import 'package:simollu_front/views/liking_things_page.dart';
+import 'package:simollu_front/views/notification_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/test_restaurant_detail_page.dart';
+import 'package:simollu_front/views/test_tabbar.dart';
 
 import 'package:simollu_front/views/writing_review_page.dart';
 import 'package:simollu_front/views/start_page.dart';
@@ -81,13 +83,29 @@ class TmpPage extends StatelessWidget {
                 onPressed: () {
                   Get.to(TestRestaurantDetailpage());
                 },
-                child: Text('임시 가게정보'),
+                child: Text('임시'),
               ),
               OutlinedButton(
                 onPressed: () {
-                  Get.to(ForkUsagePage());
+                  Get.to(ForkRewardPage());
                 },
                 child: Text('포크'),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Get.to(MyApp());
+                },
+                child: Text('테스트'),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              OutlinedButton(
+                onPressed: () {
+                  Get.to(NotificationPage());
+                },
+                child: Text('알림'),
               ),
             ],
           )
