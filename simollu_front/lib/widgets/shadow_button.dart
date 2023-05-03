@@ -19,7 +19,7 @@ class ShadowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -35,10 +35,7 @@ class ShadowButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: child,
-          ),
+          child: child,
         ),
       ),
     );
