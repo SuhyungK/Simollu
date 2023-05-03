@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/views/notification_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -11,7 +13,7 @@ class MorePage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              print("공지사항");
+              Get.to(NotificationPage());
             },
             child: Container(
               padding: EdgeInsets.all(30),
