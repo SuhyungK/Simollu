@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:simollu_front/views/more_page.dart';
 import 'package:simollu_front/views/my_page.dart';
 import 'package:simollu_front/views/search_page.dart';

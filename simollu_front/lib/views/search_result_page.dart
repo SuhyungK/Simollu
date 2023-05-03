@@ -10,24 +10,19 @@ class SearchResultPage extends StatefulWidget {
 class _SearchResultPageState extends State<SearchResultPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.only(top: 100),
-          child: Text('검색 결과 page',
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Roboto',
-              fontSize: 20,
-              fontStyle: FontStyle.normal,
-              letterSpacing: 0,
-              wordSpacing: 0,
-              height: 1.0,
-              shadows: [],
-              decoration: TextDecoration.none,
+    return SingleChildScrollView(
+      child: Container(
+        color: Colors.white,
+        // padding: EdgeInsets.only(bottom: 12),
+        child: Column(
+          children: [
+            Container(
+              height: 7,
+              width: double.infinity,
+              margin: EdgeInsets.only(top: 10),
+              color: Colors.grey.withOpacity(0.2),
             ),
-          ),
+          ],
         ),
       ),
     );
