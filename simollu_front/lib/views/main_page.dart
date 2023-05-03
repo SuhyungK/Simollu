@@ -200,7 +200,7 @@ class _MainPageState extends State<MainPage> {
             child: waitingInfo == null
                 ? null
                 : Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),

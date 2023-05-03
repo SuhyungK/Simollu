@@ -24,6 +24,7 @@ class RootController extends GetxController {
   RxBool visibleBell = true.obs;
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> searchKey = GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> myPageKey = GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> mainPageKey = GlobalKey<NavigatorState>();
 
@@ -34,6 +35,7 @@ class RootController extends GetxController {
   Future<bool> onWillPop() async {
     rootPageTitles[rootPageIndex.value].pop();
     return !(await mainPageKey.currentState!.maybePop() ||
+        await searchKey.currentState!.maybePop() ||
         await myPageKey.currentState!.maybePop());
   }
 
@@ -146,14 +148,12 @@ class Root extends GetView<RootController> {
                   );
                 },
               ),
-              // Navigator(
-              //   key: controller.navigatorKey,
-              //   onGenerateRoute: (routeSettings) {
-              //     return MaterialPageRoute(
-              //         builder: (context) => const TmpPage());
-              //   },
-              // ),
-              SearchPage(),
+              Navigator(
+                  key: controller.searchKey,
+                  onGenerateRoute: (routeSettings) {
+                    return MaterialPageRoute(
+                        builder: (context) => const SearchPage());
+                  }),
               Navigator(
                 key: controller.myPageKey,
                 onGenerateRoute: (routeSettings) {
