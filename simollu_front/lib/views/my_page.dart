@@ -6,6 +6,7 @@ import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
+import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 class MyPage extends StatefulWidget {
@@ -209,7 +210,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                             width: 100,
                             child: GestureDetector(
                               onTap: () {
-                                print("포크 수");
+                                RootController.to.setRootPageTitles("작성 리뷰");
+                                RootController.to.setIsMainPage(false);
+                                Navigator.push(
+                                  context,
+                                  GetPageRoute(
+                                    curve: Curves.fastOutSlowIn,
+                                    page: () => ReviewManagementPage(),
+                                  ),
+                                );
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
