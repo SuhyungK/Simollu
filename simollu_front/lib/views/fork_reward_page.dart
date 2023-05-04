@@ -13,14 +13,6 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 없앨 예정
-      appBar: CustomAppBar(
-        title: '포크 사용 내역',
-        leading: Icon(Icons.arrow_back),
-        actions: [
-          Icon(Icons.no_accounts)
-        ],
-      ),
       body: Column(
         children: [
           Container(
@@ -48,7 +40,7 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
                         children: [
                           Image.asset('assets/icons/Fork_small.png',),
                           SizedBox(width: 10,),
-                          Text('보유 포크'),
+                          Text('보유 포크', style: TextStyle(fontSize: 18)),
                         ],
                       ),
                       RichText(
@@ -57,8 +49,8 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
                             color: Colors.black,
                           ),
                           children: [
-                            TextSpan(text: "2000", style: TextStyle(color: Colors.amber)),
-                            TextSpan(text: "개")
+                            TextSpan(text: "2000", style: TextStyle(color: Colors.amber, fontSize: 20)),
+                            TextSpan(text: "개", style: TextStyle(fontSize: 18))
                           ]
                         ),
                       )

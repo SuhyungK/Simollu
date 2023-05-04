@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
@@ -134,7 +135,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                             width: 100,
                             child: GestureDetector(
                               onTap: () {
-                                print("포크 수");
+                                RootController.to.setRootPageTitles("포크 사용 내역");
+                                RootController.to.setIsMainPage(false);
+                                Navigator.push(
+                                  context,
+                                  GetPageRoute(
+                                    curve: Curves.fastOutSlowIn,
+                                    page: () => ForkRewardPage(),
+                                  ),
+                                );
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
