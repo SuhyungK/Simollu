@@ -101,7 +101,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                       ],
                     ),
                   ),
-                  Row(
+                  Row( // 인원 수, 웨이팅하기 버튼
                     children: [
                       Expanded(
                         child: Row(
@@ -112,8 +112,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             InkWell(
                               onTap: _decrementNumberOfPeople,
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 40,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: Colors.grey),
@@ -126,6 +126,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             ),
                             Container(
                               width: 70,
+
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey,
@@ -133,7 +134,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                 ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7.5),
                               child: Text(
                                 '$_numberOfPeople',
                                 style: TextStyle(
@@ -149,8 +150,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             InkWell(
                               onTap: _incrementNumberOfPeople,
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 40,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: Colors.grey),
@@ -161,9 +162,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: 170,
-                        height: 45,
+                      SizedBox(
+                        width: 160,
+                        height: 40,
                         child: OutlinedButton(
                           onPressed: () {
                             print('웨이팅하기 ! 클릭');
