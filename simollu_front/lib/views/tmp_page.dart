@@ -91,12 +91,6 @@ class TmpPage extends StatelessWidget {
                 },
                 child: Text('포크'),
               ),
-              OutlinedButton(
-                onPressed: () {
-                  Get.to(MyApp());
-                },
-                child: Text('테스트'),
-              ),
             ],
           ),
           Row(

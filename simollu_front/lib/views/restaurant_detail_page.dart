@@ -39,7 +39,54 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
           tabViews: [
             _menuDetail(_menuList),
             _restaurantInfo(),
-            _menuDetail(_menuList),
+            Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Colors.black12
+                          )
+                      )
+                  ),
+                  child: ListTile(
+                      leading: Icon(Icons.circle, size: 50),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('작성자', style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22
+                          )),
+                          Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
+                        ],
+                      )
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Colors.black12
+                          )
+                      )
+                  ),
+                  child: ListTile(
+                      leading: Icon(Icons.circle, size: 50),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('작성자', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22
+                          )),
+                          Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
+                        ],
+                      )
+                  ),
+                ),
+              ],
+            )
           ],
           hasSliverAppBar: true,
           flexibleImage: 'assets/Rectangle 42.png',
