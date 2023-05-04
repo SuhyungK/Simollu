@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simollu_front/views/recent_search_keyword_widget.dart';
-import 'package:simollu_front/views/search_hot_keyword_widget.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
-import 'package:simollu_front/views/search_recommendation_button.dart';
 import 'package:simollu_front/views/search_result_page.dart';
-import '../root.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -56,7 +52,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus();
+        // FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -159,13 +155,16 @@ class _SearchPageState extends State<SearchPage> {
         ),
         body: Container(
           color: Colors.white,
-          padding: EdgeInsets.only(bottom: 13),
+          // padding: EdgeInsets.only(bottom: 13),
           child: Scaffold(
-            body: Navigator(
-              key: _navigatorKey,
-              onPopPage: _onPopPage,
-              initialRoute: routeA,
-              onGenerateRoute: _onGenerateRoute,
+            body: Container(
+              color: Colors.white,
+              child: Navigator(
+                key: _navigatorKey,
+                onPopPage: _onPopPage,
+                initialRoute: routeA,
+                onGenerateRoute: _onGenerateRoute,
+              ),
             ),
           ),
         ),

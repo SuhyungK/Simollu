@@ -28,6 +28,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        width: double.infinity,
         color: Colors.white,
         // padding: EdgeInsets.only(bottom: 12),
         child: Column(
@@ -64,39 +65,93 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 8),
-                          padding: EdgeInsets.only(left: 10),
+                        Expanded(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 170,
-                                child: Text(
-                                  '동래정 선릉직영점rrrrrrrrrrrrrrrrr',
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.normal,
-                                    letterSpacing: 0,
-                                    wordSpacing: 0,
-                                    height: 1.0,
-                                    shadows: [],
-                                    decoration: TextDecoration.none,
+                                margin: EdgeInsets.only(left: 10, top: 10),
+                                child: SizedBox(
+                                  child: Text(
+                                    '동래정 선릉직영점rrrrrrrrrrrrrrrrr',
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 0,
+                                      wordSpacing: 0,
+                                      height: 1.0,
+                                      shadows: [],
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.schedule,
+                                          color: Color(0xFFFFD200),
+                                        ),
+                                        Text(
+                                          '1시간 30분 웨이팅',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal,
+                                            letterSpacing: 0,
+                                            wordSpacing: 0,
+                                            height: 1.0,
+                                            shadows: [],
+                                            decoration: TextDecoration.none,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.schedule,
+                                          color: Color(0xFFFFD200),
+                                        ),
+                                        Text(
+                                          '현재 3팀 대기 중',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal,
+                                            letterSpacing: 0,
+                                            wordSpacing: 0,
+                                            height: 1.0,
+                                            shadows: [],
+                                            decoration: TextDecoration.none,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Expanded(
-                          // 나머지 공간을 차지하기 위한 Expanded 위젯
-                          child: Container(),
                         ),
                       ],
                     ),
