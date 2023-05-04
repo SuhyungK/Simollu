@@ -11,7 +11,6 @@ import 'package:simollu_front/views/test_restaurant_detail_page.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 import 'package:simollu_front/views/start_page.dart';
 
-
 class TmpPage extends StatelessWidget {
   const TmpPage({super.key});
 
@@ -27,7 +26,8 @@ class TmpPage extends StatelessWidget {
                 onPressed: () {
                   print('취향 받기 페이지 이동!!!!!!!!');
                   // Get.to(LikingThings()); //페이지이동
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LikingThings()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LikingThings()));
                 },
                 style: OutlinedButton.styleFrom(
                     side: BorderSide(
@@ -47,11 +47,13 @@ class TmpPage extends StatelessWidget {
                       shadows: [],
                       decoration: TextDecoration.none,
                     )),
-
               ),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => WritingReviewPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WritingReviewPage()));
                 },
                 child: Text('리뷰 쓰기'),
               ),
@@ -67,7 +69,10 @@ class TmpPage extends StatelessWidget {
             children: [
               OutlinedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewManagement()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ReviewManagementPage()));
                 },
                 child: Text('내 리뷰 관리'),
               ),
