@@ -44,6 +44,7 @@ class SearchHotKeyword extends StatelessWidget {
           Container(
             height: 190,
             padding: EdgeInsets.only(left: 20),
+            color: Colors.white,
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
