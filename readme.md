@@ -8,3 +8,4 @@ Config-service
 
 bootstrap.yml, Docker 파일은 서버 안에서 관리합니다.
 
+application.yml 파일은 다른 gitlab 저장소에 있습니다.
