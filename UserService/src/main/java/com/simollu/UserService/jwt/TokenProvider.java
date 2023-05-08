@@ -1,8 +1,7 @@
 package com.simollu.UserService.jwt;
 
 
-import com.simollu.UserService.dto.UserInfoJwtDto;
-import com.simollu.UserService.entity.Authority;
+import com.simollu.UserService.dto.user.UserInfoJwtDto;
 import com.simollu.UserService.oauth.PrincipalDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

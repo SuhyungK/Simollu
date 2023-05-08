@@ -1,7 +1,7 @@
 package com.simollu.UserService.oauth;
 
 
-import com.simollu.UserService.dto.RegisterUserRequestDto;
+import com.simollu.UserService.dto.user.RegisterUserRequestDto;
 import com.simollu.UserService.entity.User;
 import com.simollu.UserService.service.UserService;
 import lombok.RequiredArgsConstructor;

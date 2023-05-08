@@ -1,0 +1,96 @@
+package com.simollu.UserService.service;
+
+
+import com.simollu.UserService.builder.UserForkBuilder;
+import com.simollu.UserService.dto.userfork.RegisterUserForkRequestDto;
+import com.simollu.UserService.dto.userfork.RegisterUserForkResponseDto;
+import com.simollu.UserService.dto.userfork.UserForkPageDto;
+import com.simollu.UserService.dto.userfork.UserForkResponseDto;
+import com.simollu.UserService.dto.user.UserInfoJwtDto;
+import com.simollu.UserService.entity.UserForkLog;
+import com.simollu.UserService.jwt.TokenProvider;
+import com.simollu.UserService.repository.UserForkLogRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class UserForkService {
+
+
+    private final UserForkLogRepository userForkLogRepository;
+    private final TokenProvider tokenProvider;
+    private final UserForkBuilder userForkBuilder;
+
+    private final int size = 10;
+
+
+    // 회원 포크 내역 추가
+    public RegisterUserForkResponseDto registerUserForkLog(String token, RegisterUserForkRequestDto registerUserForkRequestDto) {
+        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+
+        // 최근 하나의 것을 가져온다.
+        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq());
+
+        // 일단은 들어오는 값이 음수, 양수라고 생각한다.
+        int balance = latestOne.getUserForkBalance() + registerUserForkRequestDto.getUserForkAmount();
+
+        // 저장
+        UserForkLog userForkLog = UserForkLog.builder()
+                .userSeq(userInfo.getUserSeq())
+                .userForkAmount(registerUserForkRequestDto.getUserForkAmount())
+                .userForkBalance(balance)
+                .userForkType(registerUserForkRequestDto.getUserForkType())
+                .userForkContent(registerUserForkRequestDto.getUserForkContent())
+                .build();
+        UserForkLog save = userForkLogRepository.save(userForkLog);
+
+        System.out.println(save.toString());
+
+        // 반환
+        RegisterUserForkResponseDto responseDto  = RegisterUserForkResponseDto.builder()
+                .userForkSeq(save.getUserForkSeq())
+                .userSeq(save.getUserSeq())
+                .userForkAmount(save.getUserForkAmount())
+                .userForkBalance(save.getUserForkBalance())
+                .userForkType(save.getUserForkType())
+                .userForkContent(save.getUserForkContent())
+                .userForkRegisterDate(
+                        save.getUserForkRegisterDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
+        return responseDto;
+    }
+
+    // 회원 포크 조회
+    public UserForkResponseDto getUserFork(String token) {
+        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+
+        // 최근 하나의 것을 가져온다.
+        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq());
+
+        return UserForkResponseDto.builder()
+                .userFork(latestOne.getUserForkBalance())
+                .build();
+    }
+
+
+    // 회원 포크 내역 조회
+    public Page<UserForkPageDto> getUserForkLog(String token, int page) {
+        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "userForkRegisterDate"));
+        Page<UserForkLog> userForkPage = userForkLogRepository.findByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq(), pageRequest);
+
+        return userForkPage.map(userForkBuilder::userForkLogToUserForkPageDto);
+    }
+
+
+}

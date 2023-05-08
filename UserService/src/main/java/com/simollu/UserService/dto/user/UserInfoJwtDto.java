@@ -1,4 +1,4 @@
-package com.simollu.UserService.dto;
+package com.simollu.UserService.dto.user;
 
 
 import com.simollu.UserService.entity.Authority;

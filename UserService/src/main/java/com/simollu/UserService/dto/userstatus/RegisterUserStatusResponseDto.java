@@ -1,8 +1,10 @@
-package com.simollu.UserService.dto;
+package com.simollu.UserService.dto.userstatus;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,15 +16,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class RegisterUserForkResponseDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegisterUserStatusResponseDto {
 
-    private long userForkSeq;
+    private long userStatusSeq;
     private String userSeq;
-    private int userForkAmount;
-    private int userForkBalance;
-    private String userForkType;
-    private String userForkContent;
-    private String userForkRegisterDate;
-
+    private int userStatusContent;
+    private String userStatusDate;
 
 }
