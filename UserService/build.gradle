@@ -67,6 +67,10 @@ dependencies {
 	// oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	// json
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+
+
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
