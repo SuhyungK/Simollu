@@ -28,6 +28,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        width: double.infinity,
         color: Colors.white,
         // padding: EdgeInsets.only(bottom: 12),
         child: Column(
@@ -64,44 +65,98 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 8),
-                          padding: EdgeInsets.only(left: 10),
+                        Expanded(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 170,
-                                child: Text(
-                                  '동래정 선릉직영점rrrrrrrrrrrrrrrrr',
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.normal,
-                                    letterSpacing: 0,
-                                    wordSpacing: 0,
-                                    height: 1.0,
-                                    shadows: [],
-                                    decoration: TextDecoration.none,
+                                margin: EdgeInsets.only(left: 10, top: 10),
+                                child: SizedBox(
+                                  child: Text(
+                                    '동래정 선릉직영점rrrrrrrrrrrrrrrrr',
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 0,
+                                      wordSpacing: 0,
+                                      height: 1.0,
+                                      shadows: [],
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.schedule,
+                                          color: Color(0xFFFFD200),
+                                        ),
+                                        Text(
+                                          '1시간 30분 웨이팅',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal,
+                                            letterSpacing: 0,
+                                            wordSpacing: 0,
+                                            height: 1.0,
+                                            shadows: [],
+                                            decoration: TextDecoration.none,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.schedule,
+                                          color: Color(0xFFFFD200),
+                                        ),
+                                        Text(
+                                          '현재 3팀 대기 중',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal,
+                                            letterSpacing: 0,
+                                            wordSpacing: 0,
+                                            height: 1.0,
+                                            shadows: [],
+                                            decoration: TextDecoration.none,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Expanded(
-                          // 나머지 공간을 차지하기 위한 Expanded 위젯
-                          child: Container(),
-                        ),
                       ],
                     ),
                   ),
-                  Row(
+                  Row( // 인원 수, 웨이팅하기 버튼
                     children: [
                       Expanded(
                         child: Row(
@@ -112,8 +167,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             InkWell(
                               onTap: _decrementNumberOfPeople,
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 40,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: Colors.grey),
@@ -126,6 +181,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             ),
                             Container(
                               width: 70,
+
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey,
@@ -133,7 +189,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                 ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7.5),
                               child: Text(
                                 '$_numberOfPeople',
                                 style: TextStyle(
@@ -149,8 +205,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             InkWell(
                               onTap: _incrementNumberOfPeople,
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 40,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: Colors.grey),
@@ -161,9 +217,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: 170,
-                        height: 45,
+                      SizedBox(
+                        width: 160,
+                        height: 40,
                         child: OutlinedButton(
                           onPressed: () {
                             print('웨이팅하기 ! 클릭');

@@ -5,7 +5,8 @@ class RecentSearchKeywordWidget extends StatefulWidget {
   const RecentSearchKeywordWidget({Key? key}) : super(key: key);
 
   @override
-  _RecentSearchKeywordWidgetState createState() => _RecentSearchKeywordWidgetState();
+  _RecentSearchKeywordWidgetState createState() =>
+      _RecentSearchKeywordWidgetState();
 }
 
 class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
@@ -50,10 +51,12 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
                     width: 0.9,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // 원하는 radius 값으로 설정
+                    borderRadius:
+                        BorderRadius.circular(20), // 원하는 radius 값으로 설정
                   ),
                 ),
-                child: const Text('모두 삭제',
+                child: const Text(
+                  '모두 삭제',
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Roboto',
@@ -64,24 +67,39 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
                     height: 1.0,
                     shadows: [],
                     decoration: TextDecoration.none,
-                  ),),
+                  ),
+                ),
               ),
             ),
           ],
         ),
-        Row(
-          children: _recentSearches.map((query) {
-            return SingleChildScrollView(
-              child: Row(
-                children: [
-                  const SizedBox(width: 8),
-                  const Icon(Icons.history),
-                  const SizedBox(width: 8),
-                  Text(query),
-                ],
-              ),
-            );
-          }).toList(),
+        FutureBuilder<List<String>>(
+          future: RecentSearches.load(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final recentSearches = snapshot.data!;
+              return Row(
+                children: recentSearches
+                    .map(
+                      (query) => SingleChildScrollView(
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 8),
+                            const Icon(Icons.history),
+                            const SizedBox(width: 8),
+                            Text(query),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              );
+            }
+          },
         ),
       ],
     );

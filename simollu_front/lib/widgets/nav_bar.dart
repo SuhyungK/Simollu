@@ -38,6 +38,7 @@ class NavBar extends StatelessWidget {
           ...List.generate(
             icons.length,
             (index) => BottomNavigationBarItem(
+              backgroundColor: Colors.white,
               icon: Stack(
                 alignment: Alignment.center,
                 children: [
