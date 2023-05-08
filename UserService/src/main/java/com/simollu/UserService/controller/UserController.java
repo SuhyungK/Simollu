@@ -17,12 +17,16 @@ public class UserController {
     private final UserService userService;
 
 
+    // 회원 포크 내역 등록
     @PostMapping("user-fork")
-    public ResponseEntity<?> registerUserFork(@RequestHeader("token") String token,
+    public ResponseEntity<?> registerUserFork(@RequestHeader("AUTHORIZATION") String token,
                                               @RequestBody RegisterUserForkRequestDto registerUserForkRequestDto) {
         RegisterUserForkResponseDto responseDto = userService.registerUserForkLog(token, registerUserForkRequestDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 회원 포크 내역 최신 조회
+
 
 
 
