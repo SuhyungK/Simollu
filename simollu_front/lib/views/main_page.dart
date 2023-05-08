@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/widgets/shadow_button.dart';
 
@@ -128,14 +129,23 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        backgroundColor: Colors.amber,
-        icon: Icon(Icons.location_on),
-        label: Text('경로 보기', style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16
-        ),)
-      ),
+          onPressed: () {
+            RootController.to.setRootPageTitles("지도");
+            RootController.to.setIsMainPage(false);
+            Navigator.push(
+              context,
+              GetPageRoute(
+                curve: Curves.fastOutSlowIn,
+                page: () => MapPage(),
+              ),
+            );
+          },
+          backgroundColor: Colors.amber,
+          icon: Icon(Icons.location_on),
+          label: Text(
+            '경로 보기',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          )),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -232,7 +242,8 @@ class _MainPageState extends State<MainPage> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         padding:
@@ -251,7 +262,8 @@ class _MainPageState extends State<MainPage> {
                                           Text(
                                             "예상 대기 시간",
                                             style: TextStyle(
-                                              color: Colors.grey.withOpacity(0.8),
+                                              color:
+                                                  Colors.grey.withOpacity(0.8),
                                             ),
                                           ),
                                           SizedBox(
@@ -267,7 +279,8 @@ class _MainPageState extends State<MainPage> {
                                           Text(
                                             "예상 대기 인원",
                                             style: TextStyle(
-                                              color: Colors.grey.withOpacity(0.8),
+                                              color:
+                                                  Colors.grey.withOpacity(0.8),
                                             ),
                                           ),
                                           SizedBox(
@@ -315,12 +328,14 @@ class _MainPageState extends State<MainPage> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: Color(0xFFFFD200),
-                                          borderRadius: BorderRadius.circular(6),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
                                           boxShadow: [
                                             BoxShadow(
                                               offset: Offset(0, 3),
                                               blurRadius: 6,
-                                              color: Colors.grey.withOpacity(0.4),
+                                              color:
+                                                  Colors.grey.withOpacity(0.4),
                                             ),
                                           ],
                                         ),
@@ -350,12 +365,14 @@ class _MainPageState extends State<MainPage> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: Color(0xFFCCCCCC),
-                                          borderRadius: BorderRadius.circular(6),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
                                           boxShadow: [
                                             BoxShadow(
                                               offset: Offset(0, 6),
                                               blurRadius: 3,
-                                              color: Colors.grey.withOpacity(0.4),
+                                              color:
+                                                  Colors.grey.withOpacity(0.4),
                                             ),
                                           ],
                                         ),
@@ -629,8 +646,8 @@ class _MainPageState extends State<MainPage> {
                                               "${restaurants[index].likes}%",
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color:
-                                                    Colors.grey.withOpacity(0.8),
+                                                color: Colors.grey
+                                                    .withOpacity(0.8),
                                               ),
                                             ),
                                             SizedBox(
@@ -638,15 +655,16 @@ class _MainPageState extends State<MainPage> {
                                             ),
                                             Icon(
                                               Icons.schedule,
-                                              color: Colors.grey.withOpacity(0.8),
+                                              color:
+                                                  Colors.grey.withOpacity(0.8),
                                               size: 20,
                                             ),
                                             Text(
                                               "${restaurants[index].watingMinutes}m",
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color:
-                                                    Colors.grey.withOpacity(0.8),
+                                                color: Colors.grey
+                                                    .withOpacity(0.8),
                                               ),
                                             ),
                                           ],
