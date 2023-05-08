@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
+import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
