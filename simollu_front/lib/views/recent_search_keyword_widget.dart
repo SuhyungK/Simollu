@@ -77,7 +77,8 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
           future: RecentSearches.load(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Container();
+              // return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
