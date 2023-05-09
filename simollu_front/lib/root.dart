@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:simollu_front/views/main_page.dart';
 import 'package:simollu_front/views/more_page.dart';
 import 'package:simollu_front/views/my_page.dart';
 import 'package:simollu_front/views/search_page.dart';
-import 'package:simollu_front/views/tmp_page.dart';
 import 'package:simollu_front/widgets/nav_bar.dart';
 import 'package:simollu_front/utils/sstack.dart';
 
@@ -29,10 +29,14 @@ class RootController extends GetxController {
 
   void changeRootPageIndex(int index) {
     rootPageIndex(index);
+    
   }
 
   Future<bool> onWillPop() async {
     rootPageTitles[rootPageIndex.value].pop();
+    if (rootPageTitles[rootPageIndex.value].length == 1) {
+      setIsMainPage(true);
+    }
     return !(await mainPageKey.currentState!.maybePop() ||
         await searchKey.currentState!.maybePop() ||
         await myPageKey.currentState!.maybePop());
@@ -48,9 +52,6 @@ class RootController extends GetxController {
 
   void back() {
     onWillPop();
-    if (rootPageTitles[rootPageIndex.value].length == 1) {
-      setIsMainPage(true);
-    }
   }
 }
 
