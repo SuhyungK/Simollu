@@ -1,19 +1,27 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/UserModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/utils/token.dart';
 
 class UserViewModel{
   Uri uri = Uri.parse('https://simollu.com/api/user/nickname');
+  String token = ""; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
+
+  Future<void> initialize() async {
+    token = await getToken(); // getToken() 함수의 반환값을 대입
+  }
 
   Future<String> getNickname() async {
+
+    await initialize();
 
     String nickname = "";
 
     final response = await http.get(
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Authorization" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMGFhZTQ3Yi02ODM0LTQ3MTEtOWQ2ZC03MWQxNGMyYzk4MzAiLCJhdXRob3JpdHkiOlsiUk9MRV9VU0VSIl0sImV4cCI6MTY4MzY4MTI1OX0.GoN9Of44mvyOlK4ZAgNEeJrb09h-afojBakffVy0j2k"
+          "Authorization" : token
         },
         uri);
     print(response);
@@ -35,10 +43,12 @@ class UserViewModel{
   Future<String> postNickname(String nickname) async {
     String res = "";
 
+    await initialize();
+
     final response = await http.post(
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Authorization" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMGFhZTQ3Yi02ODM0LTQ3MTEtOWQ2ZC03MWQxNGMyYzk4MzAiLCJhdXRob3JpdHkiOlsiUk9MRV9VU0VSIl0sImV4cCI6MTY4MzY4MTI1OX0.GoN9Of44mvyOlK4ZAgNEeJrb09h-afojBakffVy0j2k"
+          "Authorization": token
         },
         body: json.encode({
           "userNicknameContent" : nickname

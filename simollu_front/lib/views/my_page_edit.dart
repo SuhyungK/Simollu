@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../viewmodels/UserViewmodel.dart';
 
@@ -22,7 +23,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
 
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
     nameController = TextEditingController(text: widget.name);
   }
@@ -32,7 +33,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     nameController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
