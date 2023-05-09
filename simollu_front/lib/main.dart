@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
@@ -7,7 +8,9 @@ import 'package:simollu_front/root.dart';
 import './views/my_page.dart';
 import 'widgets/nav_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); // 추가
   runApp(
     MyApp(),
   );
