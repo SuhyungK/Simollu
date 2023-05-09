@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/views/login_page.dart';
+import 'package:simollu_front/views/main_page.dart';
+import 'package:simollu_front/views/my_page.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 
-class StartPage extends StatelessWidget {
+final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
+// final Uri _url = Uri.parse('https://simollu.com/api/user/login/oauth2/code/kakao');
+
+class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
   @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  final getToken = GetToken();
+
+  @override
+  void initState()  {
+    // TODO: implement initState
+    super.initState();
+    _readLoginInfo();
+  }
+
+  Future<void> _readLoginInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    final password = prefs.getString('password');
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
@@ -17,13 +49,29 @@ class StartPage extends StatelessWidget {
                   'assets/logo.png',
                   width: 300,
               ),
-              Image.asset(
-                'assets/kakao_login_large_wide 1.png'
+              InkWell(
+                onTap: () {
+                  Get.to(MyWebView());
+                } ,
+                child: Image.asset(
+                  'assets/kakao_login_large_wide 1.png'
+                ),
               )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class GetToken {
+  final List<String> _key = ['token', 'initial'];
+
+  Future<String> isTokenExists() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(_key[0]);
+    final initial = prefs.getBool(_key[1]);
+    return token ?? '';
   }
 }
