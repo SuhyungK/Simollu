@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
+import 'package:simollu_front/views/start_page.dart';
+import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
-
 import 'package:simollu_front/root.dart';
 import './views/my_page.dart';
 import 'widgets/nav_bar.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           Get.put(RootController());
         },
       ),
-      home: Root(),
+      // home: Root(),
+      home: StartPage(),
     );
   }
 }

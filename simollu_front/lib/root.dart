@@ -29,6 +29,7 @@ class RootController extends GetxController {
 
   void changeRootPageIndex(int index) {
     rootPageIndex(index);
+
   }
 
   Future<bool> onWillPop() async {

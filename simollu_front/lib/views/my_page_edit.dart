@@ -1,7 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyPageEdit extends StatelessWidget {
-  const MyPageEdit({super.key});
+import '../viewmodels/UserViewmodel.dart';
+
+class MyPageEdit extends StatefulWidget {
+  final String name;
+
+  MyPageEdit({Key? key, required this.name}) : super(key: key);
+
+  @override
+  _MyPageEditState createState() => _MyPageEditState();
+}
+
+class _MyPageEditState extends State<MyPageEdit> {
+  late TextEditingController nameController;
+
+  UserViewModel userViewModel = UserViewModel();
+
+  Future postNickname(String text) async {
+    String res = await userViewModel.postNickname(text);
+    print("mypage screen"+res);
+  }
+
+  @override
+  Future<void> initState() async {
+    super.initState();
+    nameController = TextEditingController(text: widget.name);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +82,7 @@ class MyPageEdit extends StatelessWidget {
                 FractionallySizedBox(
                   widthFactor: 0.8,
                   child: TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
@@ -62,7 +94,8 @@ class MyPageEdit extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('내 정보 수정');
+                  print('내 정보 수정'+ nameController.value.text);
+                  postNickname(nameController.value.text);
                 },
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
