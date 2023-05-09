@@ -1,38 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../viewmodels/UserViewmodel.dart';
-
-class MyPageEdit extends StatefulWidget {
-  final String name;
-
-  MyPageEdit({Key? key, required this.name}) : super(key: key);
-
-  @override
-  _MyPageEditState createState() => _MyPageEditState();
-}
-
-class _MyPageEditState extends State<MyPageEdit> {
-  late TextEditingController nameController;
-
-  UserViewModel userViewModel = UserViewModel();
-
-  Future postNickname(String text) async {
-    String res = await userViewModel.postNickname(text);
-    print("mypage screen"+res);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController(text: widget.name);
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    super.dispose();
-  }
-
+class MyPageEdit extends StatelessWidget {
+  const MyPageEdit({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +51,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                 FractionallySizedBox(
                   widthFactor: 0.8,
                   child: TextField(
-                    controller: nameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
@@ -94,8 +62,7 @@ class _MyPageEditState extends State<MyPageEdit> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('내 정보 수정'+ nameController.value.text);
-                  postNickname(nameController.value.text);
+                  print('내 정보 수정');
                 },
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,

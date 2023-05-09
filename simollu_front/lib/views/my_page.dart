@@ -5,13 +5,10 @@ import 'package:get/get.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
-import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
-
-import '../viewmodels/UserViewmodel.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -23,29 +20,10 @@ class MyPage extends StatefulWidget {
 class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  UserViewModel userViewModel = UserViewModel();
-  String nickname = "";
-
-  Future initNickname() async {
-    nickname = (await userViewModel.getNickname()) as String;
-    print("mypage screen"+nickname);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    initNickname();
-  }
-
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    initNickname().then((_) {
-      setState(() {
-        nickname = nickname;
-      });
-    });
   }
 
   @override
@@ -83,7 +61,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                   ),
                   Expanded(
                     child: Text(
-                      nickname,
+                      "KOEHssssssssssssssssssssssssssssssss",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -98,8 +76,8 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       Navigator.push(
                         context,
                         GetPageRoute(
-                          page: () => MyPageEdit(name: nickname,),
-                          transition: Transition.cupertino,
+                          curve: Curves.fastOutSlowIn,
+                          page: () => MyPageEdit(),
                         ),
                       );
                     },
