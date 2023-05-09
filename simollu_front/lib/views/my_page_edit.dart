@@ -23,7 +23,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.name);
   }
