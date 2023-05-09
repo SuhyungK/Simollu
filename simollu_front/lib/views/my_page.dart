@@ -11,6 +11,8 @@ import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
+import '../viewmodels/UserViewmodel.dart';
+
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
@@ -21,10 +23,23 @@ class MyPage extends StatefulWidget {
 class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
+  UserViewModel userViewModel = UserViewModel();
+  String nickname = "";
+
+  Future initNickname() async {
+    nickname = (await userViewModel.getNickname()) as String;
+    print("mypage screen"+nickname);
+  }
+
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    initNickname().then((_) {
+      setState(() {
+        nickname = nickname;
+      });
+    });
   }
 
   @override
@@ -62,7 +77,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                   ),
                   Expanded(
                     child: Text(
-                      "KOEHssssssssssssssssssssssssssssssss",
+                      nickname,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
