@@ -32,6 +32,12 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initNickname();
+  }
+
+  @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);

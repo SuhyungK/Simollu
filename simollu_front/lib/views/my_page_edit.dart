@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../viewmodels/UserViewmodel.dart';
+
 class MyPageEdit extends StatefulWidget {
   final String name;
 
@@ -11,6 +13,13 @@ class MyPageEdit extends StatefulWidget {
 
 class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController nameController;
+
+  UserViewModel userViewModel = UserViewModel();
+
+  Future postNickname(String text) async {
+    String res = await userViewModel.postNickname(text);
+    print("mypage screen"+res);
+  }
 
   @override
   void initState() {
@@ -85,7 +94,8 @@ class _MyPageEditState extends State<MyPageEdit> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('내 정보 수정');
+                  print('내 정보 수정'+ nameController.value.text);
+                  postNickname(nameController.value.text);
                 },
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
