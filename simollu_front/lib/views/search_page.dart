@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
 
+import '../viewmodels/SearchViewModel.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -47,6 +49,8 @@ class _SearchPageState extends State<SearchPage> {
       throw Exception('Unknown route: ${setting.name}');
     }
   }
+  List<SearchViewModel> result = [];
+  SearchViewModel searchViewModel = SearchViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +108,10 @@ class _SearchPageState extends State<SearchPage> {
                   // _hasSearchResult = true;
                   _canPop = true;
                 });
+
+                // 검색 api 연결
+                result = (await searchViewModel.getSearchResult()).cast<SearchViewModel>();
+                print(result);
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(
