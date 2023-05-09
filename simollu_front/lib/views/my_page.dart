@@ -92,8 +92,8 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       Navigator.push(
                         context,
                         GetPageRoute(
-                          curve: Curves.fastOutSlowIn,
-                          page: () => MyPageEdit(),
+                          page: () => MyPageEdit(name: nickname,),
+                          transition: Transition.cupertino,
                         ),
                       );
                     },

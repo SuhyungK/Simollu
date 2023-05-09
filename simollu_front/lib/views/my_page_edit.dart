@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
 
-class MyPageEdit extends StatelessWidget {
-  const MyPageEdit({super.key});
+class MyPageEdit extends StatefulWidget {
+  final String name;
+
+  MyPageEdit({Key? key, required this.name}) : super(key: key);
+
+  @override
+  _MyPageEditState createState() => _MyPageEditState();
+}
+
+class _MyPageEditState extends State<MyPageEdit> {
+  late TextEditingController nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.name);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +73,7 @@ class MyPageEdit extends StatelessWidget {
                 FractionallySizedBox(
                   widthFactor: 0.8,
                   child: TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
