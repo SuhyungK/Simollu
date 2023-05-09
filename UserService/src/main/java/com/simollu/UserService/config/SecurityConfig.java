@@ -42,7 +42,7 @@ public class SecurityConfig {
 
 
                 .and()
-                .successHandler(gptoAuth2AuthenticationSuccessHandler)
+                .successHandler(oAuth2AuthenticationSuccessHandler)
 
                 .and()
                 .logout()
