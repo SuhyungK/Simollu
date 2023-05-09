@@ -22,6 +22,9 @@ import java.util.Map;
 public class CustomUserOAuth2Service extends DefaultOAuth2UserService {
 
 
+
+
+
     private static final Logger logger = LoggerFactory.getLogger(CustomUserOAuth2Service.class);
 
     private final UserService userService;
@@ -47,11 +50,15 @@ public class CustomUserOAuth2Service extends DefaultOAuth2UserService {
         }
 
         User user;
+        boolean initial = false;
+
+        // 가입 여부 확인 - 있음
         if (userService.checkByKakao(oAuth2UserInfo.getProviderId())) {
             user = userService.findByUserKakaoWithAuthorities(oAuth2UserInfo.getProviderId());
             logger.info("CustomUserOAuth2Service - 가입 한적 있음");
+        // 가입 여부 확인 - 없음
         } else {
-
+            initial = true;
             RegisterUserRequestDto registerUserRequestDto = RegisterUserRequestDto.builder()
                     .userKakao(oAuth2UserInfo.getProviderId())
                     .userProfileUrl(oAuth2UserInfo.getProfileImage())
@@ -64,7 +71,7 @@ public class CustomUserOAuth2Service extends DefaultOAuth2UserService {
         logger.info("CustomUserOAuth2Service - oAuth2User , {}", oAuth2User.getAttributes());
 
 
-        return new PrincipalDetails(user, oAuth2User.getAttributes());
+        return new PrincipalDetails(user, oAuth2User.getAttributes(), initial);
     }
 
 

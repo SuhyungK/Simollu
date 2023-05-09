@@ -66,8 +66,8 @@ public class UserService {
         // 회원 포크 삽입
         UserForkLog userForkLog = UserForkLog.builder()
                 .userSeq(userSeq)
-                .userForkAmount(3)
-                .userForkBalance(3)
+                .userForkAmount(10)
+                .userForkBalance(10)
                 .userForkType("사용")
                 .userForkContent("회원 가입")
                 .build();

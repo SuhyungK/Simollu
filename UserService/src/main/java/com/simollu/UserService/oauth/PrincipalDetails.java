@@ -13,6 +13,10 @@ import java.util.*;
 @Data
 public class PrincipalDetails implements OAuth2User {
 
+    // 최초 가입 여부 확인
+    private boolean initial;
+
+
     private User user;
     private Map<String, Object> attributes;
     private String provider;
@@ -21,9 +25,10 @@ public class PrincipalDetails implements OAuth2User {
         this.user = user;
     }
 
-    public PrincipalDetails(User user, Map<String, Object> attributes) {
+    public PrincipalDetails(User user, Map<String, Object> attributes, boolean initial) {
         this.user = user;
         this.attributes = attributes;
+        this.initial = initial;
     }
 
     /**
@@ -54,6 +59,11 @@ public class PrincipalDetails implements OAuth2User {
     @Override
     public String getName() {
         return user.getUserKakao();
+    }
+
+
+    public boolean isInitial() {
+        return initial;
     }
 
 

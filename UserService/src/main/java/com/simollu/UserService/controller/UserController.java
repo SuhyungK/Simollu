@@ -11,6 +11,7 @@ import com.simollu.UserService.dto.usernickname.UserNicknameResponseDto;
 import com.simollu.UserService.dto.userpreference.RegisterUserPreferenceRequestDto;
 import com.simollu.UserService.dto.userpreference.RegisterUserPreferenceResponseDto;
 import com.simollu.UserService.dto.userpreference.UserPreferenceResponseDto;
+import com.simollu.UserService.dto.userprofile.UserProfileResponseDto;
 import com.simollu.UserService.dto.userstatus.RegisterUserStatusRequestDto;
 import com.simollu.UserService.dto.userstatus.RegisterUserStatusResponseDto;
 import com.simollu.UserService.dto.userstatus.UserStatusResponseDto;
@@ -31,6 +32,7 @@ public class UserController {
     private final UserNicknameService userNicknameService;
     private final UserStatusService userStatusService;
     private final UserPreferenceService userPreferenceService;
+    private final UserProfileService userProfileService;
 
 
     // 회원 포크 내역 등록
@@ -99,6 +101,14 @@ public class UserController {
     @GetMapping("preference")
     public ResponseEntity<?> getUserPreference(@RequestHeader("AUTHORIZATION") String token) {
         UserPreferenceResponseDto responseDto = userPreferenceService.getUserPreference(token);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+    // 회원 프로필 조회
+    @GetMapping("profile-image")
+    public ResponseEntity<?> getUserProfileImage(@RequestHeader("AUTHORIZATION") String token) {
+        UserProfileResponseDto responseDto = userProfileService.getUserProfileImage(token);
         return ResponseEntity.ok(responseDto);
     }
 

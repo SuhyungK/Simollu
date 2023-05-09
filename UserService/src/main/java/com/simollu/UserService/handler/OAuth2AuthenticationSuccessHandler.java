@@ -2,6 +2,7 @@ package com.simollu.UserService.handler;
 
 
 import com.simollu.UserService.jwt.TokenProvider;
+import com.simollu.UserService.oauth.PrincipalDetails;
 import com.simollu.UserService.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 인증 정보를 기반으로 JWT 토큰 생성
         String token = tokenProvider.createToken(authentication);
 
+        // initial 값을 가져옵니다.
+        boolean initial = false;
+        if (authentication.getPrincipal() instanceof PrincipalDetails) {
+            initial = ((PrincipalDetails) authentication.getPrincipal()).isInitial();
+        }
+
         // URL 쿼리 파라미터로 token 추가
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
+                .queryParam("initial", initial)
                 .build().toUriString();
     }
 
