@@ -8,6 +8,7 @@ import 'package:simollu_front/models/path_segment.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
+import 'package:simollu_front/widgets/path_recommended.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -24,6 +25,7 @@ class _MapPageState extends State<MapPage> {
   late StreamSubscription<Position> positionStreamSubscription;
   List<PathSegment> _pathList = [];
   List<Polyline> _polylineList = [];
+  late Map<String, List<String>> routes;
 
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
@@ -256,7 +258,20 @@ class _MapPageState extends State<MapPage> {
               length: 2,
               tabs: ['추천 경로', '검색'],
               tabViews: [
-                Container(child: Text("추천 경로")),
+                PathRecommended(
+                  routes: {
+                    '3POP피씨방': [
+                      "1234",
+                      "5678",
+                      "1234",
+                      "567dd8",
+                      "123ddddddddddddd4dddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                      "5678",
+                      "1234",
+                      "5678",
+                    ]
+                  },
+                ),
                 Container(child: Text("검색")),
               ],
             ),
