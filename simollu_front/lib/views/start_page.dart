@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/root.dart';
+import 'package:simollu_front/utils/token.dart';
 import 'package:simollu_front/views/login_page.dart';
 import 'package:simollu_front/views/main_page.dart';
 import 'package:simollu_front/views/my_page.dart';
@@ -8,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
 final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
-// final Uri _url = Uri.parse('https://simollu.com/api/user/login/oauth2/code/kakao');
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  final getToken = GetToken();
+  String token = "";
 
   @override
   void initState()  {
@@ -28,9 +29,10 @@ class _StartPageState extends State<StartPage> {
   }
 
   Future<void> _readLoginInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('email');
-    final password = prefs.getString('password');
+    token = await getToken();
+    if(token != "") {
+      Get.to(Root());
+    }
   }
 
   @override
