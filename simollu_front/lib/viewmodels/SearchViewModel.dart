@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/SearchModel.dart';
+import 'package:simollu_front/models/searchModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class SearchViewModel {
@@ -11,26 +11,34 @@ class SearchViewModel {
   }
 
   // search/contains/?description={검색어}&cx={경도}&cy={위도}&size=10
-  String keyword = "초밥"; // 검색어
+  String keyword = "베트남음식"; // 검색어
   double lat = 37.5013068; // 현재위치 : 위도
   double long = 127.0396597; // 현재위치 : 경도
 
   Future<List<SearchModel>> getSearchResult() async {
-    Uri uri = Uri.parse('http://70.12.246.176:8080/api/search/contains?description=${keyword}&cx=${lat}&cy=${long}&size=10');
+    await initialize();
+    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${keyword}&cx=${lat.toString()}&cy=${long.toString()}&size=10');
     List<SearchModel> result = [];
     final response = await http.get(
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Authorization" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMGFhZTQ3Yi02ODM0LTQ3MTEtOWQ2ZC03MWQxNGMyYzk4MzAiLCJhdXRob3JpdHkiOlsiUk9MRV9VU0VSIl0sImV4cCI6MTY4MzcwNjA2MX0.O-k7luYzFPFcEe5ZhXnvRZ1YBh-cT_t-qJ3prDXpRMg"
+          "Authorization" : token
         },
       uri);
     print(response);
     print("---------@@@@@"+response.body);
 
     if (response.statusCode == 200) {
-      result = jsonDecode(response.body)['result'].map<SearchModel>( (article) {
-        return SearchModel.fromMap(article);
-      }).toList();
+      List<dynamic> res = json.decode(response.body)["result"];
+      
+      // result = jsonDecode(response.body)["result"].map<SearchModel>( (result) {
+      //   return SearchModel.fromMap(result);
+      // }).toList();
+      
+      for(dynamic r in res) {
+        result.add(SearchModel.fromJSON(r));
+      }
+      // print("result :" + jsonDecode(response.body)["result"]);
     }
 
     return result;

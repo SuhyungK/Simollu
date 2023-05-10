@@ -73,34 +73,37 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
             ),
           ],
         ),
-        FutureBuilder<List<String>>(
-          future: RecentSearches.load(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-              // return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final recentSearches = snapshot.data!;
-              return Row(
-                children: recentSearches
-                    .map(
-                      (query) => SingleChildScrollView(
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 8),
-                            const Icon(Icons.history),
-                            const SizedBox(width: 8),
-                            Text(query),
-                          ],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: FutureBuilder<List<String>>(
+            future: RecentSearches.load(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+                // return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                final recentSearches = snapshot.data!;
+                return Row(
+                  children: recentSearches
+                      .map(
+                        (query) => SingleChildScrollView(
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 8),
+                              const Icon(Icons.history),
+                              const SizedBox(width: 8),
+                              Text(query),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
-              );
-            }
-          },
+                      )
+                      .toList(),
+                );
+              }
+            },
+          ),
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
 
+import '../models/searchModel.dart';
 import '../viewmodels/SearchViewModel.dart';
 
 class SearchPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
       throw Exception('Unknown route: ${setting.name}');
     }
   }
-  List<SearchViewModel> result = [];
+  List<SearchModel> result = [];
   SearchViewModel searchViewModel = SearchViewModel();
 
   @override
@@ -68,7 +69,9 @@ class _SearchPageState extends State<SearchPage> {
                   color: Colors.black54,
                   onPressed: () {
                     _navigatorKey.currentState?.pop();
-                    _canPop = false;
+                    setState(() {
+                      _canPop = false;
+                    });
                   },
                 )
               : null,
@@ -110,8 +113,11 @@ class _SearchPageState extends State<SearchPage> {
                 });
 
                 // 검색 api 연결
-                result = (await searchViewModel.getSearchResult()).cast<SearchViewModel>();
-                print(result);
+                result = (await searchViewModel.getSearchResult()).cast<SearchModel>();
+                for(SearchModel r in result) {
+                  print("==== yeah !");
+                  print(r.restaurantName.toString());
+                }
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(
@@ -218,10 +224,27 @@ class RecentSearches {
     final prefs = await SharedPreferences.getInstance();
     final recentSearches = prefs.getStringList(_key) ?? [];
 
+    // 이전 검색어가 목록에 없으면 새 검색어를 최상단에 추가
+    if (!recentSearches.contains(newQuery)) {
+      recentSearches.insert(0, newQuery);
+
+      // 검색어가 10개를 초과하면 마지막 항목을 제거
+      if (recentSearches.length > 10) {
+        recentSearches.removeLast();
+      }
+    } else {
+      // 이전 검색어를 새 검색어로 대체
+      final index = recentSearches.indexOf(newQuery);
+      recentSearches.removeAt(index);
+      recentSearches.insert(0, newQuery);
+    }
+
     // // 이전 검색어를 새 검색어로 대체
-    // final index = recentSearches.indexOf(oldQuery);
+    // final index = recentSearches.indexOf(newQuery);
     // if (index != -1) {
-    //   recentSearches[index] = newQuery;
+    //   recentSearches.removeAt(index);
+    //   recentSearches.insert(0, newQuery);
+    //   // recentSearches[index] = newQuery;
     // } else {
     //   // 이전 검색어가 목록에 없으면 새 검색어를 최상단에 추가
     //   recentSearches.insert(0, newQuery);

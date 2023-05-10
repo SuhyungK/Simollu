@@ -31,13 +31,12 @@ class _StartPageState extends State<StartPage> {
   Future<void> _readLoginInfo() async {
     token = await getToken();
     if(token != "") {
-      Get.to(Root());
+      Get.offAll(Root());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
 
     return MaterialApp(
       home: Scaffold(
