@@ -10,6 +10,14 @@ class SearchViewModel {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
+  List<SearchModel> _result = [];
+
+  List<SearchModel> get result => _result;
+
+  Future<void> setSearchResult(List<SearchModel> searchResult) async {
+    _result = searchResult;
+  }
+
   // search/contains/?description={검색어}&cx={경도}&cy={위도}&size=10
   String keyword = "베트남음식"; // 검색어
   double lat = 37.5013068; // 현재위치 : 위도
