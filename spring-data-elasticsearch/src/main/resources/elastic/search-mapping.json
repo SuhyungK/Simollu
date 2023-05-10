@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "searchSeq": { "type": "keyword" },
+    "searchWord": {
+      "type": "keyword"
+    }
+  }
+}

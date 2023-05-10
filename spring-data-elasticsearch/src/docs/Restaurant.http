@@ -1,0 +1,16 @@
+
+# 엔티티 document로 전환해서 ES에 저장
+# POST http://localhost:8080/api/restaurantDocuments
+POST http://localhost:8080/restaurantDocuments
+
+###
+# 포함하는 것 찾기
+# GET http://localhost:8080/api/search/contains?description=베트남음식&cx=126.8828469&cy=37.48272445&size=10
+GET http://localhost:8080/search/contains?description=베트남음식&cx=126.8828469&cy=37.48272445&size=10
+
+
+# 랭킹
+###
+# POST http://localhost:8080/api/search/top-search-keyword
+POST http://localhost:8080/search/top-search-keyword
+
