@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/path_segment.dart';
+import 'package:simollu_front/models/place.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
@@ -23,7 +24,8 @@ class _MapPageState extends State<MapPage> {
   late Position _currentPosition;
   Set<Marker> _markers = {};
   late StreamSubscription<Position> positionStreamSubscription;
-  List<PathSegment> _pathList = [];
+  List<PathSegment> pathList = [];
+  List<Place> placeList = [];
   List<Polyline> _polylineList = [];
   late Map<String, List<String>> routes;
 
@@ -40,16 +42,23 @@ class _MapPageState extends State<MapPage> {
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
-        _pathList =
+        pathList =
             await Provider.of<MapViewModel>(context, listen: false).findPaths(
           LatLng(_currentPosition.latitude, _currentPosition.longitude),
           _arrive,
           "",
         );
 
+        placeList = await Provider.of<MapViewModel>(context, listen: false)
+            .getPlaces(_arrive, "PC방");
+
+        for (Place place in placeList) {
+          print(place.id + " " + place.name);
+        }
+
         List<Polyline> polylineList = [];
         int polylineId = 0;
-        for (PathSegment path in _pathList) {
+        for (PathSegment path in pathList) {
           for (int i = 0; i < path.coordinates.length - 1; i++) {
             polylineList.add(Polyline(
               polylineId: PolylineId(polylineId.toString()),
@@ -62,13 +71,6 @@ class _MapPageState extends State<MapPage> {
             ));
             polylineId++;
           }
-          print(path.index.toString() +
-              " " +
-              path.coordinates.toString() +
-              " " +
-              path.distance.toString() +
-              " " +
-              path.time.toString());
         }
         setState(() {
           _polylineList = polylineList;
@@ -252,24 +254,14 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
           ),
-          SizedBox(
-            height: 400,
+          Expanded(
             child: CustomTabBar(
               length: 2,
               tabs: ['추천 경로', '검색'],
               tabViews: [
                 PathRecommended(
                   routes: {
-                    '3POP피씨방': [
-                      "1234",
-                      "5678",
-                      "1234",
-                      "567dd8",
-                      "123ddddddddddddd4dddddddddddddddddddddddddddddddddddddddddddddddddddd",
-                      "5678",
-                      "1234",
-                      "5678",
-                    ]
+                    '3POP피씨방': pathList,
                   },
                 ),
                 Container(child: Text("검색")),

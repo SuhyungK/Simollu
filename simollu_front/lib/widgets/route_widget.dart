@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/path_segment.dart';
 
 class RouteWidget extends StatelessWidget {
-  final List<String> routes;
+  final List<PathSegment> routes;
   final String name;
   const RouteWidget({super.key, required this.routes, required this.name});
 
@@ -45,7 +46,7 @@ class RouteWidget extends StatelessWidget {
                 ...List.generate(
                   routes.length,
                   (index) => TextSpan(
-                    text: routes[index],
+                    text: routes[index].description,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -57,7 +58,7 @@ class RouteWidget extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                    text: "도착",
+                    text: "매장 도착!",
                     style: TextStyle(
                       fontSize: 20,
                     )),

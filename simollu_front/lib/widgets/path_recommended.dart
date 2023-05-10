@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/widgets/route_widget.dart';
 
 class PathRecommended extends StatelessWidget {
-  final Map<String, List<String>> routes;
+  final Map<String, List<PathSegment>> routes;
   const PathRecommended({super.key, required this.routes});
 
   @override
