@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
@@ -24,6 +25,9 @@ class _SearchPageState extends State<SearchPage> {
   String _searchText = "";
   bool _canPop = false;
 
+  late List<SearchModel> result = [];
+  SearchViewModel searchViewModel = SearchViewModel();
+
   _SearchPageState() {
     _filter.addListener(() {
       setState(() {
@@ -43,15 +47,15 @@ class _SearchPageState extends State<SearchPage> {
     if (setting.name == routeA) {
       return MaterialPageRoute<dynamic>(
           builder: (context) => SearchInitialWidget(), settings: setting);
-    } else if (setting.name == routeB) {
+    }
+    else if (setting.name == routeB) {
       return MaterialPageRoute<dynamic>(
-          builder: (context) => SearchResultPage(), settings: setting);
-    } else {
+          builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
+    }
+    else {
       throw Exception('Unknown route: ${setting.name}');
     }
   }
-  List<SearchModel> result = [];
-  SearchViewModel searchViewModel = SearchViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +122,10 @@ class _SearchPageState extends State<SearchPage> {
                   print("==== yeah !");
                   print(r.restaurantName.toString());
                 }
+
+                await searchViewModel.setSearchResult(result);
+
+                // GetPageRoute(page: () => SearchResultPage(result: result));
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(
