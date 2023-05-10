@@ -24,9 +24,10 @@ class _MapPageState extends State<MapPage> {
   late Position _currentPosition;
   Set<Marker> _markers = {};
   late StreamSubscription<Position> positionStreamSubscription;
-  List<PathSegment> pathList = [];
+  Map<Place, List<PathSegment>> pathMap = {};
   List<Place> placeList = [];
   List<Polyline> _polylineList = [];
+  Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
@@ -42,38 +43,46 @@ class _MapPageState extends State<MapPage> {
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
-        pathList =
-            await Provider.of<MapViewModel>(context, listen: false).findPaths(
-          LatLng(_currentPosition.latitude, _currentPosition.longitude),
-          _arrive,
-          "",
-        );
+        List<Place> newPlaceList =
+            await Provider.of<MapViewModel>(context, listen: false)
+                .getPlaces(_arrive, "PC방");
 
-        placeList = await Provider.of<MapViewModel>(context, listen: false)
-            .getPlaces(_arrive, "PC방");
+        Map<Place, List<PathSegment>> newPathMap = {};
+        Map<Place, List<Polyline>> newPolylineMap = {};
 
-        for (Place place in placeList) {
-          print(place.id + " " + place.name);
-        }
-
-        List<Polyline> polylineList = [];
         int polylineId = 0;
-        for (PathSegment path in pathList) {
-          for (int i = 0; i < path.coordinates.length - 1; i++) {
-            polylineList.add(Polyline(
-              polylineId: PolylineId(polylineId.toString()),
-              points: [
-                LatLng(path.coordinates[i][1], path.coordinates[i][0]),
-                LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0])
-              ], // 시작점과 끝점 좌표
-              color: Colors.red, // 선 색상
-              width: 5,
-            ));
-            polylineId++;
+
+        for (Place place in newPlaceList) {
+          List<PathSegment> pathList =
+              await Provider.of<MapViewModel>(context, listen: false).findPaths(
+            LatLng(_currentPosition.latitude, _currentPosition.longitude),
+            _arrive,
+            place.lng.toString() + "," + place.lat.toString(),
+          );
+          newPathMap[place] = pathList;
+
+          List<Polyline> polylineList = [];
+          for (PathSegment path in pathList) {
+            for (int i = 0; i < path.coordinates.length - 1; i++) {
+              polylineList.add(Polyline(
+                polylineId: PolylineId(polylineId.toString()),
+                points: [
+                  LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+                  LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0])
+                ], // 시작점과 끝점 좌표
+                color: Colors.red, // 선 색상
+                width: 5,
+              ));
+              polylineId++;
+            }
           }
+          newPolylineMap[place] = polylineList;
         }
+
         setState(() {
-          _polylineList = polylineList;
+          _polylineMap = newPolylineMap;
+          placeList = newPlaceList;
+          pathMap = newPathMap;
         });
         _startListening();
       }
@@ -144,6 +153,13 @@ class _MapPageState extends State<MapPage> {
       target: LatLng(position.latitude, position.longitude),
       zoom: 19,
     )));
+  }
+
+  void onClickPath(Place key) {
+    print("클릭! " + key.name);
+    setState(() {
+      _polylineList = _polylineMap[key]!;
+    });
   }
 
   @override
@@ -260,9 +276,8 @@ class _MapPageState extends State<MapPage> {
               tabs: ['추천 경로', '검색'],
               tabViews: [
                 PathRecommended(
-                  routes: {
-                    '3POP피씨방': pathList,
-                  },
+                  routes: pathMap,
+                  event: onClickPath,
                 ),
                 Container(child: Text("검색")),
               ],
