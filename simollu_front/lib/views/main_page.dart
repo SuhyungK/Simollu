@@ -7,6 +7,8 @@ import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/widgets/shadow_button.dart';
 
+import '../viewmodels/UserViewmodel.dart';
+
 class WaitingInfo {
   final String restaurant;
   final int waitingNumber;
@@ -47,6 +49,26 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  UserViewModel userViewModel = UserViewModel();
+  late String nickname = "";
+
+  initNickname() async {
+    nickname = (await userViewModel.getNickname()) as String;
+    print("mypage screen"+nickname);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initNickname().then((_) {
+      setState(() {
+        nickname = nickname;
+      });
+    });
+  }
+
   // WaitingInfo? waitingInfo;
   WaitingInfo? waitingInfo = WaitingInfo(
     expectedWatingTime: 160,
@@ -166,7 +188,7 @@ class _MainPageState extends State<MainPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          "KOEH님",
+                          nickname+"님",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
