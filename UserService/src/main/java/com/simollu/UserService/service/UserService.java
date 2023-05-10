@@ -43,35 +43,35 @@ public class UserService {
         String userSeq = save.getUserSeq();
 
         // 회원 이미지 삽입
-        UserProfile userProfile = UserProfile.builder()
-                .userSeq(userSeq)
-                .userProfileUrl(registerUserRequestDto.getUserProfileUrl())
-                .build();
-        userProfileRepository.save(userProfile);
-
-        // 회원 닉네임 삽입
-        UserNickname userNickname = UserNickname.builder()
-                .userSeq(userSeq)
-                .userNicknameContent(registerUserRequestDto.getUserNicknameContent())
-                .build();
-        userNicknameRepository.save(userNickname);
-
-        // 회원 상태 삽입
-        UserStatus userStatus = UserStatus.builder()
-                .userSeq(userSeq)
-                .userStatusContent(1)
-                .build();
-        userStatusRepository.save(userStatus);
-
-        // 회원 포크 삽입
-        UserForkLog userForkLog = UserForkLog.builder()
-                .userSeq(userSeq)
-                .userForkAmount(10)
-                .userForkBalance(10)
-                .userForkType("사용")
-                .userForkContent("회원 가입")
-                .build();
-        userForkLogRepository.save(userForkLog);
+//        UserProfile userProfile = UserProfile.builder()
+//                .userSeq(userSeq)
+//                .userProfileUrl(registerUserRequestDto.getUserProfileUrl())
+//                .build();
+//        userProfileRepository.save(userProfile);
+//
+//        // 회원 닉네임 삽입
+//        UserNickname userNickname = UserNickname.builder()
+//                .userSeq(userSeq)
+//                .userNicknameContent(registerUserRequestDto.getUserNicknameContent())
+//                .build();
+//        userNicknameRepository.save(userNickname);
+//
+//        // 회원 상태 삽입
+//        UserStatus userStatus = UserStatus.builder()
+//                .userSeq(userSeq)
+//                .userStatusContent(1)
+//                .build();
+//        userStatusRepository.save(userStatus);
+//
+//        // 회원 포크 삽입
+//        UserForkLog userForkLog = UserForkLog.builder()
+//                .userSeq(userSeq)
+//                .userForkAmount(10)
+//                .userForkBalance(10)
+//                .userForkType("사용")
+//                .userForkContent("회원 가입")
+//                .build();
+//        userForkLogRepository.save(userForkLog);
 
         return save;
     }
