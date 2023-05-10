@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/main.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/notification_page.dart';
 import 'package:simollu_front/views/start_page.dart';
 
@@ -15,7 +16,7 @@ class MorePage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(StartPage());
+              Get.to(() => LikingThings());
             },
             child: Container(
               padding: EdgeInsets.all(30),
