@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
 
+import '../models/searchModel.dart';
 import '../viewmodels/SearchViewModel.dart';
 
 class SearchPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
       throw Exception('Unknown route: ${setting.name}');
     }
   }
-  List<SearchViewModel> result = [];
+  List<SearchModel> result = [];
   SearchViewModel searchViewModel = SearchViewModel();
 
   @override
@@ -68,7 +69,9 @@ class _SearchPageState extends State<SearchPage> {
                   color: Colors.black54,
                   onPressed: () {
                     _navigatorKey.currentState?.pop();
-                    _canPop = false;
+                    setState(() {
+                      _canPop = false;
+                    });
                   },
                 )
               : null,
@@ -110,8 +113,11 @@ class _SearchPageState extends State<SearchPage> {
                 });
 
                 // 검색 api 연결
-                result = (await searchViewModel.getSearchResult()).cast<SearchViewModel>();
-                print(result);
+                result = (await searchViewModel.getSearchResult()).cast<SearchModel>();
+                for(SearchModel r in result) {
+                  print("==== yeah !");
+                  print(r.restaurantName.toString());
+                }
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(

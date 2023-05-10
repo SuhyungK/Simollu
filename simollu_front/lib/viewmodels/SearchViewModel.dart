@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/SearchModel.dart';
+import 'package:simollu_front/models/searchModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class SearchViewModel {
@@ -17,7 +17,7 @@ class SearchViewModel {
 
   Future<List<SearchModel>> getSearchResult() async {
     await initialize();
-    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${keyword}&cx=${lat}&cy=${long}&size=10');
+    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${keyword}&cx=${lat.toString()}&cy=${long.toString()}&size=10');
     List<SearchModel> result = [];
     final response = await http.get(
         headers: {
@@ -29,10 +29,16 @@ class SearchViewModel {
     print("---------@@@@@"+response.body);
 
     if (response.statusCode == 200) {
-      result = jsonDecode(response.body)['result'].map<SearchModel>( (article) {
-        return SearchModel.fromMap(article);
-      }).toList();
-      print("result :" + jsonDecode(response.body)['result']);
+      List<dynamic> res = json.decode(response.body)["result"];
+      
+      // result = jsonDecode(response.body)["result"].map<SearchModel>( (result) {
+      //   return SearchModel.fromMap(result);
+      // }).toList();
+      
+      for(dynamic r in res) {
+        result.add(SearchModel.fromJSON(r));
+      }
+      // print("result :" + jsonDecode(response.body)["result"]);
     }
 
     return result;
