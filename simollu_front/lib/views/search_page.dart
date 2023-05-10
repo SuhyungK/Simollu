@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';

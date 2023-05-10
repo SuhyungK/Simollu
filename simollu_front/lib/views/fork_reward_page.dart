@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:simollu_front/widgets/custom_appBar.dart';
 import 'package:intl/intl.dart';
 
 class ForkRewardPage extends StatefulWidget {

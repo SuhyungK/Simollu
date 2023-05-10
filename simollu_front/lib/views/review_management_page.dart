@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
-import 'package:simollu_front/views/review_management_star_button.dart';
 import 'package:simollu_front/views/writable_review_widget.dart';
-import 'package:simollu_front/widgets/custom_appBar.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
 List<String> myReviews = ['리뷰 1', '리뷰 2', '리뷰 3'];

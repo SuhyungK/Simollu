@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/models/place.dart';
 
 class KakaoMapAPI {

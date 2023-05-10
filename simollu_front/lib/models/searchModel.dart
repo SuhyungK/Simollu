@@ -42,11 +42,11 @@ class SearchModel {
   }
 
   SearchModel.fromJSON(Map<String, dynamic> json)
-      : this.restaurantSeq = json['restaurantSeq'],
-        this.restaurantName = json['restaurantName'],
-        this.restaurantRating = json['restaurantRating'],
-        this.restaurantImg = json['restaurantImg'],
-        this.restaurantX = double.parse(json['restaurantX']),
-        this.restaurantY = double.parse(json['restaurantY']),
-        this.distanceTime = json['distanceTime'];
+      : restaurantSeq = json['restaurantSeq'],
+        restaurantName = json['restaurantName'],
+        restaurantRating = json['restaurantRating'],
+        restaurantImg = json['restaurantImg'],
+        restaurantX = double.parse(json['restaurantX']),
+        restaurantY = double.parse(json['restaurantY']),
+        distanceTime = json['distanceTime'];
 }
