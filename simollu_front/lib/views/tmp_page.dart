@@ -8,7 +8,6 @@ import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/test_restaurant_detail_page.dart';
-import 'package:simollu_front/views/test_tabbar.dart';
 
 import 'package:simollu_front/views/writing_review_page.dart';
 import 'package:simollu_front/views/start_page.dart';

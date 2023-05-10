@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/PreferenceModel.dart';
-import 'package:simollu_front/models/SearchModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class PreferenceViewModel {
@@ -13,7 +12,7 @@ class PreferenceViewModel {
   
   Future<PreferenceModel> postPreference(String json) async {
     late PreferenceModel result;
-    initialize();
+    await initialize();
     var url = Uri.https('simollu.com', '/api/user/preference');
     // Uri uri = Uri.parse('https://simollu.com/api/user/preference');
     final response = await http.post(

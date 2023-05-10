@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/widgets/shadow_button.dart';
+
+import '../viewmodels/UserViewmodel.dart';
 
 class WaitingInfo {
   final String restaurant;
@@ -47,6 +51,26 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  UserViewModel userViewModel = UserViewModel();
+  late String nickname = "";
+
+  initNickname() async {
+    nickname = (await userViewModel.getNickname()) as String;
+    print("mypage screen"+nickname);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initNickname().then((_) {
+      setState(() {
+        nickname = nickname;
+      });
+    });
+  }
+
   // WaitingInfo? waitingInfo;
   WaitingInfo? waitingInfo = WaitingInfo(
     expectedWatingTime: 160,
@@ -130,13 +154,20 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            RootController.to.setRootPageTitles("지도");
+            RootController.to.setRootPageTitles("");
             RootController.to.setIsMainPage(false);
             Navigator.push(
               context,
               GetPageRoute(
                 curve: Curves.fastOutSlowIn,
-                page: () => MapPage(),
+                page: () => MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (_) => MapViewModel(),
+                    )
+                  ],
+                  child: MapPage(),
+                ),
               ),
             );
           },
@@ -166,7 +197,7 @@ class _MainPageState extends State<MainPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          "KOEH님",
+                          nickname+"님",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -277,7 +308,7 @@ class _MainPageState extends State<MainPage> {
                                       Row(
                                         children: [
                                           Text(
-                                            "예상 대기 인원",
+                                            "대기 순서",
                                             style: TextStyle(
                                               color:
                                                   Colors.grey.withOpacity(0.8),
@@ -287,7 +318,7 @@ class _MainPageState extends State<MainPage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            "${waitingInfo!.waitingCount}명",
+                                            "${waitingInfo!.waitingCount}",
                                           ),
                                         ],
                                       ),
