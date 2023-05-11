@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/path_segment.dart';
+import 'package:simollu_front/models/place.dart';
 
 class RouteWidget extends StatelessWidget {
   final List<PathSegment> routes;
-  final String name;
-  const RouteWidget({super.key, required this.routes, required this.name});
+  final Place wayPoint;
+  const RouteWidget({super.key, required this.routes, required this.wayPoint});
 
   @override
   Widget build(BuildContext context) {
+    int beforeTime = 0;
+    int afterTime = 0;
+    bool isBefore = true;
+    for (PathSegment route in routes) {
+      if (isBefore) {
+        beforeTime += route.time;
+      } else {
+        afterTime += route.time;
+      }
+      if (route.description.compareTo(("경유지")) == 0) {
+        isBefore = false;
+      }
+    }
     return Container(
       width: 360,
       decoration: BoxDecoration(
@@ -32,7 +46,7 @@ class RouteWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(10),
             child: Text(
-              name,
+              wayPoint.name,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -42,27 +56,37 @@ class RouteWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: Text.rich(
-              TextSpan(children: [
-                ...List.generate(
-                  routes.length,
-                  (index) => TextSpan(
-                    text: routes[index].description,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                    children: [
-                      WidgetSpan(
-                        child: Icon(Icons.arrow_right),
-                      ),
-                    ],
-                  ),
+              TextSpan(
+                style: TextStyle(
+                  fontSize: 16,
                 ),
-                TextSpan(
+                children: [
+                  TextSpan(
+                    text: "도보 ${(beforeTime / 60).round().toString()}분",
+                  ),
+                  WidgetSpan(
+                      child: Icon(
+                    Icons.arrow_forward,
+                  )),
+                  TextSpan(
+                    text: wayPoint.name,
+                  ),
+                  WidgetSpan(
+                      child: Icon(
+                    Icons.arrow_forward,
+                  )),
+                  TextSpan(
+                    text: "도보 ${(afterTime / 60).round().toString()}분",
+                  ),
+                  WidgetSpan(
+                      child: Icon(
+                    Icons.arrow_forward,
+                  )),
+                  TextSpan(
                     text: "매장 도착!",
-                    style: TextStyle(
-                      fontSize: 20,
-                    )),
-              ]),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

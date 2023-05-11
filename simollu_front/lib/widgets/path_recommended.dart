@@ -23,7 +23,7 @@ class PathRecommended extends StatelessWidget {
                 onTap: () {
                   event(entry.key);
                 },
-                child: RouteWidget(routes: entry.value, name: entry.key.name),
+                child: RouteWidget(routes: entry.value, wayPoint: entry.key),
               ),
             );
           }).toList()),

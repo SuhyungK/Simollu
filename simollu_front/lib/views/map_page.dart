@@ -19,7 +19,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   bool _locationPermission = false;
   late Position _currentPosition;
   Set<Marker> _markers = {};
@@ -53,6 +53,11 @@ class _MapPageState extends State<MapPage> {
         int polylineId = 0;
 
         for (Place place in newPlaceList) {
+          print(place.lat.toString() +
+              " " +
+              place.lng.toString() +
+              " " +
+              place.name);
           List<PathSegment> pathList =
               await Provider.of<MapViewModel>(context, listen: false).findPaths(
             LatLng(_currentPosition.latitude, _currentPosition.longitude),
@@ -155,8 +160,15 @@ class _MapPageState extends State<MapPage> {
     )));
   }
 
-  void onClickPath(Place key) {
-    print("클릭! " + key.name);
+  void onClickPath(Place key) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng((_currentPosition.latitude + _arrive.latitude) / 2,
+            (_currentPosition.longitude + _arrive.longitude) / 2),
+        zoom: 16.0,
+      ),
+    ));
     setState(() {
       _polylineList = _polylineMap[key]!;
     });
@@ -243,6 +255,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   zoomControlsEnabled: false,
                   markers: _markers,
+                  mapType: MapType.terrain,
                 ),
                 Positioned(
                   bottom: 20,
@@ -259,7 +272,7 @@ class _MapPageState extends State<MapPage> {
                               CameraPosition(
                                 target: LatLng(_currentPosition.latitude,
                                     _currentPosition.longitude),
-                                zoom: 19,
+                                zoom: 19.0,
                               ),
                             ));
                           }
