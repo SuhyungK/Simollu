@@ -21,10 +21,10 @@ public class UserProfileService {
 
     private final TokenProvider tokenProvider;
 
-    public UserProfileResponseDto getUserProfileImage(String token) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+    public UserProfileResponseDto getUserProfileImage(String userSeq) {
 
-        UserProfile userProfile = userProfileRepository.findTopByUserSeqOrderByUserProfileRegisterDateDesc(userInfo.getUserSeq());
+
+        UserProfile userProfile = userProfileRepository.findTopByUserSeqOrderByUserProfileRegisterDateDesc(userSeq);
 
         return UserProfileResponseDto.builder()
                 .userProfileUrl(userProfile.getUserProfileUrl())

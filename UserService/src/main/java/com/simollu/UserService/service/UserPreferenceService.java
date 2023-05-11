@@ -26,19 +26,19 @@ public class UserPreferenceService {
 
 
     // 회원 취향 삽입
-    public RegisterUserPreferenceResponseDto registerUserPreference(String token,
+    public RegisterUserPreferenceResponseDto registerUserPreference(String userSeq,
                                                                     RegisterUserPreferenceRequestDto requestDto) {
 
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+
 
         // 기존 회원 취향 삭제
-        userPreferenceRepository.deleteAllByUserSeq(userInfo.getUserSeq());
+        userPreferenceRepository.deleteAllByUserSeq(userSeq);
 
         List<UserPreference> userPreferenceList = new ArrayList<>();
 
         for (String preferenceType : requestDto.getUserPrefernceList()) {
             UserPreference userPreference = UserPreference.builder()
-                    .userSeq(userInfo.getUserSeq())
+                    .userSeq(userSeq)
                     .userPreferenceType(preferenceType)
                     .build();
 
@@ -55,7 +55,7 @@ public class UserPreferenceService {
         }
         
         RegisterUserPreferenceResponseDto responseDto = RegisterUserPreferenceResponseDto.builder()
-                .userSeq(userInfo.getUserSeq())
+                .userSeq(userSeq)
                 .userPrefernceList(saveList)
                 .build();
 
@@ -63,10 +63,10 @@ public class UserPreferenceService {
     }
 
     // 회원 취향 조회
-    public UserPreferenceResponseDto getUserPreference(String token) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+    public UserPreferenceResponseDto getUserPreference(String userSeq) {
 
-        List<UserPreference> userPreferences = userPreferenceRepository.findAllByUserSeq(userInfo.getUserSeq());
+
+        List<UserPreference> userPreferences = userPreferenceRepository.findAllByUserSeq(userSeq);
 
         List<String> userPreferenceList = userPreferences.stream()
                 .map(UserPreference::getUserPreferenceType)
@@ -74,7 +74,7 @@ public class UserPreferenceService {
 
 
         return UserPreferenceResponseDto.builder()
-                .userSeq(userInfo.getUserSeq())
+                .userSeq(userSeq)
                 .userPrefernceList(userPreferenceList)
                 .build();
     }

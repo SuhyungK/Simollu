@@ -52,6 +52,8 @@ public class CustomUserOAuth2Service extends DefaultOAuth2UserService {
         User user;
         boolean initial = false;
 
+        log.info("CustomUserOAuth2Service - kakao login : {}", oAuth2UserInfo.getProviderId());
+
         // 가입 여부 확인 - 있음
         if (userService.checkByKakao(oAuth2UserInfo.getProviderId())) {
             user = userService.findByUserKakaoWithAuthorities(oAuth2UserInfo.getProviderId());

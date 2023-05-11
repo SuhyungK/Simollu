@@ -33,18 +33,17 @@ public class UserForkService {
 
 
     // 회원 포크 내역 추가
-    public RegisterUserForkResponseDto registerUserForkLog(String token, RegisterUserForkRequestDto registerUserForkRequestDto) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+    public RegisterUserForkResponseDto registerUserForkLog(String userSeq, RegisterUserForkRequestDto registerUserForkRequestDto) {
 
         // 최근 하나의 것을 가져온다.
-        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq());
+        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userSeq);
 
         // 일단은 들어오는 값이 음수, 양수라고 생각한다.
         int balance = latestOne.getUserForkBalance() + registerUserForkRequestDto.getUserForkAmount();
 
         // 저장
         UserForkLog userForkLog = UserForkLog.builder()
-                .userSeq(userInfo.getUserSeq())
+                .userSeq(userSeq)
                 .userForkAmount(registerUserForkRequestDto.getUserForkAmount())
                 .userForkBalance(balance)
                 .userForkType(registerUserForkRequestDto.getUserForkType())
@@ -70,11 +69,9 @@ public class UserForkService {
     }
 
     // 회원 포크 조회
-    public UserForkResponseDto getUserFork(String token) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
-
+    public UserForkResponseDto getUserFork(String userSeq) {
         // 최근 하나의 것을 가져온다.
-        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq());
+        UserForkLog latestOne = userForkLogRepository.findTopByUserSeqOrderByUserForkRegisterDateDesc(userSeq);
 
         return UserForkResponseDto.builder()
                 .userFork(latestOne.getUserForkBalance())
@@ -83,11 +80,9 @@ public class UserForkService {
 
 
     // 회원 포크 내역 조회
-    public Page<UserForkPageDto> getUserForkLog(String token, int page) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
-
+    public Page<UserForkPageDto> getUserForkLog(String userSeq, int page) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "userForkRegisterDate"));
-        Page<UserForkLog> userForkPage = userForkLogRepository.findByUserSeqOrderByUserForkRegisterDateDesc(userInfo.getUserSeq(), pageRequest);
+        Page<UserForkLog> userForkPage = userForkLogRepository.findByUserSeqOrderByUserForkRegisterDateDesc(userSeq, pageRequest);
 
         return userForkPage.map(userForkBuilder::userForkLogToUserForkPageDto);
     }

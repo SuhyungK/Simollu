@@ -26,14 +26,12 @@ public class UserNicknameService {
 
     // 유저 닉네임 변경
     public RegisterUserNicknameResponseDto registerUserNickname(
-            String token,
+            String userSeq,
             RegisterUserNicknameRequestDto requestDto) {
-
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
 
         // 유저 닉네임 저장
         UserNickname userNickname = UserNickname.builder()
-                .userSeq(userInfo.getUserSeq())
+                .userSeq(userSeq)
                 .userNicknameContent(requestDto.getUserNicknameContent())
                 .build();
         UserNickname save = userNicknameRepository.save(userNickname);
@@ -47,9 +45,8 @@ public class UserNicknameService {
     }
 
     // 유저 닉네임 조회
-    public UserNicknameResponseDto getUserNickname(String token) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
-        UserNickname userNickname = userNicknameRepository.findTopByUserSeqOrderByUserNicknameRegisterDateDesc(userInfo.getUserSeq());
+    public UserNicknameResponseDto getUserNickname(String userSeq) {
+        UserNickname userNickname = userNicknameRepository.findTopByUserSeqOrderByUserNicknameRegisterDateDesc(userSeq);
 
         return UserNicknameResponseDto.builder()
                 .userNicknameContent(userNickname.getUserNicknameContent())

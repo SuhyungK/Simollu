@@ -34,6 +34,8 @@ public class UserService {
                 .authorityName("ROLE_USER") // ROLE_ 이런 형식으로 권한을 표시해야한다.
                 .build();
 
+
+
         // User 값 삽입
         User user = User.builder()
                 .userKakao(registerUserRequestDto.getUserKakao())

@@ -23,11 +23,10 @@ public class UserStatusService {
 
 
     // 회원 상태 변경
-    public RegisterUserStatusResponseDto registerUserStatus(String token, RegisterUserStatusRequestDto requestDto) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
+    public RegisterUserStatusResponseDto registerUserStatus(String userSeq, RegisterUserStatusRequestDto requestDto) {
 
         UserStatus userStatus = UserStatus.builder()
-                .userSeq(userInfo.getUserSeq())
+                .userSeq(userSeq)
                 .userStatusContent(requestDto.getUserStatusContent())
                 .build();
         UserStatus save = userStatusRepository.save(userStatus);
@@ -41,9 +40,9 @@ public class UserStatusService {
     }
 
     // 회원 최신 조회
-    public UserStatusResponseDto getUserStatus(String token) {
-        UserInfoJwtDto userInfo = tokenProvider.getUserInfo(token);
-        UserStatus userStatus = userStatusRepository.findTopByUserSeqOrderByUserStatusDateDesc(userInfo.getUserSeq());
+    public UserStatusResponseDto getUserStatus(String userSeq) {
+
+        UserStatus userStatus = userStatusRepository.findTopByUserSeqOrderByUserStatusDateDesc(userSeq);
 
         return UserStatusResponseDto.builder()
                 .userStatusContent(userStatus.getUserStatusContent())
