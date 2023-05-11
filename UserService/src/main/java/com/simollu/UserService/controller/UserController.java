@@ -1,10 +1,7 @@
 package com.simollu.UserService.controller;
 
 
-import com.simollu.UserService.dto.userfork.RegisterUserForkRequestDto;
-import com.simollu.UserService.dto.userfork.RegisterUserForkResponseDto;
-import com.simollu.UserService.dto.userfork.UserForkPageDto;
-import com.simollu.UserService.dto.userfork.UserForkResponseDto;
+import com.simollu.UserService.dto.userfork.*;
 import com.simollu.UserService.dto.usernickname.RegisterUserNicknameRequestDto;
 import com.simollu.UserService.dto.usernickname.RegisterUserNicknameResponseDto;
 import com.simollu.UserService.dto.usernickname.UserNicknameResponseDto;
@@ -23,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,19 +70,31 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
+
+    // 회원 포크 내역 페이지 조회
+
+    @Operation(summary = "사용자의 fork log 를 조회",
+            description = "사용자의 fork 사용 내역들을 페이지로 조회합니다.")
+    @GetMapping("fork-list")
+    public ResponseEntity<?> getUserForkLogList(@RequestHeader("userSeq") String userSeq) {
+        log.info("UserController - 회원 포크 내역 리스트 입력");
+        List<UserForkLogListDto> userForkLogList = userForkService.getUserForkLogList(userSeq);
+        return ResponseEntity.ok(userForkLogList);
+    }
+
+
     // 회원 포크 내역 페이지 조회
 
     @Operation(summary = "사용자의 fork log 를 조회",
             description = "사용자의 fork 사용 내역들을 페이지로 조회합니다.")
     @GetMapping("fork-page")
-    public ResponseEntity<?> getUserForkLog(@RequestHeader("userSeq") String userSeq, @RequestParam int page) {
+    public ResponseEntity<?> getUserForkLogPage(@RequestHeader("userSeq") String userSeq, @RequestParam int page) {
 
         log.info("UserController - 회원 포크 내역 페이지 입력");
         
-        Page<UserForkPageDto> userForkLog = userForkService.getUserForkLog(userSeq, page);
+        Page<UserForkPageDto> userForkLogPage = userForkService.getUserForkLogPage(userSeq, page);
 
-
-        return ResponseEntity.ok(userForkLog);
+        return ResponseEntity.ok(userForkLogPage);
     }
 
     // 회원 닉네임 등록

@@ -2,10 +2,7 @@ package com.simollu.UserService.service;
 
 
 import com.simollu.UserService.builder.UserForkBuilder;
-import com.simollu.UserService.dto.userfork.RegisterUserForkRequestDto;
-import com.simollu.UserService.dto.userfork.RegisterUserForkResponseDto;
-import com.simollu.UserService.dto.userfork.UserForkPageDto;
-import com.simollu.UserService.dto.userfork.UserForkResponseDto;
+import com.simollu.UserService.dto.userfork.*;
 import com.simollu.UserService.dto.user.UserInfoJwtDto;
 import com.simollu.UserService.entity.UserForkLog;
 import com.simollu.UserService.jwt.TokenProvider;
@@ -18,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -79,8 +78,20 @@ public class UserForkService {
     }
 
 
-    // 회원 포크 내역 조회
-    public Page<UserForkPageDto> getUserForkLog(String userSeq, int page) {
+    // 회원 포크 내역 리스트 조회
+    public List<UserForkLogListDto> getUserForkLogList(String userSeq) {
+
+        List<UserForkLog> userForkLogList = userForkLogRepository.findByUserSeqOrderByUserForkRegisterDateDesc(userSeq);
+
+        return userForkLogList.stream()
+                .map(userForkBuilder::userForkLogToUserForkListDto)
+                .collect(Collectors.toList());
+    }
+
+
+
+    // 회원 포크 내역 페이지 조회
+    public Page<UserForkPageDto> getUserForkLogPage(String userSeq, int page) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "userForkRegisterDate"));
         Page<UserForkLog> userForkPage = userForkLogRepository.findByUserSeqOrderByUserForkRegisterDateDesc(userSeq, pageRequest);
 
