@@ -34,7 +34,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     @Override
     public GatewayFilter apply(Config config) {
 
-        System.out.println("Authorization 작동");
+
 
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
