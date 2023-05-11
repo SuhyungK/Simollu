@@ -117,14 +117,9 @@ class _SearchPageState extends State<SearchPage> {
 
                 // 검색 api 연결
                 result = (await searchViewModel.getSearchResult()).cast<SearchModel>();
-                for(SearchModel r in result) {
-                  print("==== yeah !");
-                  print(r.restaurantName.toString());
-                }
 
                 await searchViewModel.setSearchResult(result);
 
-                // GetPageRoute(page: () => SearchResultPage(result: result));
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(
