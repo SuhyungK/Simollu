@@ -40,6 +40,13 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("여기는 search result widget 페이지");
+    print(widget.imageUrl);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +66,31 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                     alignment: Alignment.center,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        widget.imageUrl,
+                      child: Image.network(
+                        widget.imageUrl ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                         width: 80,
                         height: 80,
-                        fit: BoxFit
-                            .cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                          return Image.network(
+                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
+                    // child: ClipRRect(
+                    //   borderRadius: BorderRadius.circular(10),
+                    //   child: Image.network(
+                    //     widget.imageUrl,
+                    //     width: 80,
+                    //     height: 80,
+                    //     fit: BoxFit
+                    //         .cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                    //   ),
+                    // ),
                   ),
                 ),
                 Expanded(
@@ -75,7 +99,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      Container( // 가게 이름
                         margin: EdgeInsets.only(left: 10, top: 10),
                         child: SizedBox(
                           child: Text(
@@ -97,62 +121,98 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.schedule,
-                                  color: Color(0xFFFFD200),
+                        child: Text("기다릴만해요"),
+                      ),
+                      Row(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("0.48km"),
+                            ],
+                          ),
+                          Expanded(child: Container()),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.schedule,
+                                color: Color(0xFFFFD200),
+                              ),
+                              Text(
+                                '1시간 30분 웨이팅',
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0,
+                                  wordSpacing: 0,
+                                  height: 1.0,
+                                  shadows: [],
+                                  decoration: TextDecoration.none,
                                 ),
-                                Text(
-                                  '1시간 30분 웨이팅',
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.normal,
-                                    letterSpacing: 0,
-                                    wordSpacing: 0,
-                                    height: 1.0,
-                                    shadows: [],
-                                    decoration: TextDecoration.none,
-                                  ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     Icon(
+                          //       Icons.schedule,
+                          //       color: Color(0xFFFFD200),
+                          //     ),
+                          //     Text(
+                          //       '1시간 30분 웨이팅',
+                          //       maxLines: 2,
+                          //       style: TextStyle(
+                          //         color: Colors.black,
+                          //         fontSize: 13,
+                          //         fontFamily: 'Roboto',
+                          //         fontWeight: FontWeight.bold,
+                          //         fontStyle: FontStyle.normal,
+                          //         letterSpacing: 0,
+                          //         wordSpacing: 0,
+                          //         height: 1.0,
+                          //         shadows: [],
+                          //         decoration: TextDecoration.none,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.schedule,
+                                color: Color(0xFFFFD200),
+                              ),
+                              Text(
+                                '현재 3팀 대기 중',
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0,
+                                  wordSpacing: 0,
+                                  height: 1.0,
+                                  shadows: [],
+                                  decoration: TextDecoration.none,
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.schedule,
-                                  color: Color(0xFFFFD200),
-                                ),
-                                Text(
-                                  '현재 3팀 대기 중',
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.normal,
-                                    letterSpacing: 0,
-                                    wordSpacing: 0,
-                                    height: 1.0,
-                                    shadows: [],
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
                   ),
