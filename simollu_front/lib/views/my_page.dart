@@ -24,10 +24,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
   UserViewModel userViewModel = UserViewModel();
   late String nickname = "";
+  late int fork = 0;
 
-  initNickname() async {
+  initUserInfo() async {
     nickname = (await userViewModel.getNickname()) as String;
     print("mypage screen"+nickname);
+
+    fork = await userViewModel.getForkNumber();
+    print("forkNum : ");
+    print(fork);
   }
 
   @override
@@ -39,9 +44,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    initNickname().then((_) {
+    initUserInfo().then((_) {
       setState(() {
         nickname = nickname;
+        fork = fork;
       });
     });
   }
@@ -167,7 +173,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "포크",
                                     style: TextStyle(
@@ -176,7 +182,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   Text(
-                                    "2,000",
+                                    fork.toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
