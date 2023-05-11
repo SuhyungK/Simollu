@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
@@ -9,6 +10,7 @@ import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
+import 'package:simollu_front/views/start_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 import '../viewmodels/UserViewmodel.dart';
@@ -460,14 +462,22 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               ),
             ),
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              '로그아웃',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+          child: GestureDetector(
+            onTap: () async {
+              // SharedPreferences에서 "token" 키에 저장된 값을 삭제합니다.
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove("token");
+              Get.to(StartPage());
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                '로그아웃',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
