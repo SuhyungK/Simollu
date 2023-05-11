@@ -8,6 +8,7 @@ import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/models/place.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/widgets/custom_marker.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 import 'package:simollu_front/widgets/path_recommended.dart';
 
@@ -30,16 +31,18 @@ class _MapPageState extends State<MapPage> {
   Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
+  late Marker startMarker;
+  late Marker destinationMarker;
+  late Marker waypointMarker;
+  late Marker myLocationMarker;
+
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
 
   @override
   void initState() {
     super.initState();
-    _markers.add(Marker(
-      markerId: MarkerId('destination'),
-      position: LatLng(_arrive.latitude, _arrive.longitude),
-    ));
+
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
@@ -123,7 +126,20 @@ class _MapPageState extends State<MapPage> {
       }
     }
 
+    _addMarkers();
     _listening();
+  }
+
+  Future<void> _addMarkers() async {
+    destinationMarker = await CustomMarker(
+            markerId: "destination",
+            latLng: _arrive,
+            type: MarkerType.destination)
+        .getMarker();
+
+    setState(() {
+      _markers.add(destinationMarker);
+    });
   }
 
   @override
@@ -177,10 +193,7 @@ class _MapPageState extends State<MapPage> {
         markerId: MarkerId('myLocation'),
         position: LatLng(position.latitude, position.longitude),
       ));
-      _markers.add(Marker(
-        markerId: MarkerId('destination'),
-        position: _arrive,
-      ));
+      _markers.add(destinationMarker);
     });
 
     final GoogleMapController controller = await _controller.future;
@@ -212,10 +225,7 @@ class _MapPageState extends State<MapPage> {
       markerId: MarkerId('wayPoint'),
       position: LatLng(key.lat, key.lng),
     ));
-    _markers.add(Marker(
-      markerId: MarkerId('destination'),
-      position: _arrive,
-    ));
+    _markers.add(destinationMarker);
     setState(() {
       _polylineList = _polylineMap[key]!;
     });
