@@ -43,14 +43,9 @@ class _StartPageState extends State<StartPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(height: 20),
-              InkWell(
-                onTap: () {
-                  Get.to(() => WritingReviewPage());
-                },
-                child: Image.asset(
-                    'assets/logo.png',
-                    width: 300,
-                ),
+              Image.asset(
+                  'assets/logo.png',
+                  width: 300,
               ),
               InkWell(
                 onTap: () {

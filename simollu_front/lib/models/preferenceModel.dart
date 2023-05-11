@@ -1,3 +1,4 @@
+
 class PreferenceModel {
   String? userSeq;
   List<String>? userPrefernceList;
