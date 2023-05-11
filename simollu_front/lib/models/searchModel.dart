@@ -43,7 +43,7 @@ class SearchModel {
 
   SearchModel.fromJSON(Map<String, dynamic> json)
       : restaurantSeq = json['restaurantSeq'],
-        restaurantName = json['restaurantName'],
+        restaurantName = json['restaurantName'] ?? '',
         restaurantRating = json['restaurantRating'],
         restaurantImg = json['restaurantImg'],
         restaurantX = double.parse(json['restaurantX']),

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:simollu_front/utils/token.dart';
 
 class UserViewModel{
-  Uri uri = Uri.parse('https://simollu.com/api/user/nickname');
+  Uri uri = Uri.parse('https://simollu.com/api/user/user/nickname');
   String token = ""; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
 
   Future<void> initialize() async {

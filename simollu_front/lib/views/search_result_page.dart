@@ -6,7 +6,7 @@ class SearchResultPage extends StatefulWidget {
 
   final List<SearchModel> searchResults;
 
-  List<SearchModel> get result => this.searchResults;
+  List<SearchModel> get result => searchResults;
 
   SearchResultPage({Key? key, required List<SearchModel> searchResults}) :
         this.searchResults = searchResults,
@@ -15,10 +15,6 @@ class SearchResultPage extends StatefulWidget {
   SearchResultPage.withResult({Key? key, required List<SearchModel> result}) :
         this.searchResults = result,
         super(key: key);
-
-  //
-
-  // const SearchResultPage({Key? key, required List<SearchModel> result}) : super(key: key);
 
   @override
   State<SearchResultPage> createState() => _SearchResultPageState();
@@ -66,7 +62,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
               itemCount: widget.result.length,
               itemBuilder: (context, index) {
                 final searchResult = widget.result[index];
-                return SearchResultWidget(name: '', imageUrl: '', waitingTime: '', queueSize: '', numberOfPeople: 1, onWait: () {  },
+                return SearchResultWidget(name: searchResult.restaurantName, imageUrl: searchResult.restaurantImg, waitingTime: '', queueSize: '', numberOfPeople: 1, onWait: () {  },
 
                 );
               },

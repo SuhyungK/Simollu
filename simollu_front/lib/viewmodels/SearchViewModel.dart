@@ -33,18 +33,25 @@ class SearchViewModel {
           "Authorization" : token
         },
       uri);
-    print(response);
     print("---------@@@@@"+response.body);
 
     if (response.statusCode == 200) {
-      List<dynamic> res = json.decode(response.body)["result"];
-      
+      // Map decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      // print("decodeResponse");
+      // print(decodedResponse);
+
+      List<dynamic> res = json.decode(utf8.decode(response.bodyBytes))["result"];
+      // List uri = Uri.parse(decodedResponse['result'] as String) as List;
+      // print('uri :');
+      // print(uri);
       // result = jsonDecode(response.body)["result"].map<SearchModel>( (result) {
       //   return SearchModel.fromMap(result);
       // }).toList();
-      
+
+      print("검색 결과 :");
       for(dynamic r in res) {
         result.add(SearchModel.fromJSON(r));
+        print(r);
       }
       // print("result :" + jsonDecode(response.body)["result"]);
     }
