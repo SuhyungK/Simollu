@@ -25,7 +25,7 @@ class TmpPage extends StatelessWidget {
             children: [
               OutlinedButton(
                 onPressed: () {
-                  print('취향 받기 페이지 이동!!!!!!!!');
+                  debugPrint('취향 받기 페이지 이동!!!!!!!!');
                   // Get.to(LikingThings()); //페이지이동
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LikingThings()));

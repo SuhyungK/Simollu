@@ -226,7 +226,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                 height: 40,
                 child: OutlinedButton(
                   onPressed: () {
-                    print('웨이팅하기 ! 클릭');
+                    debugPrint('웨이팅하기 ! 클릭');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Color(0xFFFFD200),

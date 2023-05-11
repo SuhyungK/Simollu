@@ -5,7 +5,7 @@ import 'package:simollu_front/utils/token.dart';
 import 'package:simollu_front/views/login_page.dart';
 import 'package:get/get.dart';
 
-final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
+// final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
