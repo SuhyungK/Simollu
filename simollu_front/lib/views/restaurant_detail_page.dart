@@ -22,6 +22,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
   ];
+  late List<Map<String, dynamic>> reviewList;
 
   @override
   void initState() {

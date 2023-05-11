@@ -89,27 +89,27 @@ class _CustomTabBarState extends State<CustomTabBar>
   }
 
   // TabBar 제목 부분
-  Widget _buildTabBar() {
-    return Container(
-      decoration: BoxDecoration(
-          border:
-          Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
-      child: TabBar(
-        controller: _tabController,
-        tabs: List<Widget>.generate(widget.length, (index) {
-          return Tab(
-              child: Text(
-                widget.tabs[index],
-                style: TextStyle(color: Colors.black, fontSize: 17),
-              ));
-        }),
-        indicatorColor: Colors.black,
-        labelPadding: EdgeInsets.all(5.0),
-        labelStyle: TextStyle(fontWeight: FontWeight.bold),
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
-      ),
-    );
-  }
+  // Widget _buildTabBar() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //         border:
+  //         Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
+  //     child: TabBar(
+  //       controller: _tabController,
+  //       tabs: List<Widget>.generate(widget.length, (index) {
+  //         return Tab(
+  //             child: Text(
+  //               widget.tabs[index],
+  //               style: TextStyle(color: Colors.black, fontSize: 17),
+  //             ));
+  //       }),
+  //       indicatorColor: Colors.black,
+  //       labelPadding: EdgeInsets.all(5.0),
+  //       labelStyle: TextStyle(fontWeight: FontWeight.bold),
+  //       unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+  //     ),
+  //   );
+  // }
 
   // TabBar 내용 부분
   Widget _buildTabBarView() {

@@ -1,3 +1,4 @@
+
 class PreferenceModel {
   String? userSeq;
   List<String>? userPrefernceList;
@@ -5,7 +6,7 @@ class PreferenceModel {
   PreferenceModel({this.userPrefernceList});
 
   PreferenceModel.fromJson(Map<String, dynamic> json) {
-    userPrefernceList = json['userPrefernceList'].cast<String>();
+    userPrefernceList = json['userPrefernceList'].map((e) => e.toString()).toList();
   }
 
   Map<String, dynamic> toJson() {
