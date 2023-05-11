@@ -2,7 +2,9 @@ package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.document.RestaurantDocument;
+import com.example.elasticsearch.model.document.SearchDocument2;
 import com.example.elasticsearch.model.dto.SearchListResponse;
+import com.example.elasticsearch.model.dto.SearchRankResponse;
 import com.example.elasticsearch.model.entity.Search;
 import com.example.elasticsearch.model.document.SearchDocument;
 import com.example.elasticsearch.repository.elkAdvance.SearchElasticAdvanceRepository;
@@ -53,6 +55,22 @@ public class SearchService {
         return restaurantResponses;
     }
 
+
+    public List<SearchRankResponse> getTopSearchKeywords(int topN) {
+        List<SearchDocument2> SearchDocumentList =  searchElasticAdvanceRepository.findTopSearchKeywords(topN);
+        List<SearchRankResponse> searchRankResponses = new ArrayList<>();
+        int n=1;
+        for (SearchDocument2 searchDocument : SearchDocumentList) {
+            SearchRankResponse s = SearchRankResponse.builder()
+                    .searchRank(n++)
+                    .searchWord(searchDocument.getSearchWord())
+                    .build();
+            searchRankResponses.add(s);
+        }
+
+        return searchRankResponses;
+    }
+
     /*RDB에 검색한 데이터 저장*/
     public void saveSearch(String description) {
         Search searchSaveRequest = new Search();
@@ -71,9 +89,7 @@ public class SearchService {
         searchElasticBasicRepository.saveAll(searchDocumentList);
     }
 
-    public List<SearchDocument> getTopSearchKeywords(int topN) {
-        return searchElasticAdvanceRepository.findTopSearchKeywords(topN);
-    }
+
 
     public static double calculateWalkingTime(double startLat, double startLng, double endLat, double endLng) {
         double distanceInKm = calculateDistance(startLat, startLng, endLat, endLng);

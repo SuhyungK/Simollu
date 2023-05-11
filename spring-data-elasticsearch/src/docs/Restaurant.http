@@ -14,3 +14,6 @@ GET http://localhost:8080/search/contains?description=베트남음식&cx=126.882
 # POST http://localhost:8080/api/search/top-search-keyword
 POST http://localhost:8080/search/top-search-keyword
 
+###
+# POST http://localhost:8080/api/search/top-search-keyword
+POST http://localhost:8080/search/top-search-keyword2

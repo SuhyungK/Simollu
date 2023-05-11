@@ -1,6 +1,8 @@
 package com.example.elasticsearch.model.entity;
 
 import com.example.elasticsearch.model.dto.SearchSaveRequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,8 +31,9 @@ public class Search {
 
     @Column(name = "search_word")
     private String searchWord;
-    @Column(name = "review_regist_date")
+    @Column(name = "search_regist_date")
     @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime searchRegistDate;
 
     public static Search from (SearchSaveRequest searchSaveRequest){

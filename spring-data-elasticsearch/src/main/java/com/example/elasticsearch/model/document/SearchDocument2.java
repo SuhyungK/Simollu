@@ -2,7 +2,6 @@ package com.example.elasticsearch.model.document;
 
 import com.example.elasticsearch.model.entity.Search;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,18 +20,17 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Document(indexName = "search")
 @Mapping(mappingPath = "elastic/search-mapping.json")
 @Setting(settingPath = "elastic/search-setting.json")
-public class SearchDocument {
+public class SearchDocument2 {
     @Id
     private Long searchSeq;
     private String searchWord;
-    private LocalDateTime searchRegistDate;
 
 
-    public static SearchDocument from(Search search) throws IOException {
-        return SearchDocument.builder()
+
+    public static SearchDocument2 from(Search search) throws IOException {
+        return SearchDocument2.builder()
                 .searchSeq(search.getSearchSeq())
                 .searchWord(search.getSearchWord())
-                .searchRegistDate(search.getSearchRegistDate())
                 .build();
     }
 

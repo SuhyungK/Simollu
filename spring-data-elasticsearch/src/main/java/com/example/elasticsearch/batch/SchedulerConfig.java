@@ -23,7 +23,7 @@ public class SchedulerConfig {
         return taskScheduler;
     }
 
-    @Scheduled(fixedRate = 360000000) // 3분마다 실행
+    @Scheduled(fixedRate = 180000) // 3분마다 실행
     public void scheduleTask() throws IOException {
         scheduledTask.searchHistoryTask();
     }
