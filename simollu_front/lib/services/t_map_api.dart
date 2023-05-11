@@ -21,7 +21,7 @@ class TMapAPI {
       'startName': Uri.encodeComponent('현재 위치'),
       'endName': Uri.encodeComponent('도착 위치'),
     };
-    if (passList.isNotEmpty) {
+    if (passList.length != 0) {
       requestData['passList'] = passList;
     }
     var response = await http

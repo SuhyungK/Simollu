@@ -69,19 +69,26 @@ class RouteWidget extends StatelessWidget {
                     Icons.arrow_forward,
                   )),
                   TextSpan(
-                    text: wayPoint.name,
+                    children: afterTime == 0
+                        ? null
+                        : [
+                            TextSpan(
+                              text: wayPoint.name,
+                            ),
+                            WidgetSpan(
+                                child: Icon(
+                              Icons.arrow_forward,
+                            )),
+                            TextSpan(
+                              text:
+                                  "도보 ${(afterTime / 60).round().toString()}분",
+                            ),
+                            WidgetSpan(
+                                child: Icon(
+                              Icons.arrow_forward,
+                            )),
+                          ],
                   ),
-                  WidgetSpan(
-                      child: Icon(
-                    Icons.arrow_forward,
-                  )),
-                  TextSpan(
-                    text: "도보 ${(afterTime / 60).round().toString()}분",
-                  ),
-                  WidgetSpan(
-                      child: Icon(
-                    Icons.arrow_forward,
-                  )),
                   TextSpan(
                     text: "매장 도착!",
                   ),

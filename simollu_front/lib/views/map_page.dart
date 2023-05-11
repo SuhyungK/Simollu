@@ -52,19 +52,41 @@ class _MapPageState extends State<MapPage> {
 
         int polylineId = 0;
 
-        for (Place place in newPlaceList) {
-          print(place.lat.toString() +
-              " " +
-              place.lng.toString() +
-              " " +
-              place.name);
+        if (newPlaceList.isNotEmpty) {
+          for (Place place in newPlaceList) {
+            List<PathSegment> pathList =
+                await Provider.of<MapViewModel>(context, listen: false)
+                    .findPaths(
+              LatLng(_currentPosition.latitude, _currentPosition.longitude),
+              _arrive,
+              place.lng.toString() + "," + place.lat.toString(),
+            );
+            newPathMap[place] = pathList;
+
+            List<Polyline> polylineList = [];
+            for (PathSegment path in pathList) {
+              for (int i = 0; i < path.coordinates.length - 1; i++) {
+                polylineList.add(Polyline(
+                  polylineId: PolylineId(polylineId.toString()),
+                  points: [
+                    LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+                    LatLng(
+                        path.coordinates[i + 1][1], path.coordinates[i + 1][0])
+                  ], // 시작점과 끝점 좌표
+                  color: Colors.red, // 선 색상
+                  width: 5,
+                ));
+                polylineId++;
+              }
+            }
+            newPolylineMap[place] = polylineList;
+          }
+        } else {
           List<PathSegment> pathList =
               await Provider.of<MapViewModel>(context, listen: false).findPaths(
-            LatLng(_currentPosition.latitude, _currentPosition.longitude),
-            _arrive,
-            place.lng.toString() + "," + place.lat.toString(),
-          );
-          newPathMap[place] = pathList;
+                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
+                  _arrive,
+                  "");
 
           List<Polyline> polylineList = [];
           for (PathSegment path in pathList) {
@@ -81,7 +103,15 @@ class _MapPageState extends State<MapPage> {
               polylineId++;
             }
           }
+          Place place = Place(
+            address: "",
+            lat: 0,
+            lng: 0,
+            id: "",
+            name: "동래정",
+          );
           newPolylineMap[place] = polylineList;
+          newPathMap[place] = pathList;
         }
 
         setState(() {
@@ -168,6 +198,23 @@ class _MapPageState extends State<MapPage> {
             (_currentPosition.longitude + _arrive.longitude) / 2),
         zoom: 16.0,
       ),
+    ));
+    _markers.clear();
+    _markers.add(Marker(
+      markerId: MarkerId('myLocation'),
+      position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+      // icon: BitmapDiscriptor(Icon(
+      //   Icons.circle,
+      //   color: Colors.blue,
+      // )),
+    ));
+    _markers.add(Marker(
+      markerId: MarkerId('wayPoint'),
+      position: LatLng(key.lat, key.lng),
+    ));
+    _markers.add(Marker(
+      markerId: MarkerId('destination'),
+      position: _arrive,
     ));
     setState(() {
       _polylineList = _polylineMap[key]!;
