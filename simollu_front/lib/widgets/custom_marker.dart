@@ -20,7 +20,7 @@ class CustomMarker {
   });
 
   Future<Marker> getMarker() async {
-    late BitmapDescriptor image;
+    // late BitmapDescriptor image;
     switch (type) {
       case MarkerType.start:
         // icon = Icons.directions_bike;

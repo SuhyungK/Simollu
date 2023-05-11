@@ -43,6 +43,11 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
 
+    _markers.add(Marker(
+      markerId: MarkerId("destination"),
+      position: _arrive,
+    ));
+
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
@@ -126,21 +131,20 @@ class _MapPageState extends State<MapPage> {
       }
     }
 
-    _addMarkers();
     _listening();
   }
 
-  Future<void> _addMarkers() async {
-    destinationMarker = await CustomMarker(
-            markerId: "destination",
-            latLng: _arrive,
-            type: MarkerType.destination)
-        .getMarker();
+  // Future<void> _addMarkers() async {
+  //   destinationMarker = await CustomMarker(
+  //     markerId: "destination",
+  //     latLng: _arrive,
+  //     type: MarkerType.destination,
+  //   ).getMarker();
 
-    setState(() {
-      _markers.add(destinationMarker);
-    });
-  }
+  //   setState(() {
+  //     _markers.add(destinationMarker);
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -225,7 +229,10 @@ class _MapPageState extends State<MapPage> {
       markerId: MarkerId('wayPoint'),
       position: LatLng(key.lat, key.lng),
     ));
-    _markers.add(destinationMarker);
+    _markers.add(Marker(
+      markerId: MarkerId("destination"),
+      position: _arrive,
+    ));
     setState(() {
       _polylineList = _polylineMap[key]!;
     });
