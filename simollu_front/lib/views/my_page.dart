@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
+import 'package:simollu_front/views/start_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
 import '../viewmodels/UserViewmodel.dart';
@@ -24,10 +27,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
   UserViewModel userViewModel = UserViewModel();
   late String nickname = "";
+  late int fork = 0;
 
-  initNickname() async {
+  initUserInfo() async {
     nickname = (await userViewModel.getNickname()) as String;
     print("mypage screen"+nickname);
+
+    fork = await userViewModel.getForkNumber();
+    print("forkNum : ");
+    print(fork);
   }
 
   @override
@@ -39,9 +47,10 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    initNickname().then((_) {
+    initUserInfo().then((_) {
       setState(() {
         nickname = nickname;
+        fork = fork;
       });
     });
   }
@@ -167,7 +176,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "포크",
                                     style: TextStyle(
@@ -176,7 +185,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   Text(
-                                    "2,000",
+                                    fork.toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
@@ -361,6 +370,46 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 ),
                 GestureDetector(
                   onTap: () {
+                    print('취향 보기');
+                    RootController.to.setRootPageTitles("취향 보기");
+                    RootController.to.setIsMainPage(false);
+                    Navigator.push(
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => LikingThings(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFDDDDDD),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          '취향 보기',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Icon(Icons.arrow_forward_ios_outlined),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
                     print('회원 탈퇴');
                   },
                   child: Container(
@@ -398,8 +447,12 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             print('로그아웃');
+            // SharedPreferences에서 "token" 키에 저장된 값을 삭제합니다.
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.remove("token");
+            Get.offAll(StartPage());
           },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
