@@ -10,9 +10,9 @@ class SearchModel {
   late String restaurantName;
   late int restaurantRating;
   late String restaurantImg;
-  late String restaurantX;
-  late String restaurantY;
-  late String distanceTime;
+  late double restaurantX;
+  late double restaurantY;
+  late double distanceTime;
   // "restaurantSeq": 7,
   // "restaurantName": "코애식당",
   // "restaurantRating": 0,
@@ -36,8 +36,17 @@ class SearchModel {
     restaurantName = map?['restaurantName'] ?? '';
     restaurantRating = map?['restaurantRating'] ?? '';
     restaurantImg = map?['restaurantImg'] ?? '';
-    restaurantX = map?['restaurantX'] ?? '';
-    restaurantY = map?['restaurantY'] ?? '';
-    distanceTime = map?['distanceTime'] ?? '';
+    restaurantX = map?['restaurantX'] ?? 0;
+    restaurantY = map?['restaurantY'] ?? 0;
+    distanceTime = map?['distanceTime'] ?? 0;
   }
+
+  SearchModel.fromJSON(Map<String, dynamic> json)
+      : restaurantSeq = json['restaurantSeq'],
+        restaurantName = json['restaurantName'] ?? '',
+        restaurantRating = json['restaurantRating'],
+        restaurantImg = json['restaurantImg'],
+        restaurantX = double.parse(json['restaurantX']),
+        restaurantY = double.parse(json['restaurantY']),
+        distanceTime = json['distanceTime'];
 }

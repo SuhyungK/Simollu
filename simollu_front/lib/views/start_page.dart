@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/utils/token.dart';
 import 'package:simollu_front/views/login_page.dart';
-import 'package:simollu_front/views/main_page.dart';
-import 'package:simollu_front/views/my_page.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
 final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
@@ -31,13 +27,12 @@ class _StartPageState extends State<StartPage> {
   Future<void> _readLoginInfo() async {
     token = await getToken();
     if(token != "") {
-      Get.to(Root());
+      Get.offAll(Root());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
 
     return MaterialApp(
       home: Scaffold(
@@ -73,7 +68,7 @@ class GetToken {
   Future<String> isTokenExists() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(_key[0]);
-    final initial = prefs.getBool(_key[1]);
+    // final initial = prefs.getBool(_key[1]);
     return token ?? '';
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:simollu_front/widgets/custom_appBar.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 

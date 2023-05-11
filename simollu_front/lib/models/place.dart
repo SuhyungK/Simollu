@@ -14,9 +14,9 @@ class Place {
   });
 
   Place.fromJSON(Map<String, dynamic> json)
-      : this.id = json['id'],
-        this.name = json['place_name'],
-        this.address = json['road_address_name'],
-        this.lat = double.parse(json['y']),
-        this.lng = double.parse(json['x']);
+      : id = json['id'],
+        name = json['place_name'],
+        address = json['road_address_name'],
+        lat = double.parse(json['y']),
+        lng = double.parse(json['x']);
 }

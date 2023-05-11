@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:simollu_front/views/review_management_star_button.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
 class WritableReview extends StatelessWidget {
