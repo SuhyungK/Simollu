@@ -83,7 +83,7 @@ class _LikingThingsState extends State<LikingThings> {
                                             } else {
                                               selectedLikings.add(text);
                                             }
-                                            print(selectedLikings);
+                                            // print(selectedLikings);
                                           });
                                         }),
                                   );
@@ -113,7 +113,7 @@ class _LikingThingsState extends State<LikingThings> {
                       // print(jsonEncode(json));
                       var result =
                           await preferenceViewModel.postPreference(jsonData);
-                      print('최 종 결 과 : ${result.userPrefernceList}');
+                      debugPrint('사용자의 취향 : ${result.userPrefernceList}');
                     }
                   // 선택된 취향이 3개보다 작으면 disabled
                   : null,

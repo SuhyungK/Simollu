@@ -9,6 +9,10 @@ class PreferenceViewModel {
   Future<void> initialize() async {
     token = await getToken();
   }
+
+  PreferenceViewModel() {
+    initialize();
+  }
   
   Future<PreferenceModel> postPreference(String json) async {
     late PreferenceModel result;
@@ -24,11 +28,10 @@ class PreferenceViewModel {
       url);
 
     if (response.statusCode == 200) {
-      result = PreferenceModel.fromJson(jsonDecode(response.body));
+      result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to post preferences...');
     }
-
     return result;
   }
 
