@@ -35,9 +35,9 @@ class PreferenceViewModel {
     return result;
   }
 
-  Future<PreferenceModel> getPreference() async {
+  Future<List<String>>getPreference() async {
     await initialize();
-    late PreferenceModel result;
+    late List<String> result;
     var url = Uri.https('simollu.com', '/api/user/user/preference');
 
     final response = await http.get(url,
@@ -47,9 +47,10 @@ class PreferenceViewModel {
       },
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
-      result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      result = jsonDecode(utf8.decode(response.bodyBytes))['userPrefernceList']?.cast<String>();
+      // result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to get preferences...');
     }

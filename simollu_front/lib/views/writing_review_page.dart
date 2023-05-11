@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/models/reviewModel.dart';
+import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
 import 'package:simollu_front/viewmodels/ReviewViewModel.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
@@ -15,6 +16,7 @@ class WritingReviewPage extends StatefulWidget {
 
 class _WritingReviewPageState extends State<WritingReviewPage> {
   final reviewViewModel = ReviewMViewModel();
+  final preferenceViewModel = PreferenceViewModel();
 
   List<String> rating = ['아쉬워요', '기다릴만해요'];
   int _selecedRating = -1;
@@ -23,7 +25,6 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
@@ -204,17 +205,19 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                 reviewRating: _selecedRating
               );
               final jsonData = reviewModel.toJson();
-              var reviewSeq = await reviewViewModel.postReview(jsonData);
-              debugPrint(reviewSeq);
-              Future.delayed(Duration.zero, () {
-                Navigator.push(
-                    context,
-                    GetPageRoute(
-                      curve: Curves.fastOutSlowIn,
-                      page: () => ReviewManagementPage(),
-                    )
-                );
-              });
+              var result = preferenceViewModel.getPreference();
+              print('$result');
+              // var reviewSeq = await reviewViewModel.postReview(jsonData);
+              // debugPrint(reviewSeq);
+              // Future.delayed(Duration.zero, () {
+              //   Navigator.push(
+              //       context,
+              //       GetPageRoute(
+              //         curve: Curves.fastOutSlowIn,
+              //         page: () => ReviewManagementPage(),
+              //       )
+              //   );
+              // });
             } : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,
