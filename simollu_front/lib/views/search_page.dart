@@ -98,6 +98,7 @@ class _SearchPageState extends State<SearchPage> {
               autofocus: true,
               controller: _filter,
               onSubmitted: (value) async {
+                FocusScope.of(context).unfocus();
                 // 사용자가 입력한 검색어 처리하는 코드 작성
                 print('사용자 검색 엔터');
                 print(value);
