@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
 import 'package:simollu_front/viewmodels/ReviewViewModel.dart';
@@ -205,19 +206,20 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                 reviewRating: _selecedRating
               );
               final jsonData = reviewModel.toJson();
-              var result = preferenceViewModel.getPreference();
-              print('$result');
-              // var reviewSeq = await reviewViewModel.postReview(jsonData);
-              // debugPrint(reviewSeq);
-              // Future.delayed(Duration.zero, () {
-              //   Navigator.push(
-              //       context,
-              //       GetPageRoute(
-              //         curve: Curves.fastOutSlowIn,
-              //         page: () => ReviewManagementPage(),
-              //       )
-              //   );
-              // });
+              // List<String> preferenceList =
+              //     await preferenceViewModel.getPreference().then((result) => result);
+              // print('$preferenceList');
+              var reviewSeq = await reviewViewModel.postReview(jsonData);
+              debugPrint(reviewSeq);
+              Future.delayed(Duration.zero, () {
+                Navigator.push(
+                    context,
+                    GetPageRoute(
+                      curve: Curves.fastOutSlowIn,
+                      page: () => ReviewManagementPage(),
+                    )
+                );
+              });
             } : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,

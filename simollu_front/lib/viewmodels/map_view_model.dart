@@ -16,23 +16,23 @@ class MapViewModel extends ChangeNotifier {
 
   Future<List<PathSegment>> findPaths(
       LatLng start, LatLng end, String passList) async {
-    this.paths = await TMapAPI().findPaths(start, end, passList);
+    paths = await TMapAPI().findPaths(start, end, passList);
     loadingStatus = LoadingStatus.loading;
     notifyListeners();
 
-    this.loadingStatus =
-        this.paths.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
-    return this.paths;
+    loadingStatus =
+        paths.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
+    return paths;
   }
 
   Future<List<Place>> getPlaces(LatLng dest, String keyword) async {
-    this.places = await KakaoMapAPI().getPlaces(dest, keyword);
+    places = await KakaoMapAPI().getPlaces(dest, keyword);
     placeLoadingStatus = LoadingStatus.loading;
     notifyListeners();
 
     placeLoadingStatus =
-        this.places.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
+        places.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
 
-    return this.places;
+    return places;
   }
 }
