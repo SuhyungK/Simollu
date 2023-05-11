@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/PreferenceModel.dart';
+import 'package:simollu_front/models/preferenceModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class PreferenceViewModel {
@@ -16,6 +16,7 @@ class PreferenceViewModel {
   
   Future<PreferenceModel> postPreference(String json) async {
     late PreferenceModel result;
+    await initialize();
     var url = Uri.https('simollu.com', '/api/user/preference');
     // Uri uri = Uri.parse('https://simollu.com/api/user/preference');
     final response = await http.post(
@@ -34,7 +35,25 @@ class PreferenceViewModel {
     return result;
   }
 
-  // Future<List<PreferenceModel>> getPreference() async {
-  //   Uri uri = U
-  // }
+  Future<PreferenceModel> getPreference() async {
+    await initialize();
+    late PreferenceModel result;
+    var url = Uri.https('simollu.com', '/api/user/user/preference');
+
+    final response = await http.get(url,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization" : token
+      },
+    );
+
+    print(response.body);
+    if (response.statusCode == 200) {
+      result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to get preferences...');
+    }
+    return result;
+
+  }
 }

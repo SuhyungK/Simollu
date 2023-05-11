@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'package:simollu_front/models/PreferenceModel.dart';
+import 'package:simollu_front/models/preferenceModel.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
 import 'package:simollu_front/views/liking_things_button.dart';

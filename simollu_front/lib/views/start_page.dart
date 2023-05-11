@@ -4,6 +4,7 @@ import 'package:simollu_front/root.dart';
 import 'package:simollu_front/utils/token.dart';
 import 'package:simollu_front/views/login_page.dart';
 import 'package:get/get.dart';
+import 'package:simollu_front/views/writing_review_page.dart';
 
 // final Uri _url = Uri.parse('https://simollu.com/api/user/oauth2/authorization/kakao');
 
@@ -42,9 +43,14 @@ class _StartPageState extends State<StartPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(height: 20),
-              Image.asset(
-                  'assets/logo.png',
-                  width: 300,
+              InkWell(
+                onTap: () {
+                  Get.to(() => WritingReviewPage());
+                },
+                child: Image.asset(
+                    'assets/logo.png',
+                    width: 300,
+                ),
               ),
               InkWell(
                 onTap: () {
