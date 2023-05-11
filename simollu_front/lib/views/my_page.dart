@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
+import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/my_page_edit.dart';
 import 'package:simollu_front/views/recenlty_viewed_restaurants_page.dart';
 import 'package:simollu_front/views/review_management_page.dart';
@@ -354,6 +355,46 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       children: const [
                         Text(
                           '최근 본 식당',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Icon(Icons.arrow_forward_ios_outlined),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print('취향 보기');
+                    RootController.to.setRootPageTitles("취향 보기");
+                    RootController.to.setIsMainPage(false);
+                    Navigator.push(
+                      context,
+                      GetPageRoute(
+                        curve: Curves.fastOutSlowIn,
+                        page: () => LikingThings(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFDDDDDD),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          '취향 보기',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
