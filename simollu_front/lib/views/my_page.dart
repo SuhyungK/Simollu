@@ -447,8 +447,12 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             print('로그아웃');
+            // SharedPreferences에서 "token" 키에 저장된 값을 삭제합니다.
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.remove("token");
+            Get.offAll(StartPage());
           },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
@@ -462,22 +466,14 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               ),
             ),
           ),
-          child: GestureDetector(
-            onTap: () async {
-              // SharedPreferences에서 "token" 키에 저장된 값을 삭제합니다.
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove("token");
-              Get.to(StartPage());
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '로그아웃',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              '로그아웃',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
