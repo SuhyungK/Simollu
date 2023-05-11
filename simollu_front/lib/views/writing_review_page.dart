@@ -9,11 +9,7 @@ class WritingReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: '리뷰 쓰기',
-        leading: Image.asset('assets/backBtn.png'),
-        actions: [Image.asset('assets/bell.png')],
-      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           child: Column(

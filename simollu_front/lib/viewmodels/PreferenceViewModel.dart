@@ -16,7 +16,6 @@ class PreferenceViewModel {
   
   Future<PreferenceModel> postPreference(String json) async {
     late PreferenceModel result;
-    await initialize();
     var url = Uri.https('simollu.com', '/api/user/preference');
     // Uri uri = Uri.parse('https://simollu.com/api/user/preference');
     final response = await http.post(
