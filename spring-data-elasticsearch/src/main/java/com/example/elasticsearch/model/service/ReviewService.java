@@ -7,6 +7,7 @@ import com.example.elasticsearch.model.dto.review.MyReviewDto;
 import com.example.elasticsearch.model.dto.review.ReviewDto;
 
 import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 public interface ReviewService {
@@ -30,4 +31,5 @@ public interface ReviewService {
     List<WriteableReviewDto> getWriteableList(String userSeq);
 
 
+    void writeReviewRedis() throws JsonProcessingException;
 }

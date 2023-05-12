@@ -3,26 +3,18 @@ package com.example.elasticsearch.model.service;
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.document.RestaurantDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
-import com.example.elasticsearch.model.dto.SearchHistoryResponse;
-import com.example.elasticsearch.model.dto.SearchInfoResponse;
-import com.example.elasticsearch.model.dto.SearchListResponse;
-import com.example.elasticsearch.model.dto.SearchRankResponse;
+import com.example.elasticsearch.model.dto.search.SearchHistoryResponse;
+import com.example.elasticsearch.model.dto.search.SearchRankResponse;
 import com.example.elasticsearch.model.entity.Search;
 import com.example.elasticsearch.model.document.SearchDocument;
 import com.example.elasticsearch.repository.elkAdvance.SearchElasticAdvanceRepository;
 import com.example.elasticsearch.repository.jpa.SearchJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.SearchElasticBasicRepository;
-import com.example.elasticsearch.model.dto.RestaurantListResponse;
-import java.io.BufferedReader;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantListResponse;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -51,7 +43,7 @@ public class SearchService {
                     .restaurantY(restaurant.getRestaurantY())
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
-                    .restaurantRating(restaurant.getRestaurantRating())
+                    .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
                     .distanceTime(calculateDistance(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
                     .build();
             restaurantResponses.add(restaurantListResponse);
@@ -118,5 +110,16 @@ public class SearchService {
             searchHistoryListResponse.add(searchHistoryResponse);
         }
         return searchHistoryListResponse;
+    }
+
+    public int calculateRating(Long restaurantSeq) {
+        int f = (int) redisTemplate.opsForHash().get("review", restaurantSeq+"_false");
+        int t = (int) redisTemplate.opsForHash().get("review", restaurantSeq+"_true");
+        int percentage=0;
+
+        if(t!=0){
+            percentage = ((int) t / f+t) * 100;
+        }
+        return percentage;
     }
 }

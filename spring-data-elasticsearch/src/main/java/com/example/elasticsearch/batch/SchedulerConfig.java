@@ -1,8 +1,10 @@
 package com.example.elasticsearch.batch;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 public class SchedulerConfig {
 
     private final ScheduledTask scheduledTask;
+    private final RedisTemplate redisTemplate;
 
     @Bean
     public TaskScheduler taskScheduler() {
@@ -27,4 +30,6 @@ public class SchedulerConfig {
     public void scheduleTask() throws IOException {
         scheduledTask.searchHistoryTask();
     }
+
+
 }

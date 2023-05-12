@@ -1,6 +1,6 @@
 package com.example.elasticsearch.controller;
 
-import com.example.elasticsearch.model.dto.SearchInfoResponse;
+import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.service.RestaurantService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;

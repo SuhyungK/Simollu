@@ -1,14 +1,12 @@
 package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
-import com.example.elasticsearch.model.dto.MenuInfoResponse;
-import com.example.elasticsearch.model.dto.RestaurantInfoResponse;
-import com.example.elasticsearch.model.dto.ReviewInfoResponse;
-import com.example.elasticsearch.model.dto.SearchInfoResponse;
+import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
+import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.entity.Menu;
 import com.example.elasticsearch.model.entity.Restaurant;
 import com.example.elasticsearch.model.document.RestaurantDocument;
-import com.example.elasticsearch.model.entity.Review;
 import com.example.elasticsearch.repository.jpa.MenuJpaRepository;
 import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepository;
@@ -16,7 +14,6 @@ import com.example.elasticsearch.repository.review.ReviewRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;

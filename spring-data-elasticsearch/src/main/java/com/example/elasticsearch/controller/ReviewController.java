@@ -6,6 +6,7 @@ import com.example.elasticsearch.model.dto.review.MyReviewDto;
 import com.example.elasticsearch.model.dto.review.ReviewDto;
 import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.example.elasticsearch.model.service.ReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,4 +64,12 @@ public class ReviewController {
         if(writeableReviewDtoList == null) return ResponseEntity.status(202).build();
         return ResponseEntity.ok(writeableReviewDtoList);
     }
+
+
+    @GetMapping("/writeReviewRedis")
+    public void writeReviewRedis() throws JsonProcessingException {
+        reviewService.writeReviewRedis();
+
+    }
+
 }

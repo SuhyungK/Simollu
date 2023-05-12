@@ -1,21 +1,13 @@
 package com.example.elasticsearch.repository.elkAdvance;
 
 import com.example.elasticsearch.model.document.RestaurantDocument;
-import com.example.elasticsearch.model.document.SearchDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
-import com.example.elasticsearch.model.dto.SearchListResponse;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.BucketOrder;

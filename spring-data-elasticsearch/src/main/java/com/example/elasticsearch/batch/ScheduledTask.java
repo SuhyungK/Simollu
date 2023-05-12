@@ -1,14 +1,12 @@
 package com.example.elasticsearch.batch;
 
-import com.example.elasticsearch.model.document.SearchDocument;
-import com.example.elasticsearch.model.dto.SearchRankResponse;
+import com.example.elasticsearch.model.dto.search.SearchRankResponse;
 import com.example.elasticsearch.model.service.SearchService;
 import com.example.elasticsearch.utils.RedisUtil;
 import java.io.IOException;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.search;
 
 import lombok.Builder;
 import lombok.Getter;
