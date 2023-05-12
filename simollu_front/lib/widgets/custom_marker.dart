@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 enum MarkerType {
@@ -20,29 +21,38 @@ class CustomMarker {
   });
 
   Future<Marker> getMarker() async {
-    // late BitmapDescriptor image;
+    late BitmapDescriptor marker;
     switch (type) {
       case MarkerType.start:
-        // icon = Icons.directions_bike;
+        marker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(),
+          "assets/icons/start.png",
+        );
         break;
       case MarkerType.destination:
-        // image = await BitmapDescriptor.fromAssetImage(
-        //   ImageConfiguration(size: Size(48, 48)),
-        //   "assets/icons/destination.png",
-        // );
+        marker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(),
+          "assets/icons/destination.png",
+        );
         break;
       case MarkerType.waypoint:
-        // icon = Icons.location_history;
+        marker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(),
+          "assets/icons/waypoint.png",
+        );
         break;
       case MarkerType.myLocation:
-        // icon = Icons.my_location;
+        marker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(),
+          "assets/icons/mylocation.png",
+        );
         break;
     }
 
     return Marker(
       markerId: MarkerId(markerId),
       position: latLng,
-      // icon: image,
+      icon: marker,
     );
   }
 }

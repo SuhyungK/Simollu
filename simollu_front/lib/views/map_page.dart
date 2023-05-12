@@ -31,24 +31,44 @@ class _MapPageState extends State<MapPage> {
   Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
+  late final LatLng _start;
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
+
+  void addMarker() async {
+    Marker destination = await CustomMarker(
+            markerId: "destination",
+            latLng: _arrive,
+            type: MarkerType.destination)
+        .getMarker();
+
+    _markers.add(destination);
+
+    _start = LatLng(_currentPosition.latitude, _currentPosition.longitude);
+    Marker start = await CustomMarker(
+            markerId: "start", latLng: _start, type: MarkerType.start)
+        .getMarker();
+
+    _markers.add(start);
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _markers.add(Marker(
-      markerId: MarkerId("destination"),
-      position: _arrive,
-    ));
+    // _markers.add(Marker(
+    //   markerId: MarkerId("destination"),
+    //   position: _arrive,
+    // ));
 
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
+        addMarker();
+        // 관심 검색하는 부분
         List<Place> newPlaceList =
             await Provider.of<MapViewModel>(context, listen: false)
-                .getPlaces(_arrive, "");
+                .getPlaces(_arrive, "PC방");
 
         Map<Place, List<PathSegment>> newPathMap = {};
         Map<Place, List<Polyline>> newPolylineMap = {};
@@ -167,13 +187,16 @@ class _MapPageState extends State<MapPage> {
     }
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
+        .then((Position position) async {
+      _currentPosition = position;
+      Marker myLocation = await CustomMarker(
+              markerId: "myLocation",
+              latLng:
+                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
+              type: MarkerType.myLocation)
+          .getMarker();
       setState(() {
-        _currentPosition = position;
-        _markers.add(Marker(
-          markerId: MarkerId('myLocation'),
-          position: LatLng(position.latitude, position.longitude),
-        ));
+        _markers.add(myLocation);
       });
     }).catchError((e) {
       print(e);
@@ -185,17 +208,17 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onLocationChanged(Position position) async {
+    _currentPosition = position;
+    Marker myLocation = await CustomMarker(
+            markerId: "myLocation",
+            latLng:
+                LatLng(_currentPosition.latitude, _currentPosition.longitude),
+            type: MarkerType.myLocation)
+        .getMarker();
     setState(() {
-      _currentPosition = position;
-      _markers.clear();
-      _markers.add(Marker(
-        markerId: MarkerId('myLocation'),
-        position: LatLng(position.latitude, position.longitude),
-      ));
-      _markers.add(Marker(
-        markerId: MarkerId('destination'),
-        position: _arrive,
-      ));
+      _markers.remove(MarkerId('myLocation'));
+
+      _markers.add(myLocation);
     });
 
     final GoogleMapController controller = await _controller.future;
@@ -214,23 +237,14 @@ class _MapPageState extends State<MapPage> {
         zoom: 16.0,
       ),
     ));
-    _markers.clear();
-    _markers.add(Marker(
-      markerId: MarkerId('myLocation'),
-      position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-      // icon: BitmapDiscriptor(Icon(
-      //   Icons.circle,
-      //   color: Colors.blue,
-      // )),
-    ));
-    _markers.add(Marker(
-      markerId: MarkerId('wayPoint'),
-      position: LatLng(key.lat, key.lng),
-    ));
-    _markers.add(Marker(
-      markerId: MarkerId("destination"),
-      position: _arrive,
-    ));
+    _markers.remove(MarkerId('wayPoint'));
+    Marker waypoint = await CustomMarker(
+            markerId: "waypoint",
+            latLng: LatLng(key.lat, key.lng),
+            type: MarkerType.waypoint)
+        .getMarker();
+    _markers.add(waypoint);
+
     setState(() {
       _polylineList = _polylineMap[key]!;
     });
