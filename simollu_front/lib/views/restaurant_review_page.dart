@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/restaurantModel.dart';
-import 'package:simollu_front/viewmodels/RestaurantViewModel.dart';
+import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 
 class RestaurantReviewPage extends StatefulWidget {
   final List<Map<String, dynamic>> reviewList;
@@ -66,9 +66,9 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
                           ),
                           SizedBox(height: 3,),
                           review['reviewRating'] ?
-                            Text("기다릴만해요", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
+                            Text("기다릴만해요", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),)
                               :
-                            Text('아쉬워요', style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),),
+                            Text('아쉬워요', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
                           SizedBox(height: 3,),
                           Text(
                             review['reviewContent'],
