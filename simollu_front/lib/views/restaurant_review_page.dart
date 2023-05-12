@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/restaurantModel.dart';
-import 'package:simollu_front/viewmodels/RestaurantViewModel.dart';
+import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 
 class RestaurantReviewPage extends StatefulWidget {
   final List<Map<String, dynamic>> reviewList;

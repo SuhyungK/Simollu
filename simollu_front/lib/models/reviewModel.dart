@@ -26,7 +26,7 @@ class ReviewModel {
     reviewSeq = json['reviewSeq'];
     userSeq = json['userSeq'];
     restaurantSeq = json['restaurantSeq'];
-    reviewRating = json['reviewRating'];
+    reviewRating = json['reviewRating'] ? 1 : 0;
     reviewContent = json['reviewContent'];
     reviewRegistDate = json['reviewRegistDate'];
     restaurantName = json['restaurantName'];

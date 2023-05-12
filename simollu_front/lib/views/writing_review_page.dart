@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/reviewModel.dart';
-import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
@@ -18,7 +18,7 @@ class WritingReviewPage extends StatefulWidget {
 }
 
 class _WritingReviewPageState extends State<WritingReviewPage> {
-  final reviewViewModel = ReviewMViewModel();
+  final reviewViewModel = ReviewViewModel();
   final preferenceViewModel = PreferenceViewModel();
 
   List<String> rating = ['아쉬워요', '기다릴만해요'];
@@ -209,20 +209,22 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
               );
               final json = reviewModel.toJson();
               final jsonData = jsonEncode(json);
+              print(jsonData);
               // List<String> preferenceList =
               //     await preferenceViewModel.getPreference().then((result) => result);
               // print('$preferenceList');
               var reviewSeq = await reviewViewModel.postReview(jsonData);
               debugPrint(reviewSeq);
-              Future.delayed(Duration.zero, () {
-                Navigator.push(
-                    context,
-                    GetPageRoute(
-                      curve: Curves.fastOutSlowIn,
-                      page: () => ReviewManagementPage(),
-                    )
-                );
-              });
+              // Get.to(() => ReviewManagementPage());
+              // Future.delayed(Duration.zero, () {
+              //   Navigator.push(
+              //       context,
+              //       GetPageRoute(
+              //         curve: Curves.fastOutSlowIn,
+              //         page: () => ReviewManagementPage(),
+              //       )
+              //   );
+              // });
             } : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,
