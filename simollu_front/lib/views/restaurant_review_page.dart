@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/restaurantModel.dart';
+import 'package:simollu_front/viewmodels/RestaurantViewModel.dart';
 
-class RestaurantReviewPage extends StatelessWidget {
+class RestaurantReviewPage extends StatefulWidget {
   final List<Map<String, dynamic>> reviewList;
 
   const RestaurantReviewPage({
@@ -9,7 +11,79 @@ class RestaurantReviewPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<RestaurantReviewPage> createState() => _RestaurantReviewPageState();
+}
+
+class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
+  RestaurantViewModel restaurantViewModel = RestaurantViewModel();
+
+  Future<void> _handleTap(int reviewSeq) async {
+    var result = await restaurantViewModel.fetchReviewDetail(reviewSeq);
+    print(result.reviewContent);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    // return OutlinedButton(onPressed: (){ print(reviewList);}, child: Container( child: Text('버튼'),));
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: widget.reviewList.length,
+          itemBuilder: (context, index) {
+            final review = widget.reviewList[index];
+            return InkWell(
+              onTap: () {
+                _handleTap(review['reviewSeq']);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.grey, shape: BoxShape.circle),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '김싸피',
+                            // review['userSeq'],
+                            softWrap: true,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 3,),
+                          review['reviewRating'] ?
+                            Text("기다릴만해요", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
+                              :
+                            Text('아쉬워요', style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 3,),
+                          Text(
+                            review['reviewContent'],
+                            softWrap: true,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
