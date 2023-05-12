@@ -63,8 +63,9 @@ public class SearchController {
         searchService.saveAllSearchDocuments();
         // 실시간 검색어 순위 추출
         List<SearchRankResponse> top = searchService.getTopSearchKeywords(10);
-        redisTemplate.delete("Ranking");
+//        redisTemplate.delete("Ranking");
         for (SearchRankResponse n : top) {
+            System.out.println(n.getSearchWord()+"____________________");
             redisTemplate.opsForList().rightPush("Ranking", n.getSearchWord());
 
         }

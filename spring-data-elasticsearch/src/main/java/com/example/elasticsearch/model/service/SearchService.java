@@ -74,6 +74,8 @@ public class SearchService {
     /*RDB에 검색한 데이터 저장*/
     public void saveSearch(String description) {
         Search searchSaveRequest = new Search();
+        long currentTimeMillis = System.currentTimeMillis();
+        searchSaveRequest.setSearchRegistDate(currentTimeMillis);
         searchSaveRequest.setSearchWord(description);
         searchRepository.save(searchSaveRequest);
     }

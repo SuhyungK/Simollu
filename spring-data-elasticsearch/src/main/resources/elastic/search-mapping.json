@@ -4,9 +4,8 @@
     "searchWord": {
       "type": "keyword"
     },
-    "searchTime": {
-      "type": "date",
-      "format": "yyyy-MM-dd HH:mm:ss||yyyy/MM/dd||epoch_millis"
+    "searchRegistDate": {
+      "type": "time"
     }
   }
 }

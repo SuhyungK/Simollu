@@ -4,6 +4,7 @@ import com.example.elasticsearch.model.entity.Search;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,14 +26,14 @@ public class SearchDocument {
     @Id
     private Long searchSeq;
     private String searchWord;
-    private LocalDateTime searchRegistDate;
 
+    private Long searchRegsistDate;
 
     public static SearchDocument from(Search search) throws IOException {
         return SearchDocument.builder()
                 .searchSeq(search.getSearchSeq())
                 .searchWord(search.getSearchWord())
-                .searchRegistDate(search.getSearchRegistDate())
+                .searchRegsistDate(search.getSearchRegistDate())
                 .build();
     }
 

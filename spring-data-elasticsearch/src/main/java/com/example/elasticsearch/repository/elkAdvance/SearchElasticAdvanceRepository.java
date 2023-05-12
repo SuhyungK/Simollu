@@ -5,8 +5,10 @@ import com.example.elasticsearch.model.document.SearchDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
 import com.example.elasticsearch.model.dto.SearchListResponse;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -48,27 +50,12 @@ public class SearchElasticAdvanceRepository {
         return searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
     }
     public List<SearchDocument2> findTopSearchKeywords(int topN) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime pastTime = currentTime.minusMinutes(3);
-
-        QueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("searchRegistDate")
-                .from(pastTime.format(DateTimeFormatter.ISO_DATE_TIME))
-                .to(currentTime.format(DateTimeFormatter.ISO_DATE_TIME))
-                .includeLower(true)
-                .includeUpper(true)
-                .format("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
-        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-                .must(timeRangeQuery)
-                .must(QueryBuilders.matchAllQuery());
-
         AggregationBuilder aggregationBuilder = AggregationBuilders.terms("top_keywords")
                 .field("searchWord.keyword")
                 .size(topN)
                 .order(BucketOrder.count(false));
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(queryBuilder);
         searchSourceBuilder.aggregation(aggregationBuilder);
 
         SearchRequest searchRequest = new SearchRequest("search");
@@ -84,7 +71,6 @@ public class SearchElasticAdvanceRepository {
             throw new RuntimeException("Error occurred while fetching top search keywords.", e);
         }
     }
-
 
 }
 

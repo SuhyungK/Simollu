@@ -4,6 +4,7 @@ import com.example.elasticsearch.model.dto.SearchSaveRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,9 +33,7 @@ public class Search {
     @Column(name = "search_word")
     private String searchWord;
     @Column(name = "search_regist_date")
-    @CreationTimestamp
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime searchRegistDate;
+    private Long searchRegistDate;
 
     public static Search from (SearchSaveRequest searchSaveRequest){
         return Search.builder()

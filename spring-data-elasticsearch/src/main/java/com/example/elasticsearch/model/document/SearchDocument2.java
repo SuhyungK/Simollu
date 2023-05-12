@@ -26,7 +26,6 @@ public class SearchDocument2 {
     private String searchWord;
 
 
-
     public static SearchDocument2 from(Search search) throws IOException {
         return SearchDocument2.builder()
                 .searchSeq(search.getSearchSeq())
