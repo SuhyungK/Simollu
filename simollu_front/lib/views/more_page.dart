@@ -13,7 +13,7 @@ class MorePage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(() => LikingThings());
+              debugPrint('공지사항');
             },
             child: Container(
               padding: EdgeInsets.all(30),
@@ -43,7 +43,7 @@ class MorePage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print("설정");
+              debugPrint("설정");
             },
             child: Container(
               padding: EdgeInsets.all(30),
@@ -73,7 +73,7 @@ class MorePage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print("고객센터");
+              debugPrint("고객센터");
             },
             child: Container(
               padding: EdgeInsets.all(30),
@@ -103,7 +103,7 @@ class MorePage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print("정보");
+              debugPrint("정보");
             },
             child: Container(
               padding: EdgeInsets.all(30),

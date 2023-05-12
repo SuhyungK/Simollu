@@ -1,7 +1,9 @@
 import 'dart:convert';
-
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:simollu_front/models/PreferenceModel.dart';
+
+import 'package:simollu_front/models/preferenceModel.dart';
+import 'package:simollu_front/root.dart';
 import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
 import 'package:simollu_front/views/liking_things_button.dart';
 
@@ -83,7 +85,7 @@ class _LikingThingsState extends State<LikingThings> {
                                             } else {
                                               selectedLikings.add(text);
                                             }
-                                            print(selectedLikings);
+                                            // print(selectedLikings);
                                           });
                                         }),
                                   );
@@ -113,7 +115,8 @@ class _LikingThingsState extends State<LikingThings> {
                       // print(jsonEncode(json));
                       var result =
                           await preferenceViewModel.postPreference(jsonData);
-                      print('최 종 결 과 : ${result.userPrefernceList}');
+                      debugPrint('사용자의 취향 : ${result.userPrefernceList}');
+                      Get.offAll(Root());
                     }
                   // 선택된 취향이 3개보다 작으면 disabled
                   : null,

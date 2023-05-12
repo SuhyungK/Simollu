@@ -23,9 +23,9 @@ class SearchViewModel {
   double lat = 37.5013068; // 현재위치 : 위도
   double long = 127.0396597; // 현재위치 : 경도
 
-  Future<List<SearchModel>> getSearchResult() async {
+  Future<List<SearchModel>> getSearchResult(String value) async {
     await initialize();
-    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${keyword}&cx=${lat.toString()}&cy=${long.toString()}&size=10');
+    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${value}&cx=${lat.toString()}&cy=${long.toString()}&size=10');
     List<SearchModel> result = [];
     final response = await http.get(
         headers: {

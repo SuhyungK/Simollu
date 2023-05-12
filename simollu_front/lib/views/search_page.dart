@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
 
@@ -15,6 +16,7 @@ class SearchPage extends StatefulWidget {
 
 const routeA = "/";
 const routeB = "/B";
+const routeC = "/C";
 
 class _SearchPageState extends State<SearchPage> {
   // 화면이동을 위한 globalKey 상태 관리
@@ -50,6 +52,10 @@ class _SearchPageState extends State<SearchPage> {
     else if (setting.name == routeB) {
       return MaterialPageRoute<dynamic>(
           builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
+    }
+    else if (setting.name == routeC) {
+      return MaterialPageRoute<dynamic>(
+          builder: (context) => RestaurantDetailpage(), settings: setting);
     }
     else {
       throw Exception('Unknown route: ${setting.name}');
@@ -98,16 +104,13 @@ class _SearchPageState extends State<SearchPage> {
               autofocus: true,
               controller: _filter,
               onSubmitted: (value) async {
-                FocusScope.of(context).unfocus();
                 // 사용자가 입력한 검색어 처리하는 코드 작성
                 print('사용자 검색 엔터');
                 print(value);
 
                 // 최근 검색어 저장
                 RecentSearches.save(value);
-                // setState(() {
-                //   _recentSearches.insert(0, value);
-                // });
+
                 RecentSearches.printRecentSearches();
 
                 setState(() {
@@ -117,10 +120,11 @@ class _SearchPageState extends State<SearchPage> {
                 });
 
                 // 검색 api 연결
-                result = (await searchViewModel.getSearchResult()).cast<SearchModel>();
+                result = (await searchViewModel.getSearchResult(value)).cast<SearchModel>();
 
                 await searchViewModel.setSearchResult(result);
-
+                
+                // 검색 결과 페이지로 이동
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
               decoration: InputDecoration(
@@ -173,8 +177,8 @@ class _SearchPageState extends State<SearchPage> {
         body: Container(
           color: Colors.white,
           // padding: EdgeInsets.only(bottom: 13),
-          child: Scaffold(
-            body: Container(
+          child:
+             Container(
               color: Colors.white,
               child: Navigator(
                 key: _navigatorKey,
@@ -183,7 +187,7 @@ class _SearchPageState extends State<SearchPage> {
                 onGenerateRoute: _onGenerateRoute,
               ),
             ),
-          ),
+
         ),
       ),
     );

@@ -32,7 +32,7 @@ class _MyWebViewState extends State<MyWebView> {
           await prefs.setString('token', token!);
           await prefs.setBool('initial', initial);
           if (initial == true) {
-            Get.offAll(LikingThings());
+            Get.offAll(() => LikingThings());
           } else {
             Get.offAll(Root());
           }
