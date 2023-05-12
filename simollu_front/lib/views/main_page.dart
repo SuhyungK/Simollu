@@ -9,7 +9,7 @@ import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/widgets/shadow_button.dart';
 
-import '../viewmodels/UserViewmodel.dart';
+import '../viewmodels/user_view_model.dart';
 
 class WaitingInfo {
   final String restaurant;

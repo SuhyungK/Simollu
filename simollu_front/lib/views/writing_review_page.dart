@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
-import 'package:simollu_front/viewmodels/ReviewViewModel.dart';
+import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/writing_review_button.dart';
