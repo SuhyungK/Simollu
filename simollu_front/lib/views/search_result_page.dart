@@ -63,7 +63,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
               itemBuilder: (context, index) {
                 final searchResult = widget.result[index];
                 return SearchResultWidget(name: searchResult.restaurantName, imageUrl: searchResult.restaurantImg, waitingTime: '', queueSize: '', numberOfPeople: 1, onWait: () {  },
-
+                    restaurantSeq: searchResult.restaurantSeq
                 );
               },
             ),

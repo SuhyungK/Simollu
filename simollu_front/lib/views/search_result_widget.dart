@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:simollu_front/services/waiting_api.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import '../root.dart';
 
 class SearchResultWidget extends StatefulWidget {
+  final int restaurantSeq;
   final String name;
   final String imageUrl;
   final String waitingTime;
@@ -15,8 +17,9 @@ class SearchResultWidget extends StatefulWidget {
   final int numberOfPeople;
   final VoidCallback onWait;
 
-  const SearchResultWidget({
+  const SearchResultWidget( {
     Key? key,
+    required this.restaurantSeq,
     required this.name,
     required this.imageUrl,
     required this.waitingTime,
@@ -45,6 +48,11 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
         _numberOfPeople--;
       }
     });
+  }
+
+  registWaiting() async {
+    WaitingApi waitingApi = WaitingApi();
+    await waitingApi.postWaiting(widget.restaurantSeq, _numberOfPeople, widget.name);
   }
 
   @override
@@ -271,7 +279,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       ),
                       Container(
                         width: 70,
-
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey,
@@ -311,8 +318,10 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                   width: 160,
                   height: 40,
                   child: OutlinedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       print('웨이팅하기 ! 클릭');
+                      // 웨이팅 등록 api 연결
+                      registWaiting();
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Color(0xFFFFD200),

@@ -199,6 +199,7 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                 Container(
                     margin: EdgeInsets.only(top: 25),
                     color: Colors.white,
+                    // 실시간 검색어 : 1~5위, 6~10위
                     child: Row(
                       children: [
                         SearchHotKeyword(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../viewmodels/UserViewmodel.dart';
+import '../viewmodels/user_view_model.dart';
 
 class MyPageEdit extends StatefulWidget {
   final String name;
