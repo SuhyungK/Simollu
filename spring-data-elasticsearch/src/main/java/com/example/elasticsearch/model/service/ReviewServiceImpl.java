@@ -21,7 +21,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     /* 후기 작성 */
     @Override
-    public Integer writeReview(String userSeq, ReviewDto reviewDto) {
+    public Long writeReview(String userSeq, ReviewDto reviewDto) {
 
         Review review = Review.builder()
                 .userSeq(userSeq)
@@ -35,8 +35,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     /* 후기 리스트 조회 */
-    @Override
-    public List<ReviewDto> getReviewList(Integer restaurantSeq) {
+
+    public List<ReviewDto> getReviewList(Long restaurantSeq) {
         List<Review> reviewList = reviewRepository.findByRestaurantSeq(restaurantSeq);
         List<ReviewDto> dtoList = new ArrayList<>();
 
@@ -56,8 +56,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     /* 후기 상세 조회 */
-    @Override
-    public ReviewDto getReview(Integer reviewSeq) {
+
+    public ReviewDto getReview(Long reviewSeq) {
         Review review = reviewRepository.findById(reviewSeq).orElse(null);
 
         return ReviewDto.builder()

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findByRestaurantSeq(@Param("restaurantSeq") Integer restaurantSeq);
+    List<Review> findByRestaurantSeq(@Param("restaurantSeq") Long restaurantSeq);
 
 }

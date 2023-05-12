@@ -1,5 +1,6 @@
 package com.example.elasticsearch.controller;
 
+import com.example.elasticsearch.model.dto.SearchInfoResponse;
 import com.example.elasticsearch.model.service.RestaurantService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class RestaurantController {
     public ResponseEntity<Void> saveRestaurantDocuments() throws IOException {
         restaurantService.saveAllRestaurantDocuments();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/restaurant/{restaurantSeq}")
+    public ResponseEntity<SearchInfoResponse> getSearchInfo(@PathVariable("restaurantSeq") long restaurantSeq) throws IOException {
+        return ResponseEntity.ok(restaurantService.getSearchInfo(restaurantSeq));
     }
 
 

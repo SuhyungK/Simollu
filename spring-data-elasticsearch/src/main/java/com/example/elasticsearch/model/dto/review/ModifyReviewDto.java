@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyReviewDto {
 
-    private Integer reviewSeq; // 후기일련번호
+    private Long reviewSeq; // 후기일련번호
 
 
     private boolean reviewRating; // 평가 (0:아쉬워요 / 1:기다릴만해요)

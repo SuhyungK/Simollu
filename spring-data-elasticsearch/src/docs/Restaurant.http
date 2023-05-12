@@ -5,15 +5,17 @@ POST http://localhost:8080/restaurantDocuments
 
 ###
 # 포함하는 것 찾기
-# GET http://localhost:8080/api/search/contains?description=베트남음식&cx=126.8828469&cy=37.48272445&size=10
-GET http://localhost:8080/search/contains?description=베트남음식&cx=126.8828469&cy=37.48272445&size=10
-
+# GET http://localhost:8080/api/search/contains?description=동동쓰&cx=126.8828469&cy=37.48272445&size=10
+GET http://localhost:8080/search/contains?description=언민정&cx=126.8828469&cy=37.48272445&size=10
 
 # 랭킹
 ###
-# POST http://localhost:8080/api/search/top-search-keyword
-POST http://localhost:8080/search/top-search-keyword
+GET http://localhost:8080/search/top-search-keyword
+
+# redis로 강제로 데이터 보내는 코드
+###
+GET http://localhost:8080/search/top-search-keyword2
+
 
 ###
-# POST http://localhost:8080/api/search/top-search-keyword
-POST http://localhost:8080/search/top-search-keyword2
+GET http://localhost:8080/restaurant/10

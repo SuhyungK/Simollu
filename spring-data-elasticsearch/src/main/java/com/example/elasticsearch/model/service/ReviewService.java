@@ -10,13 +10,13 @@ import java.util.List;
 public interface ReviewService {
 
     /* 후기 작성 */
-    Integer writeReview(String userSeq, ReviewDto reviewDto);
+    Long writeReview(String userSeq, ReviewDto reviewDto);
 
     /* 후기 리스트 조회 */
-    List<ReviewDto> getReviewList(Integer restaurantSeq);
+    List<ReviewDto> getReviewList(Long restaurantSeq);
 
     /* 후기 상세 조회 */
-    ReviewDto getReview(Integer reviewSeq);
+    ReviewDto getReview(Long reviewSeq);
 
     /* 후기 수정 */
     ReviewDto modifyReview(ModifyReviewDto modifyReviewDto);

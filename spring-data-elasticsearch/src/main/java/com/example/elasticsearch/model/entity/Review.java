@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer reviewSeq; // 후기일련번호
+    private Long reviewSeq; // 후기일련번호
 
     @NotNull
     @Column(name = "user_seq")
@@ -26,7 +26,7 @@ public class Review {
 
     @NotNull
     @Column(name = "restaurant_seq")
-    private Integer restaurantSeq; // 식당일련번호
+    private Long restaurantSeq; // 식당일련번호
 
     @NotNull
     @Column(name = "review_rating")

@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 public class ReviewDto {
 
-    private Integer reviewSeq; // 후기일련번호
+    private Long reviewSeq; // 후기일련번호
 
     private String userSeq; // 회원일련번호
 
-    private Integer restaurantSeq; // 식당일련번호
+    private Long restaurantSeq; // 식당일련번호
 
     private boolean reviewRating; // 평가 (0:아쉬워요 / 1:기다릴만해요)
 

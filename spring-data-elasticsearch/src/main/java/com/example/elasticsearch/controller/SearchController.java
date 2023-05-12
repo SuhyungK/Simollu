@@ -42,7 +42,7 @@ public class SearchController {
     }
 
     /*실시간 순위 뽑아내는 로직*/
-    @PostMapping("/top-search-keyword")
+    @GetMapping("/top-search-keyword")
     @Transactional(readOnly = false)
     public ResponseEntity<Map<Integer, String>> SearchHistory () throws IOException {
         int n = 1;
@@ -57,7 +57,7 @@ public class SearchController {
 
     }
 
-    @PostMapping("/top-search-keyword2")
+    @GetMapping("/top-search-keyword2")
     @Transactional(readOnly = false)
     public ResponseEntity<Map<Integer, String>> SearchHistoryToRedis () throws IOException {
         searchService.saveAllSearchDocuments();
@@ -66,8 +66,6 @@ public class SearchController {
 //        redisTemplate.delete("Ranking");
         for (SearchRankResponse n : top) {
             System.out.println(n.getSearchWord()+"____________________");
-            redisTemplate.opsForList().rightPush("Ranking", n.getSearchWord());
-
         }
         return null;
     }
