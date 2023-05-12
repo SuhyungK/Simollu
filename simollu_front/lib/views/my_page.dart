@@ -170,7 +170,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                   context,
                                   GetPageRoute(
                                     curve: Curves.fastOutSlowIn,
-                                    page: () => ForkRewardPage(),
+                                    page: () => ForkRewardPage(fork: fork),
                                   ),
                                 );
                               },

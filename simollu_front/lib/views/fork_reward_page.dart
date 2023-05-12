@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../viewmodels/UserViewmodel.dart';
+
 class ForkRewardPage extends StatefulWidget {
-  const ForkRewardPage({Key? key}) : super(key: key);
+  final int fork;
+
+  const ForkRewardPage({Key? key, required this.fork}) : super(key: key);
 
   @override
   State<ForkRewardPage> createState() => _ForkRewardPageState();
 }
 
 class _ForkRewardPageState extends State<ForkRewardPage> {
+
+  UserViewModel userViewModel = UserViewModel();
+  late List forkList = [];
+
+  initForkList() async {
+    forkList = await userViewModel.getForkList();
+    print("for_reward_page : ");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initForkList().then((_) {
+      setState(() {
+        forkList = forkList;
+        print(forkList[0]);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +72,7 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
                             color: Colors.black,
                           ),
                           children: [
-                            TextSpan(text: "2000", style: TextStyle(color: Colors.amber, fontSize: 20)),
+                            TextSpan(text: widget.fork.toString(), style: TextStyle(color: Colors.amber, fontSize: 20)),
                             TextSpan(text: "개", style: TextStyle(fontSize: 18))
                           ]
                         ),
@@ -75,16 +99,6 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
                     _ForkHistory(
                       rewardDate: '23/04/17 (화)',
                       rewardAmount: 1999,
-                      rewardState: '포인트 사용',
-                    ),
-                    _ForkHistory(
-                      rewardDate: '23/04/18',
-                      rewardAmount: 1996,
-                      rewardState: '포인트 사용',
-                    ),
-                    _ForkHistory(
-                      rewardDate: '23/04/18',
-                      rewardAmount: 1993,
                       rewardState: '포인트 사용',
                     ),
                   ],

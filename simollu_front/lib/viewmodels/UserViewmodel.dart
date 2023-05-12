@@ -97,9 +97,9 @@ class UserViewModel{
     return fork;
   }
 
-  // [GET] User 포크 내역 조회
+  // [GET] User 포크 내역 리스트 조회
   Future<List> getForkList() async {
-    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork-page");
+    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork-list");
 
     await initialize();
 
@@ -116,7 +116,7 @@ class UserViewModel{
     if (response.statusCode == 200) {
 
       final responseBody = utf8.decode(response.bodyBytes);
-      forkList = jsonDecode(responseBody)['userFork'];
+      forkList = jsonDecode(responseBody);
       print(forkList);
     }
 

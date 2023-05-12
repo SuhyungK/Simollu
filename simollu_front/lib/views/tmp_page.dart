@@ -91,7 +91,7 @@ class TmpPage extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  Get.to(ForkRewardPage());
+
                 },
                 child: Text('포크'),
               ),
