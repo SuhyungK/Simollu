@@ -51,24 +51,19 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   UserViewModel userViewModel = UserViewModel();
-  late String nickname = "";
 
-  initNickname() async {
-    nickname = (await userViewModel.getNickname()) as String;
-    print("mypage screen"+nickname);
+  void getData() {
+    UserViewModel userViewModel = Get.find();
+
+    userViewModel.getNickname();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initNickname().then((_) {
-      setState(() {
-        nickname = nickname;
-      });
-    });
+    getData();
   }
 
   // WaitingInfo? waitingInfo;
@@ -151,6 +146,7 @@ class _MainPageState extends State<MainPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
@@ -196,11 +192,13 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          nickname+"님",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        child: Obx(
+                          () => Text(
+                            userViewModel.nickname.value + "님",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

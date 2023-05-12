@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:simollu_front/root.dart';
@@ -25,19 +26,6 @@ class MyPage extends StatefulWidget {
 class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  UserViewModel userViewModel = UserViewModel();
-  late String nickname = "";
-  late int fork = 0;
-
-  initUserInfo() async {
-    nickname = (await userViewModel.getNickname()) as String;
-    print("mypage screen"+nickname);
-
-    fork = await userViewModel.getForkNumber();
-    print("forkNum : ");
-    print(fork);
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -47,12 +35,6 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    initUserInfo().then((_) {
-      setState(() {
-        nickname = nickname;
-        fork = fork;
-      });
-    });
   }
 
   @override
@@ -63,6 +45,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -89,13 +72,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   Expanded(
-                    child: Text(
-                      nickname,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                    child: Obx(
+                      () => Text(
+                        userViewModel.nickname.value,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        softWrap: true,
                       ),
-                      softWrap: true,
                     ),
                   ),
                   ElevatedButton(
@@ -105,7 +90,9 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       Navigator.push(
                         context,
                         GetPageRoute(
-                          page: () => MyPageEdit(name: nickname,),
+                          page: () => MyPageEdit(
+                            name: "",
+                          ),
                           transition: Transition.cupertino,
                         ),
                       );
@@ -170,7 +157,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                   context,
                                   GetPageRoute(
                                     curve: Curves.fastOutSlowIn,
-                                    page: () => ForkRewardPage(fork: fork),
+                                    page: () => ForkRewardPage(fork: 0),
                                   ),
                                 );
                               },
@@ -185,7 +172,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   Text(
-                                    fork.toString(),
+                                    0.toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
