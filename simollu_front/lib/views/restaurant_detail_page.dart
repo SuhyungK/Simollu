@@ -25,6 +25,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
     ['potato.jpg', '감자튀김', '13,000'],
   ];
   late List<Map<String, dynamic>> reviewList = [];
+  bool _isLike = false;
 
   @override
   void initState() {
@@ -107,9 +108,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
           flexibleImage: 'assets/Rectangle 42.png',
           bottomWidget: Container(
             color: Colors.white,
-            height: 100,
+            height: MediaQuery.of(context).size.height * 0.16,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -130,6 +131,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            SizedBox(width: 5),
                             Text(
                               '양식',
                               style: TextStyle(
@@ -137,17 +139,19 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                             ),
                           ],
                         ),
+                        SizedBox(height: 3),
                         Text(
                           '서울특별시 강남구 역삼동 777',
                           style: TextStyle(color: Colors.black38),
                         ),
+                        SizedBox(height: 10,),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.timer_outlined,
                               color: Colors.amber,
-                              size: 22,
+                              size: 18,
                             ),
                             Text(
                               '기다릴만해요 87%',
@@ -166,10 +170,22 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(
-                            Icons.favorite,
-                            color: Colors.pink,
-                          ),
+                          _isLike ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLike = false;
+                                });
+                              },
+                              icon: Icon(Icons.favorite, color: Colors.pink,)
+                          ) : IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLike = true;
+                                });
+                              },
+                              icon: Icon(Icons.favorite_border, color: Colors.pink,)
+                          )
+                          ,
                           ButtonTheme(
                             child: OutlinedButton(
                                 onPressed: () {},
@@ -181,7 +197,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                                     fixedSize: Size(
                                         MediaQuery.of(context).size.width *
                                             0.3,
-                                        43),
+                                        40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
 
