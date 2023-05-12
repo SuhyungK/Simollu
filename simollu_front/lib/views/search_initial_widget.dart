@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/services/search_api.dart';
+import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/views/recent_search_keyword_widget.dart';
 import 'package:simollu_front/views/search_hot_keyword_widget.dart';
 import 'package:simollu_front/views/search_recommendation_button.dart';
+
+import '../models/search_hot_keyword_model.dart';
 
 class SearchInitialWidget extends StatefulWidget {
   const SearchInitialWidget({Key? key}) : super(key: key);
@@ -11,8 +16,19 @@ class SearchInitialWidget extends StatefulWidget {
 }
 
 class _SearchInitialWidgetState extends State<SearchInitialWidget> {
+  SearchApi searchApi = SearchApi();
+  late List<SearchHotKeywordModel> keywordList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    SearchViewModel searchViewModel = Get.find();
+
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
@@ -202,9 +218,12 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                     // 실시간 검색어 : 1~5위, 6~10위
                     child: Row(
                       children: [
-                        SearchHotKeyword(),
-                        SearchHotKeyword()
-                      ],
+                        Obx(() => SearchHotKeyword(list:
+                        searchViewModel.hotKeywordList.value.isEmpty ? RxList():
+                        searchViewModel.hotKeywordList.value.sublist(0,5))),
+                        Obx(() => SearchHotKeyword(list:
+                        searchViewModel.hotKeywordList.value.isEmpty ? RxList():
+                        searchViewModel.hotKeywordList.value.sublist(5))),],
                     )
                 ),
               ],

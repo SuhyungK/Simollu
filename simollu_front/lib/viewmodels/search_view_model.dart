@@ -1,10 +1,22 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/searchModel.dart';
+import 'package:simollu_front/models/search_hot_keyword_model.dart';
+import 'package:simollu_front/services/search_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
-class SearchViewModel {
+class SearchViewModel extends GetxController {
   late String token; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
+
+  // 인기검색어 상태 등록
+  RxList<SearchHotKeywordModel> hotKeywordList = <SearchHotKeywordModel>[].obs;
+
+  void getHotKeywordList() async{
+    List<SearchHotKeywordModel> list = await SearchApi().getHotKeywordList();
+    hotKeywordList(list);
+  }
+
 
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
