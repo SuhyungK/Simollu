@@ -21,10 +21,9 @@ class TMapAPI {
       'startName': Uri.encodeComponent('현재 위치'),
       'endName': Uri.encodeComponent('도착 위치'),
     };
-    if (passList.isNotEmpty) {
+    if (passList.length != 0) {
       requestData['passList'] = passList;
     }
-    print("test");
     var response = await http
         .post(Uri.parse(apiUrl), body: json.encode(requestData), headers: {
       'appKey': dotenv.env['tMapApiKey']!,
@@ -36,7 +35,16 @@ class TMapAPI {
       List<PathSegment> ret = [];
       List<dynamic> pathList = json.decode(response.body)['features'];
       for (dynamic paths in pathList) {
-        if (paths['geometry']['type'] == 'Point') continue;
+        if (paths['geometry']['type'] == 'Point') {
+          if (paths['properties']['pointType'] == 'PP1') {
+            List<String> coordinate = passList.split(',');
+            ret.add(PathSegment.fromPointJSON(
+              paths,
+              [double.parse(coordinate[1]), double.parse(coordinate[0])],
+            ));
+          }
+          continue;
+        }
         ret.add(PathSegment.fromJSON(paths));
       }
       return ret;

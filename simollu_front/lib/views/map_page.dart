@@ -8,6 +8,7 @@ import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/models/place.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/widgets/custom_marker.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 import 'package:simollu_front/widgets/path_recommended.dart';
 
@@ -19,7 +20,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   bool _locationPermission = false;
   late Position _currentPosition;
   Set<Marker> _markers = {};
@@ -30,16 +31,23 @@ class _MapPageState extends State<MapPage> {
   Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
+  late Marker startMarker;
+  late Marker destinationMarker;
+  late Marker waypointMarker;
+  late Marker myLocationMarker;
+
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
 
   @override
   void initState() {
     super.initState();
+
     _markers.add(Marker(
-      markerId: MarkerId('destination'),
-      position: LatLng(_arrive.latitude, _arrive.longitude),
+      markerId: MarkerId("destination"),
+      position: _arrive,
     ));
+
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
@@ -52,14 +60,41 @@ class _MapPageState extends State<MapPage> {
 
         int polylineId = 0;
 
-        for (Place place in newPlaceList) {
+        if (newPlaceList.isNotEmpty) {
+          for (Place place in newPlaceList) {
+            List<PathSegment> pathList =
+                await Provider.of<MapViewModel>(context, listen: false)
+                    .findPaths(
+              LatLng(_currentPosition.latitude, _currentPosition.longitude),
+              _arrive,
+              place.lng.toString() + "," + place.lat.toString(),
+            );
+            newPathMap[place] = pathList;
+
+            List<Polyline> polylineList = [];
+            for (PathSegment path in pathList) {
+              for (int i = 0; i < path.coordinates.length - 1; i++) {
+                polylineList.add(Polyline(
+                  polylineId: PolylineId(polylineId.toString()),
+                  points: [
+                    LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+                    LatLng(
+                        path.coordinates[i + 1][1], path.coordinates[i + 1][0])
+                  ], // 시작점과 끝점 좌표
+                  color: Colors.red, // 선 색상
+                  width: 5,
+                ));
+                polylineId++;
+              }
+            }
+            newPolylineMap[place] = polylineList;
+          }
+        } else {
           List<PathSegment> pathList =
               await Provider.of<MapViewModel>(context, listen: false).findPaths(
-            LatLng(_currentPosition.latitude, _currentPosition.longitude),
-            _arrive,
-            place.lng.toString() + "," + place.lat.toString(),
-          );
-          newPathMap[place] = pathList;
+                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
+                  _arrive,
+                  "");
 
           List<Polyline> polylineList = [];
           for (PathSegment path in pathList) {
@@ -76,7 +111,15 @@ class _MapPageState extends State<MapPage> {
               polylineId++;
             }
           }
+          Place place = Place(
+            address: "",
+            lat: 0,
+            lng: 0,
+            id: "",
+            name: "동래정",
+          );
           newPolylineMap[place] = polylineList;
+          newPathMap[place] = pathList;
         }
 
         setState(() {
@@ -90,6 +133,18 @@ class _MapPageState extends State<MapPage> {
 
     _listening();
   }
+
+  // Future<void> _addMarkers() async {
+  //   destinationMarker = await CustomMarker(
+  //     markerId: "destination",
+  //     latLng: _arrive,
+  //     type: MarkerType.destination,
+  //   ).getMarker();
+
+  //   setState(() {
+  //     _markers.add(destinationMarker);
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -142,10 +197,7 @@ class _MapPageState extends State<MapPage> {
         markerId: MarkerId('myLocation'),
         position: LatLng(position.latitude, position.longitude),
       ));
-      _markers.add(Marker(
-        markerId: MarkerId('destination'),
-        position: _arrive,
-      ));
+      _markers.add(destinationMarker);
     });
 
     final GoogleMapController controller = await _controller.future;
@@ -155,8 +207,32 @@ class _MapPageState extends State<MapPage> {
     )));
   }
 
-  void onClickPath(Place key) {
-    print("클릭! " + key.name);
+  void onClickPath(Place key) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng((_currentPosition.latitude + _arrive.latitude) / 2,
+            (_currentPosition.longitude + _arrive.longitude) / 2),
+        zoom: 16.0,
+      ),
+    ));
+    _markers.clear();
+    _markers.add(Marker(
+      markerId: MarkerId('myLocation'),
+      position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+      // icon: BitmapDiscriptor(Icon(
+      //   Icons.circle,
+      //   color: Colors.blue,
+      // )),
+    ));
+    _markers.add(Marker(
+      markerId: MarkerId('wayPoint'),
+      position: LatLng(key.lat, key.lng),
+    ));
+    _markers.add(Marker(
+      markerId: MarkerId("destination"),
+      position: _arrive,
+    ));
     setState(() {
       _polylineList = _polylineMap[key]!;
     });
@@ -243,6 +319,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   zoomControlsEnabled: false,
                   markers: _markers,
+                  mapType: MapType.terrain,
                 ),
                 Positioned(
                   bottom: 20,
@@ -259,7 +336,7 @@ class _MapPageState extends State<MapPage> {
                               CameraPosition(
                                 target: LatLng(_currentPosition.latitude,
                                     _currentPosition.longitude),
-                                zoom: 19,
+                                zoom: 19.0,
                               ),
                             ));
                           }

@@ -17,6 +17,13 @@ final List<List<double>> doubleList = dynamicList.map((dynamic row) {
     return List.castFrom(row).map<double>((dynamic element) => element as double).toList();
   }).toList();
 */
+  PathSegment.fromPointJSON(Map<String, dynamic> json, List<double> coordinate)
+      : this.index = json['properties']['index'],
+        this.time = 0,
+        this.coordinates = [coordinate],
+        this.distance = 0,
+        this.description = "경유지";
+
   PathSegment.fromJSON(Map<String, dynamic> json)
       : this.index = json['properties']['index'],
         this.coordinates = List<List<double>>.from(
