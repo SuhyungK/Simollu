@@ -206,20 +206,21 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                 reviewRating: _selecedRating
               );
               final jsonData = reviewModel.toJson();
+              print(jsonData);
               // List<String> preferenceList =
               //     await preferenceViewModel.getPreference().then((result) => result);
               // print('$preferenceList');
-              var reviewSeq = await reviewViewModel.postReview(jsonData);
-              debugPrint(reviewSeq);
-              Future.delayed(Duration.zero, () {
-                Navigator.push(
-                    context,
-                    GetPageRoute(
-                      curve: Curves.fastOutSlowIn,
-                      page: () => ReviewManagementPage(),
-                    )
-                );
-              });
+              // var reviewSeq = await reviewViewModel.postReview(jsonData);
+              // debugPrint(reviewSeq);
+              // Future.delayed(Duration.zero, () {
+              //   Navigator.push(
+              //       context,
+              //       GetPageRoute(
+              //         curve: Curves.fastOutSlowIn,
+              //         page: () => ReviewManagementPage(),
+              //       )
+              //   );
+              // });
             } : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,
