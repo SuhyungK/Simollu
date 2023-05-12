@@ -100,6 +100,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             child: TextField(
+              cursorColor: Colors.amber,
               focusNode: focusNode,
               autofocus: true,
               controller: _filter,
@@ -127,6 +128,9 @@ class _SearchPageState extends State<SearchPage> {
                 // 검색 결과 페이지로 이동
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
+              onEditingComplete: () {
+
+                },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
                 suffixIcon: focusNode.hasFocus
