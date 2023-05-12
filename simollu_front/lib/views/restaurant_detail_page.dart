@@ -108,7 +108,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
           flexibleImage: 'assets/Rectangle 42.png',
           bottomWidget: Container(
             color: Colors.white,
-            height: MediaQuery.of(context).size.height * 0.16,
+            height: 140,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
