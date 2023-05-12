@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -55,8 +56,10 @@ class _MainPageState extends State<MainPage> {
 
   void getData() {
     UserViewModel userViewModel = Get.find();
+    MainViewModel mainViewModel = Get.find();
 
     userViewModel.getNickname();
+    // mainViewModel.getDong(location);
   }
 
   @override
@@ -156,14 +159,7 @@ class _MainPageState extends State<MainPage> {
               context,
               GetPageRoute(
                 curve: Curves.fastOutSlowIn,
-                page: () => MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider(
-                      create: (_) => MapViewModel(),
-                    )
-                  ],
-                  child: MapPage(),
-                ),
+                page: () => MapPage(),
               ),
             );
           },

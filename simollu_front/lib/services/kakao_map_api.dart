@@ -7,17 +7,26 @@ import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/place.dart';
 
 class KakaoMapAPI {
-  final String baseUrl = 'https://dapi.kakao.com/v2/local/search/keyword.JSON';
+  final String baseUrl = 'https://dapi.kakao.com/v2/local';
 
-  Future<List<Place>> getPlaces(LatLng dest, String keyword) async {
+  Future<String> getCurrentLocationAddress(LatLng location) async {
     String apiUrl = baseUrl +
-        "?query=${keyword}&x=${dest.longitude}&y=${dest.latitude}&radius=500";
-    print("asdfdsf");
+        "/geo/coord2address.json?x=${location.longitude}&y=${location.latitude}&input_coord=WGS84";
     var response = await http.get(Uri.parse(apiUrl), headers: {
       'Authorization': dotenv.env['kakaoMapApiKey']!,
     });
-    print("start");
-    print(response.body + "asdasf");
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    return "";
+  }
+
+  Future<List<Place>> getPlaces(LatLng dest, String keyword) async {
+    String apiUrl = baseUrl +
+        "/search/keyword.JSON?query=${keyword}&x=${dest.longitude}&y=${dest.latitude}&radius=500";
+    var response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': dotenv.env['kakaoMapApiKey']!,
+    });
     if (response.statusCode == 200) {
       // 응답 데이터 처리
       List<Place> ret = [];

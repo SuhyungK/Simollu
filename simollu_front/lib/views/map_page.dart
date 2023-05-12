@@ -21,24 +21,12 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  // 지도 카메라 컨트롤
   final Completer<GoogleMapController> _controller = Completer();
-  bool _locationPermission = false;
-  late Position _currentPosition;
-  Set<Marker> _markers = {};
+
   late StreamSubscription<Position> positionStreamSubscription;
 
-  Map<Place, List<PathSegment>> pathMap = {};
-  Map<Place, List<PathSegment>> searchPathMap = {};
-
-  List<Place> placeList = [];
-  List<Place> searchPlaceList = [];
-  List<Polyline> _polylineList = [];
-  Map<Place, List<Polyline>> _polylineMap = {};
-  late Map<String, List<String>> routes;
-
-  late final LatLng _start;
-  final LatLng _center = const LatLng(37.5013068, 127.0396597);
-  final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
+  bool locationPermission = false;
 
   void addMarker() async {
     Marker destination = await CustomMarker(
@@ -153,18 +141,6 @@ class _MapPageState extends State<MapPage> {
 
     _listening();
   }
-
-  // Future<void> _addMarkers() async {
-  //   destinationMarker = await CustomMarker(
-  //     markerId: "destination",
-  //     latLng: _arrive,
-  //     type: MarkerType.destination,
-  //   ).getMarker();
-
-  //   setState(() {
-  //     _markers.add(destinationMarker);
-  //   });
-  // }
 
   @override
   void dispose() {
