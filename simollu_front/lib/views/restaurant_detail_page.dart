@@ -36,7 +36,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
   Future<void> fetchReviewData() async {
     RestaurantViewModel restaurantViewModel = RestaurantViewModel();
     List<Map<String, dynamic>> result = await restaurantViewModel.fetchReview(2);
-    // result.sort((a, b) => (b['reviewRating'].compareTo(a['reviewRating'])));
+    // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
+    reviewList.sort((a, b) => (b['reviewRating'] ? 1 : 0) - (a['reviewRating'] ? 1 : 0));
+    print(result);
     setState(() {
       reviewList = result;
     });
