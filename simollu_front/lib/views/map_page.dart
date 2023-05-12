@@ -28,23 +28,6 @@ class _MapPageState extends State<MapPage> {
 
   bool locationPermission = false;
 
-  void addMarker() async {
-    Marker destination = await CustomMarker(
-            markerId: "destination",
-            latLng: _arrive,
-            type: MarkerType.destination)
-        .getMarker();
-
-    _markers.add(destination);
-
-    _start = LatLng(_currentPosition.latitude, _currentPosition.longitude);
-    Marker start = await CustomMarker(
-            markerId: "start", latLng: _start, type: MarkerType.start)
-        .getMarker();
-
-    _markers.add(start);
-  }
-
   @override
   void initState() {
     super.initState();
