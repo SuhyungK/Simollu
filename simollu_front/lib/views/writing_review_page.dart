@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -205,22 +207,22 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                 reviewContent: _reviewContent,
                 reviewRating: _selecedRating
               );
-              final jsonData = reviewModel.toJson();
-              print(jsonData);
+              final json = reviewModel.toJson();
+              final jsonData = jsonEncode(json);
               // List<String> preferenceList =
               //     await preferenceViewModel.getPreference().then((result) => result);
               // print('$preferenceList');
-              // var reviewSeq = await reviewViewModel.postReview(jsonData);
-              // debugPrint(reviewSeq);
-              // Future.delayed(Duration.zero, () {
-              //   Navigator.push(
-              //       context,
-              //       GetPageRoute(
-              //         curve: Curves.fastOutSlowIn,
-              //         page: () => ReviewManagementPage(),
-              //       )
-              //   );
-              // });
+              var reviewSeq = await reviewViewModel.postReview(jsonData);
+              debugPrint(reviewSeq);
+              Future.delayed(Duration.zero, () {
+                Navigator.push(
+                    context,
+                    GetPageRoute(
+                      curve: Curves.fastOutSlowIn,
+                      page: () => ReviewManagementPage(),
+                    )
+                );
+              });
             } : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,

@@ -66,9 +66,9 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
                           ),
                           SizedBox(height: 3,),
                           review['reviewRating'] ?
-                            Text("기다릴만해요", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
+                            Text("기다릴만해요", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),)
                               :
-                            Text('아쉬워요', style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),),
+                            Text('아쉬워요', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
                           SizedBox(height: 3,),
                           Text(
                             review['reviewContent'],
