@@ -113,12 +113,12 @@ public class SearchService {
     }
 
     public int calculateRating(Long restaurantSeq) {
-        int f = (int) redisTemplate.opsForHash().get("review", restaurantSeq+"_false");
-        int t = (int) redisTemplate.opsForHash().get("review", restaurantSeq+"_true");
+        Integer f = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_false");
+        Integer t = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_true");
         int percentage=0;
-
         if(t!=0){
-            percentage = ((int) t / f+t) * 100;
+            System.out.println();
+            percentage = (t / t+f) * 100;
         }
         return percentage;
     }

@@ -40,10 +40,15 @@ public class ReviewServiceImpl implements ReviewService {
     /* 후기 작성 */
     @Override
     public Long writeReview(String userSeq, ReviewDto reviewDto) {
+        System.out.println(reviewDto.isReviewRating());
+
         if(reviewDto.isReviewRating()){
-            redisTemplate.opsForHash().increment("review", reviewDto.getRestaurantSeq()+"_true", 1);
+            System.out.println("여기야");
+            Integer value = (Integer) redisTemplate.opsForHash().get("review", reviewDto.getRestaurantSeq() + "_true");
+        redisTemplate.opsForHash().put("review", reviewDto.getRestaurantSeq() + "_true",value+1);
         }
-        redisTemplate.opsForHash().increment("review", reviewDto.getRestaurantSeq()+"_false", 1);
+        Integer value = (Integer) redisTemplate.opsForHash().get("review", reviewDto.getRestaurantSeq() + "_false");
+        redisTemplate.opsForHash().put("review", reviewDto.getRestaurantSeq() + "_false",value+1);
 
         Review review = Review.builder()
                 .userSeq(userSeq)
@@ -128,7 +133,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     public void writeReviewRedis()  {
         int n = (int) restaurantRepository.count();
-        System.out.println(n+"2222222222222222222222222222");
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         Map<Object, Object> map = new HashMap<>();
         for(int i=1; i<=n; i++) {
