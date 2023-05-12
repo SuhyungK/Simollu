@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/viewmodels/RestaurantViewModel.dart';
+import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
 class RestaurantDetailpage extends StatefulWidget {
@@ -22,12 +24,22 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
   ];
-  late List<Map<String, dynamic>> reviewList;
+  late List<Map<String, dynamic>> reviewList = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    fetchReviewData();
+  }
+
+  Future<void> fetchReviewData() async {
+    RestaurantViewModel restaurantViewModel = RestaurantViewModel();
+    List<Map<String, dynamic>> result = await restaurantViewModel.fetchReview(2);
+    // result.sort((a, b) => (b['reviewRating'].compareTo(a['reviewRating'])));
+    setState(() {
+      reviewList = result;
+    });
   }
 
   @override
@@ -39,54 +51,55 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
           tabViews: [
             _menuDetail(_menuList),
             _restaurantInfo(),
-            Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Colors.black12
-                          )
-                      )
-                  ),
-                  child: ListTile(
-                      leading: Icon(Icons.circle, size: 50),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('작성자', style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22
-                          )),
-                          Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
-                        ],
-                      )
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Colors.black12
-                          )
-                      )
-                  ),
-                  child: ListTile(
-                      leading: Icon(Icons.circle, size: 50),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('작성자', style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22
-                          )),
-                          Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
-                        ],
-                      )
-                  ),
-                ),
-              ],
-            )
+            RestaurantReviewPage(reviewList: reviewList)
+            // Column(
+            //   children: [
+            //     Container(
+            //       decoration: BoxDecoration(
+            //           border: Border(
+            //               bottom: BorderSide(
+            //                   color: Colors.black12
+            //               )
+            //           )
+            //       ),
+            //       child: ListTile(
+            //           leading: Icon(Icons.circle, size: 50),
+            //           title: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Text('작성자', style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   fontSize: 22
+            //               )),
+            //               Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
+            //             ],
+            //           )
+            //       ),
+            //     ),
+            //     Container(
+            //       decoration: BoxDecoration(
+            //           border: Border(
+            //               bottom: BorderSide(
+            //                   color: Colors.black12
+            //               )
+            //           )
+            //       ),
+            //       child: ListTile(
+            //           leading: Icon(Icons.circle, size: 50),
+            //           title: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Text('작성자', style: TextStyle(
+            //                 fontWeight: FontWeight.bold,
+            //                 fontSize: 22
+            //               )),
+            //               Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
+            //             ],
+            //           )
+            //       ),
+            //     ),
+            //   ],
+            // )
           ],
           hasSliverAppBar: true,
           flexibleImage: 'assets/Rectangle 42.png',
