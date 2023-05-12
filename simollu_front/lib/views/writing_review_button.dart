@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 
 class WritingReviewButton extends StatefulWidget {
   final String text;

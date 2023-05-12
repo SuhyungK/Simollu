@@ -1,15 +1,14 @@
-
-class ReviewModel {
+class WaitingRecordModel {
   int? reviewSeq;
   String? userSeq;
   int? restaurantSeq;
-  late final int reviewRating;
+  late final bool reviewRating;
   late final String reviewContent;
   String? reviewRegistDate;
   String? restaurantName;
   String? restaurantImg;
 
-  ReviewModel(
+  WaitingRecordModel(
       {
         this.reviewSeq,
         this.userSeq,
@@ -19,14 +18,13 @@ class ReviewModel {
         this.reviewRegistDate,
         this.restaurantName,
         this.restaurantImg
-      }
-  );
+      });
 
-  ReviewModel.fromJson(Map<String, dynamic> json) {
+  WaitingRecordModel.fromJson(Map<String, dynamic> json) {
     reviewSeq = json['reviewSeq'];
     userSeq = json['userSeq'];
     restaurantSeq = json['restaurantSeq'];
-    reviewRating = json['reviewRating'] ? 1 : 0;
+    reviewRating = json['reviewRating'];
     reviewContent = json['reviewContent'];
     reviewRegistDate = json['reviewRegistDate'];
     restaurantName = json['restaurantName'];
@@ -36,7 +34,6 @@ class ReviewModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['reviewSeq'] = reviewSeq;
-    data['userSeq'] = userSeq;
     data['restaurantSeq'] = restaurantSeq;
     data['reviewRating'] = reviewRating;
     data['reviewContent'] = reviewContent;

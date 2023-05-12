@@ -8,12 +8,13 @@ class RestaurantReviewModel {
   String? reviewRegistDate;
 
   RestaurantReviewModel(
-      {reviewSeq,
-        userSeq,
-        restaurantSeq,
-        reviewRating,
-        reviewContent,
-        reviewRegistDate});
+      {
+        this.reviewSeq,
+        this.userSeq,
+        this.restaurantSeq,
+        this.reviewRating,
+        this.reviewContent,
+        this.reviewRegistDate});
 
   RestaurantReviewModel.fromJson(Map<String, dynamic> json) {
     reviewSeq = json['reviewSeq'];

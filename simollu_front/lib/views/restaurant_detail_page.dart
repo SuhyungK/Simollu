@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simollu_front/viewmodels/RestaurantViewModel.dart';
+import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
