@@ -11,6 +11,7 @@ import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/widgets/custom_marker.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 import 'package:simollu_front/widgets/path_recommended.dart';
+import 'package:simollu_front/widgets/path_search_result.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -25,30 +26,54 @@ class _MapPageState extends State<MapPage> {
   late Position _currentPosition;
   Set<Marker> _markers = {};
   late StreamSubscription<Position> positionStreamSubscription;
+
   Map<Place, List<PathSegment>> pathMap = {};
+  Map<Place, List<PathSegment>> searchPathMap = {};
+
   List<Place> placeList = [];
+  List<Place> searchPlaceList = [];
   List<Polyline> _polylineList = [];
   Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
+  late final LatLng _start;
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
+
+  void addMarker() async {
+    Marker destination = await CustomMarker(
+            markerId: "destination",
+            latLng: _arrive,
+            type: MarkerType.destination)
+        .getMarker();
+
+    _markers.add(destination);
+
+    _start = LatLng(_currentPosition.latitude, _currentPosition.longitude);
+    Marker start = await CustomMarker(
+            markerId: "start", latLng: _start, type: MarkerType.start)
+        .getMarker();
+
+    _markers.add(start);
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _markers.add(Marker(
-      markerId: MarkerId("destination"),
-      position: _arrive,
-    ));
+    // _markers.add(Marker(
+    //   markerId: MarkerId("destination"),
+    //   position: _arrive,
+    // ));
 
     void _listening() async {
       await _getCurrentLocation();
       if (_locationPermission) {
+        addMarker();
+        // 관심 검색하는 부분
         List<Place> newPlaceList =
             await Provider.of<MapViewModel>(context, listen: false)
-                .getPlaces(_arrive, "");
+                .getPlaces(_arrive, "PC방");
 
         Map<Place, List<PathSegment>> newPathMap = {};
         Map<Place, List<Polyline>> newPolylineMap = {};
@@ -167,13 +192,16 @@ class _MapPageState extends State<MapPage> {
     }
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
+        .then((Position position) async {
+      _currentPosition = position;
+      Marker myLocation = await CustomMarker(
+              markerId: "myLocation",
+              latLng:
+                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
+              type: MarkerType.myLocation)
+          .getMarker();
       setState(() {
-        _currentPosition = position;
-        _markers.add(Marker(
-          markerId: MarkerId('myLocation'),
-          position: LatLng(position.latitude, position.longitude),
-        ));
+        _markers.add(myLocation);
       });
     }).catchError((e) {
       print(e);
@@ -185,17 +213,18 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onLocationChanged(Position position) async {
+    _currentPosition = position;
+    Marker myLocation = await CustomMarker(
+            markerId: "myLocation",
+            latLng:
+                LatLng(_currentPosition.latitude, _currentPosition.longitude),
+            type: MarkerType.myLocation)
+        .getMarker();
     setState(() {
-      _currentPosition = position;
-      _markers.clear();
-      _markers.add(Marker(
-        markerId: MarkerId('myLocation'),
-        position: LatLng(position.latitude, position.longitude),
-      ));
-      _markers.add(Marker(
-        markerId: MarkerId('destination'),
-        position: _arrive,
-      ));
+      _markers.remove(_markers
+          .firstWhere((marker) => marker.markerId == MarkerId('myLocation')));
+
+      _markers.add(myLocation);
     });
 
     final GoogleMapController controller = await _controller.future;
@@ -214,25 +243,77 @@ class _MapPageState extends State<MapPage> {
         zoom: 16.0,
       ),
     ));
-    _markers.clear();
-    _markers.add(Marker(
-      markerId: MarkerId('myLocation'),
-      position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-      // icon: BitmapDiscriptor(Icon(
-      //   Icons.circle,
-      //   color: Colors.blue,
-      // )),
-    ));
-    _markers.add(Marker(
-      markerId: MarkerId('wayPoint'),
-      position: LatLng(key.lat, key.lng),
-    ));
-    _markers.add(Marker(
-      markerId: MarkerId("destination"),
-      position: _arrive,
-    ));
+
+    Marker? waypoint = _markers.firstWhere(
+      (marker) => marker.markerId == MarkerId('waypoint'),
+      orElse: () => Marker(
+        markerId: MarkerId('default'),
+      ),
+    );
+    if (waypoint.markerId != MarkerId('default')) {
+      _markers.remove(waypoint);
+    }
+    waypoint = await CustomMarker(
+            markerId: "waypoint",
+            latLng: LatLng(key.lat, key.lng),
+            type: MarkerType.waypoint)
+        .getMarker();
+    _markers.add(waypoint);
+
     setState(() {
       _polylineList = _polylineMap[key]!;
+    });
+  }
+
+  void search(String keyword) async {
+    List<Place> newSearchPlaceList =
+        await Provider.of<MapViewModel>(context, listen: false)
+            .getPlaces(_arrive, keyword);
+    Map<Place, List<PathSegment>> newSearchPathMap = {};
+    Map<Place, List<Polyline>> newPolylineMap = _polylineMap;
+
+    int polylineId = 0;
+    for (Place place in newSearchPlaceList) {
+      List<PathSegment> pathList =
+          await Provider.of<MapViewModel>(context, listen: false).findPaths(
+        LatLng(_currentPosition.latitude, _currentPosition.longitude),
+        _arrive,
+        place.lng.toString() + "," + place.lat.toString(),
+      );
+      newSearchPathMap[place] = pathList;
+
+      List<Polyline> polylineList = [];
+
+      for (PathSegment path in pathList) {
+        for (int i = 0; i < path.coordinates.length - 1; i++) {
+          polylineList.add(Polyline(
+            polylineId: PolylineId(polylineId.toString()),
+            points: [
+              LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+              LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0])
+            ], // 시작점과 끝점 좌표
+            color: Colors.red, // 선 색상
+            width: 5,
+          ));
+          polylineId++;
+        }
+      }
+      newPolylineMap[place] = polylineList;
+    }
+
+    Marker waypoint = _markers.firstWhere(
+      (marker) => marker.markerId == MarkerId('waypoint'),
+      orElse: () => Marker(markerId: MarkerId('default')),
+    );
+
+    setState(() {
+      if (waypoint.markerId != MarkerId('default')) {
+        _markers.remove(waypoint);
+      }
+      _polylineList = [];
+      _polylineMap = newPolylineMap;
+      searchPlaceList = newSearchPlaceList;
+      searchPathMap = newSearchPathMap;
     });
   }
 
@@ -354,7 +435,11 @@ class _MapPageState extends State<MapPage> {
                   routes: pathMap,
                   event: onClickPath,
                 ),
-                Container(child: Text("검색")),
+                PathSearchResult(
+                  routes: searchPathMap,
+                  clickEvent: onClickPath,
+                  search: search,
+                ),
               ],
             ),
           ),
