@@ -3,6 +3,8 @@ package com.example.elasticsearch.model.service;
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.document.RestaurantDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
+import com.example.elasticsearch.model.dto.SearchHistoryResponse;
+import com.example.elasticsearch.model.dto.SearchInfoResponse;
 import com.example.elasticsearch.model.dto.SearchListResponse;
 import com.example.elasticsearch.model.dto.SearchRankResponse;
 import com.example.elasticsearch.model.entity.Search;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,7 @@ public class SearchService {
     private final SearchElasticBasicRepository searchElasticBasicRepository;
     private final SearchElasticAdvanceRepository searchElasticAdvanceRepository;
     private final AwsS3Repository awsS3Repository;
+    private final RedisTemplate redisTemplate;
 
     /*elk 검색*/
     public List<RestaurantListResponse> findByContainsDescription(String description, String cx, String cy, Pageable pageable) {
@@ -102,4 +106,17 @@ public class SearchService {
         return distanceInKm;
     }
 
+    public List<SearchHistoryResponse> SearchHistory() {
+        int n = 1;
+        List<SearchHistoryResponse> searchHistoryListResponse = new ArrayList<>();
+        List<String> dataList = redisTemplate.opsForList().range("Ranking", 0, -1);
+        for(String data : dataList) {
+            SearchHistoryResponse searchHistoryResponse = SearchHistoryResponse.builder()
+                    .order(n++)
+                    .keyword(data)
+                    .build();
+            searchHistoryListResponse.add(searchHistoryResponse);
+        }
+        return searchHistoryListResponse;
+    }
 }

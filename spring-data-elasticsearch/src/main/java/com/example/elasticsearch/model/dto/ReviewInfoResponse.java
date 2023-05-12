@@ -10,4 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class ReviewInfoResponse {
     private String userNickname;
+    private String userProfileUrl;
+    private String reviewContent;
+    private  boolean reviewRating;
 }

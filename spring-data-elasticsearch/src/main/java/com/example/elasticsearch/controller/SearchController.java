@@ -1,5 +1,6 @@
 package com.example.elasticsearch.controller;
 
+import com.example.elasticsearch.model.dto.SearchHistoryResponse;
 import com.example.elasticsearch.model.dto.SearchRankResponse;
 import com.example.elasticsearch.model.service.RedisService;
 import com.example.elasticsearch.model.service.SearchService;
@@ -44,16 +45,9 @@ public class SearchController {
     /*실시간 순위 뽑아내는 로직*/
     @GetMapping("/top-search-keyword")
     @Transactional(readOnly = false)
-    public ResponseEntity<Map<Integer, String>> SearchHistory () throws IOException {
-        int n = 1;
-        Map<Integer, String> responses =  new HashMap<Integer, String>();
-        // redis에서 순위 가져오기
-        List<String> dataList = redisTemplate.opsForList().range("Ranking", 0, -1);
-        for(String data : dataList) {
-            responses.put(n++, data);
-        }
-
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<List<SearchHistoryResponse>> SearchHistory () throws IOException {
+        List<SearchHistoryResponse> searchHistoryListResponse = searchService.SearchHistory();
+        return ResponseEntity.ok(searchHistoryListResponse);
 
     }
 
