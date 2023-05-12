@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/forkModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class UserViewModel{
@@ -98,12 +99,12 @@ class UserViewModel{
   }
 
   // [GET] User 포크 내역 리스트 조회
-  Future<List> getForkList() async {
+  Future<List<ForkModel>> getForkList() async {
     Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork-list");
 
     await initialize();
 
-    List forkList = [];
+    List<ForkModel> forkList = [];
 
     final response = await http.get(
         headers: {
@@ -116,7 +117,12 @@ class UserViewModel{
     if (response.statusCode == 200) {
 
       final responseBody = utf8.decode(response.bodyBytes);
-      forkList = jsonDecode(responseBody);
+      List<dynamic> res = jsonDecode(responseBody);
+      
+      for(dynamic r in res) {
+        forkList.add(ForkModel.fromJson(r));
+        print(r);
+      }
       print(forkList);
     }
 

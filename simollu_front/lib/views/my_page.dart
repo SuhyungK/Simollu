@@ -13,7 +13,7 @@ import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/start_page.dart';
 import 'package:simollu_front/views/waiting_record_page.dart';
 
-import '../viewmodels/UserViewmodel.dart';
+import '../viewmodels/user_view_model.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});

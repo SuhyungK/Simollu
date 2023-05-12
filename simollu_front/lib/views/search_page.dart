@@ -5,7 +5,7 @@ import 'package:simollu_front/views/search_initial_widget.dart';
 import 'package:simollu_front/views/search_result_page.dart';
 
 import '../models/searchModel.dart';
-import '../viewmodels/SearchViewModel.dart';
+import '../viewmodels/search_view_model.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

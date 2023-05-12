@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:simollu_front/models/forkModel.dart';
+import 'package:simollu_front/views/fork_history_widget.dart';
 
-import '../viewmodels/UserViewmodel.dart';
+import '../viewmodels/user_view_model.dart';
 
 class ForkRewardPage extends StatefulWidget {
   final int fork;
@@ -15,7 +17,7 @@ class ForkRewardPage extends StatefulWidget {
 class _ForkRewardPageState extends State<ForkRewardPage> {
 
   UserViewModel userViewModel = UserViewModel();
-  late List forkList = [];
+  late List<ForkModel> forkList = [];
 
   initForkList() async {
     forkList = await userViewModel.getForkList();
@@ -88,76 +90,17 @@ class _ForkRewardPageState extends State<ForkRewardPage> {
             child: Container(
               color: Colors.white,
               width: double.infinity,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _ForkHistory(
-                      rewardDate: '23/04/18 (월)',
-                      rewardAmount: 2000,
-                      rewardState: '적립',
-                    ),
-                    _ForkHistory(
-                      rewardDate: '23/04/17 (화)',
-                      rewardAmount: 1999,
-                      rewardState: '포인트 사용',
-                    ),
-                  ],
-                ),
-              ),
+              child: ListView.builder(
+                  itemCount: forkList.length,
+                  itemBuilder: (context, index) {
+                  final list = forkList[index];
+                  return ForkHistoryWidget(rewardAmount: list.userForkAmount, rewardDate: list.userForkRegisterDate, rewardState: list.userForkType, rewardContent: list.userForkContent,);
+                },
+              )
             ),
           )
         ],
       )
-    );
-  }
-}
-
-class _ForkHistory extends StatelessWidget {
-  final String rewardDate;
-  final String rewardState;
-  final int rewardAmount;
-
-  const _ForkHistory({
-    required this.rewardDate,
-    required this.rewardState,
-    required this.rewardAmount,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.93,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.black12,
-              width: 0.5
-            )
-          )
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text('$rewardDate | ', style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,),
-                  Text(rewardState, style: TextStyle(color: Colors.amber)),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text('${NumberFormat('###,###,###,###').format(rewardAmount)}개')
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
