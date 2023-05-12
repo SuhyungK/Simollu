@@ -53,6 +53,7 @@ class CustomMarker {
       markerId: MarkerId(markerId),
       position: latLng,
       icon: marker,
+      zIndex: type == MarkerType.myLocation ? 1 : 0,
     );
   }
 }
