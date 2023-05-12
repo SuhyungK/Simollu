@@ -30,8 +30,8 @@ public class UserForkBuilder {
     public UserForkLogListDto userForkLogToUserForkListDto(UserForkLog userForkLog) {
 
         return UserForkLogListDto.builder()
-                .userForkAmount(userForkLog.getUserForkAmount())
-                .userForkBalance(userForkLog.getUserForkBalance())
+                .userForkDiff(userForkLog.getUserForkAmount())
+                .userForkAmount(userForkLog.getUserForkBalance())
                 .userForkType(userForkLog.getUserForkType())
                 .userForkContent(userForkLog.getUserForkContent())
                 .userForkRegisterDate(userForkLog.getUserForkRegisterDate().format(constantUtil.simpleFormatter))

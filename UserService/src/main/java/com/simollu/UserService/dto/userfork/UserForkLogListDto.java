@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserForkLogListDto {
 
+    private int userForkDiff;
     private int userForkAmount;
-    private int userForkBalance;
     private String userForkType;
     private String userForkContent;
     private String userForkRegisterDate;
