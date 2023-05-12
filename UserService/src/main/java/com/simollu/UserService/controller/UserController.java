@@ -2,6 +2,8 @@ package com.simollu.UserService.controller;
 
 
 import com.simollu.UserService.dto.userfork.*;
+import com.simollu.UserService.dto.userinfo.GetUserInfoListRequestDto;
+import com.simollu.UserService.dto.userinfo.GetUserInfoListResponseDto;
 import com.simollu.UserService.dto.usernickname.RegisterUserNicknameRequestDto;
 import com.simollu.UserService.dto.usernickname.RegisterUserNicknameResponseDto;
 import com.simollu.UserService.dto.usernickname.UserNicknameResponseDto;
@@ -170,6 +172,13 @@ public class UserController {
     public ResponseEntity<?> getUserProfileImage(@RequestHeader("userSeq") String userSeq) {
         UserProfileResponseDto responseDto = userProfileService.getUserProfileImage(userSeq);
         return ResponseEntity.ok(responseDto);
+    }
+    
+    // 회원 리스트 이미지, 닉네임 조회
+    @GetMapping("info-list")
+    public ResponseEntity<?> getUserInfoList(@RequestBody GetUserInfoListRequestDto requestDto) {
+        List<GetUserInfoListResponseDto> responseDtoList = userService.getUserInfoList(requestDto);
+        return ResponseEntity.ok(responseDtoList);
     }
 
 

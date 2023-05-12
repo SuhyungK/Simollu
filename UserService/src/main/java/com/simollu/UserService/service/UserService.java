@@ -2,6 +2,8 @@ package com.simollu.UserService.service;
 
 
 import com.simollu.UserService.dto.user.RegisterUserRequestDto;
+import com.simollu.UserService.dto.userinfo.GetUserInfoListRequestDto;
+import com.simollu.UserService.dto.userinfo.GetUserInfoListResponseDto;
 import com.simollu.UserService.entity.*;
 import com.simollu.UserService.jwt.TokenProvider;
 import com.simollu.UserService.repository.*;
@@ -9,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -87,6 +91,26 @@ public class UserService {
     // 카카오 아이디로 회원 정보 조회, 권한도 조회
     public User findByUserKakaoWithAuthorities(String userKakao) {
         return userRepository.findByUserKakaoWithAuthorities(userKakao).orElseThrow();
+    }
+
+
+    // 회원 닉네임, 이미지 리스트로 조회
+    public List<GetUserInfoListResponseDto> getUserInfoList(GetUserInfoListRequestDto requestDto) {
+
+        List<GetUserInfoListResponseDto> responseDtoList = new ArrayList<>();
+
+        for (String userSeq : requestDto.getUserSeqList()) {
+            GetUserInfoListResponseDto responseDto = new GetUserInfoListResponseDto();
+            String userNicknameContent = userNicknameRepository.findTopByUserSeqOrderByUserNicknameRegisterDateDesc(userSeq).getUserNicknameContent();
+            String userProfileUrl = userProfileRepository.findTopByUserSeqOrderByUserProfileRegisterDateDesc(userSeq).getUserProfileUrl();
+            responseDto.setUserSeq(userSeq);
+            responseDto.setUserNicknameContent(userNicknameContent);
+            responseDto.setUserProfileUrl(userProfileUrl);
+            responseDtoList.add(responseDto);
+        }
+
+        return responseDtoList;
+
     }
 
 
