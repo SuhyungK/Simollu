@@ -31,11 +31,6 @@ class _MapPageState extends State<MapPage> {
   Map<Place, List<Polyline>> _polylineMap = {};
   late Map<String, List<String>> routes;
 
-  late Marker startMarker;
-  late Marker destinationMarker;
-  late Marker waypointMarker;
-  late Marker myLocationMarker;
-
   final LatLng _center = const LatLng(37.5013068, 127.0396597);
   final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
 
@@ -53,7 +48,7 @@ class _MapPageState extends State<MapPage> {
       if (_locationPermission) {
         List<Place> newPlaceList =
             await Provider.of<MapViewModel>(context, listen: false)
-                .getPlaces(_arrive, "PC방");
+                .getPlaces(_arrive, "");
 
         Map<Place, List<PathSegment>> newPathMap = {};
         Map<Place, List<Polyline>> newPolylineMap = {};
@@ -197,7 +192,10 @@ class _MapPageState extends State<MapPage> {
         markerId: MarkerId('myLocation'),
         position: LatLng(position.latitude, position.longitude),
       ));
-      _markers.add(destinationMarker);
+      _markers.add(Marker(
+        markerId: MarkerId('destination'),
+        position: _arrive,
+      ));
     });
 
     final GoogleMapController controller = await _controller.future;
