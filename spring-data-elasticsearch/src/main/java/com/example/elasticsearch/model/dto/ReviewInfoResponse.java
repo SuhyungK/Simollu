@@ -9,5 +9,5 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class ReviewInfoResponse {
-
+    private String userNickname;
 }

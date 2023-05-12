@@ -2,10 +2,14 @@ package com.example.elasticsearch.controller;
 
 
 import com.example.elasticsearch.model.dto.review.ModifyReviewDto;
+import com.example.elasticsearch.model.dto.review.MyReviewDto;
 import com.example.elasticsearch.model.dto.review.ReviewDto;
+import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.example.elasticsearch.model.service.ReviewService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,4 +47,20 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.modifyReview(modifyReviewDto));
     }
 
+    @GetMapping
+    public ResponseEntity<?> getMyReviewList(@RequestHeader("userSeq") String userSeq) {
+        List<MyReviewDto> myReviewDtoList = reviewService.getMyReviewList(userSeq);
+
+        if(myReviewDtoList == null ) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(myReviewDtoList);
+    }
+
+    /* 작성가능 리뷰 리스트 조회 */
+    @GetMapping("/writeable")
+    public ResponseEntity<?> getWriteableList(@RequestHeader("userSeq") String userSeq) {
+        List<WriteableReviewDto> writeableReviewDtoList = reviewService.getWriteableList(userSeq);
+
+        if(writeableReviewDtoList == null) return ResponseEntity.status(202).build();
+        return ResponseEntity.ok(writeableReviewDtoList);
+    }
 }

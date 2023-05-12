@@ -2,7 +2,9 @@ package com.example.elasticsearch.model.service;
 
 
 import com.example.elasticsearch.model.dto.review.ModifyReviewDto;
+import com.example.elasticsearch.model.dto.review.MyReviewDto;
 import com.example.elasticsearch.model.dto.review.ReviewDto;
+import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.example.elasticsearch.model.entity.Review;
 import com.example.elasticsearch.repository.review.ReviewRepository;
 import com.example.elasticsearch.utils.DateTimeUtils;
@@ -88,4 +90,20 @@ public class ReviewServiceImpl implements ReviewService {
                 .reviewRegistDate(review.getReviewRegistDate())
                 .build();
     }
+
+    /* 내 리뷰 리스트 조회 */
+    @Override
+    public List<MyReviewDto> getMyReviewList(String userSeq) {
+        List<MyReviewDto> myReviewDtoList = reviewRepository.getReviewByUserSeq(userSeq).orElse(null);
+        return myReviewDtoList;
+    }
+
+    /* 작성가능 리뷰 리스트 조회 */
+    @Override
+    public List<WriteableReviewDto> getWriteableList(String userSeq) {
+        List<WriteableReviewDto> writeableReviewDtoList = reviewRepository.getWriteableList(userSeq).orElse(null);
+
+        return writeableReviewDtoList;
+    }
+
 }

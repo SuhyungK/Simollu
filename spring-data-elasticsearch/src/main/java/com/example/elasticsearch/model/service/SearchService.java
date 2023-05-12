@@ -48,7 +48,7 @@ public class SearchService {
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
                     .restaurantRating(restaurant.getRestaurantRating())
-                    .distanceTime(2*calculateWalkingTime(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
+                    .distanceTime(calculateDistance(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
                     .build();
             restaurantResponses.add(restaurantListResponse);
         }
@@ -91,15 +91,6 @@ public class SearchService {
         searchElasticBasicRepository.saveAll(searchDocumentList);
     }
 
-
-
-    public static double calculateWalkingTime(double startLat, double startLng, double endLat, double endLng) {
-        double distanceInKm = calculateDistance(startLat, startLng, endLat, endLng);
-        double walkingSpeed = 5.0; // 보통 사람이 걷는 속도는 시속 5km
-        double walkingTimeInHours = distanceInKm / walkingSpeed;
-        double walkingTimeInMinutes = walkingTimeInHours * 60;
-        return walkingTimeInMinutes;
-    }
 
     public static double calculateDistance(double startLat, double startLng, double endLat, double endLng) {
         double earthRadiusKm = 6371.0;

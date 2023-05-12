@@ -1,5 +1,6 @@
 package com.example.elasticsearch.model.service;
 
+import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.dto.MenuInfoResponse;
 import com.example.elasticsearch.model.dto.RestaurantInfoResponse;
 import com.example.elasticsearch.model.dto.ReviewInfoResponse;
@@ -30,6 +31,8 @@ public class RestaurantService {
     private final RestaurantElasticBasicRepository restaurantElasticBasicRepository;
     private final ReviewRepository reviewRepository;
 
+    private final AwsS3Repository awsS3Repository;
+
     @Transactional
     public void saveAllRestaurantDocuments() throws IOException {
         List<RestaurantDocument> restaurantDocumentList = new ArrayList<>();
@@ -58,7 +61,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(restaurantSeq);
         RestaurantInfoResponse restaurantInfoResponse = RestaurantInfoResponse.builder()
                 .restaurantAddress(restaurant.getRestaurantAddress())
-                .restaurantImg(restaurant.getRestaurantImg())
+                .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                 .restaurantName(restaurant.getRestaurantName())
                 .restaurantCategory(restaurant.getRestaurantCategory())
                 .restaurantRating(restaurant.getRestaurantRating())
@@ -74,7 +77,7 @@ public class RestaurantService {
         List<Menu> menues = menuJpaRepository.findByRestaurantSeq(restaurantSeq);
         for(Menu m : menues){
             MenuInfoResponse menuInfoResponse = MenuInfoResponse.builder()
-                    .menuImage(m.getMenuImage())
+                    .menuImage(awsS3Repository.getTemporaryUrl(m.getMenuImage()))
                     .menuSeq(m.getMenuSeq())
                     .menuPrice(m.getMenuPrice())
                     .menuName(m.getMenuName())
