@@ -31,12 +31,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
-
-
-
-
-
-
     /* 후기 작성 */
     @Override
     public Long writeReview(String userSeq, ReviewDto reviewDto) {
@@ -131,6 +125,8 @@ public class ReviewServiceImpl implements ReviewService {
         return writeableReviewDtoList;
     }
 
+    /* review redis 제일 처음 초기화 */
+    @Override
     public void writeReviewRedis()  {
         int n = (int) restaurantRepository.count();
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();

@@ -44,7 +44,7 @@ public class SearchService {
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
                     .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
-                    .distanceTime(calculateDistance(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
+                    .distance((int)calculateDistance(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
                     .build();
             restaurantResponses.add(restaurantListResponse);
         }
@@ -115,10 +115,11 @@ public class SearchService {
     public int calculateRating(Long restaurantSeq) {
         Integer f = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_false");
         Integer t = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_true");
-        int percentage=0;
-        if(t!=0){
+        int percentage = 0;
+        if (t != 0) {
             System.out.println();
-            percentage = (t / t+f) * 100;
+            double ratio = (double) t / (t + f);
+            percentage = (int) (ratio * 100);
         }
         return percentage;
     }

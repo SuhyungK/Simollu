@@ -17,7 +17,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 public class SchedulerConfig {
 
     private final ScheduledTask scheduledTask;
-    private final RedisTemplate redisTemplate;
 
     @Bean
     public TaskScheduler taskScheduler() {
@@ -29,6 +28,11 @@ public class SchedulerConfig {
     @Scheduled(fixedRate = 180000) // 3분마다 실행
     public void scheduleTask() throws IOException {
         scheduledTask.searchHistoryTask();
+    }
+
+    @Scheduled(fixedRate = 18000000) // 3분마다 실행
+    public void scheduleTask2() throws IOException {
+        scheduledTask.saveRating();
     }
 
 
