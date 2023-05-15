@@ -69,7 +69,7 @@ public class RestaurantService {
         for (Object data : s.keySet()) {
             WaitingTimeResponse w = WaitingTimeResponse.builder()
                     .timeZone((String) data)
-                    .expectedWaitingTime((String) s.get(data))
+                    .expectedWaitingTime((int) s.get(data))
                 .build();
             response.add(w);
         }

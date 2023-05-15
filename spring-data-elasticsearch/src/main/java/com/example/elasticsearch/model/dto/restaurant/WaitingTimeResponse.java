@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 public class WaitingTimeResponse {
     private String timeZone;
-    private String expectedWaitingTime;
+    private int expectedWaitingTime;
 }
