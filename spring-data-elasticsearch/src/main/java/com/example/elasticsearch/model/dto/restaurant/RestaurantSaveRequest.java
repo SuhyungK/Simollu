@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.restaurant;
 
 import lombok.Getter;
 

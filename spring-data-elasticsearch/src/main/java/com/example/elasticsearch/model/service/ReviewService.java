@@ -7,6 +7,7 @@ import com.example.elasticsearch.model.dto.review.MyReviewDto;
 import com.example.elasticsearch.model.dto.review.RestaurantReviewDto;
 
 import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 public interface ReviewService {
@@ -31,4 +32,7 @@ public interface ReviewService {
 
     /* 작성가능 리뷰 추가 */
     void addWriteableReview(WriteableReviewDto writeableReviewDto);
+
+    void writeReviewRedis() throws JsonProcessingException;
+
 }

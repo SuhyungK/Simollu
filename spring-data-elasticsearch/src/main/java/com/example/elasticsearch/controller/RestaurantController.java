@@ -1,6 +1,6 @@
 package com.example.elasticsearch.controller;
 
-import com.example.elasticsearch.model.dto.SearchInfoResponse;
+import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.service.RestaurantService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,7 @@ public class RestaurantController {
         return ResponseEntity.ok().build();
     }
 
+    // 레스토랑 상세검색
     @GetMapping("/restaurant/{restaurantSeq}")
     public ResponseEntity<SearchInfoResponse> getSearchInfo(@PathVariable("restaurantSeq") long restaurantSeq) throws IOException {
         return ResponseEntity.ok(restaurantService.getSearchInfo(restaurantSeq));

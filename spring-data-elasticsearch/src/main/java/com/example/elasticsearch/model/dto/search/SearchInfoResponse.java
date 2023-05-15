@@ -1,5 +1,8 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.search;
 
+import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
+import com.example.elasticsearch.model.dto.review.ReviewInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.review;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

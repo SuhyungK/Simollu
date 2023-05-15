@@ -9,12 +9,22 @@ import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListRequestDto;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListResponseDto;
 import com.example.elasticsearch.model.entity.Review;
+import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.review.ReviewRepository;
 import com.example.elasticsearch.repository.review.WriteableReviewRepository;
 import com.example.elasticsearch.utils.DateTimeUtils;
+
 import feign.FeignException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +35,9 @@ import java.util.List;
 @Slf4j
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
+    private final RestaurantJpaRepository restaurantRepository;
+    private final RedisTemplate redisTemplate;
+    private final ObjectMapper objectMapper;
 
     private final WriteableReviewRepository writeableReviewRepository;
 
@@ -34,6 +47,17 @@ public class ReviewServiceImpl implements ReviewService {
     /* 후기 작성 */
     @Override
     public Long writeReview(String userSeq, RestaurantReviewDto reviewDto) {
+
+        System.out.println(reviewDto.isReviewRating());
+
+        if(reviewDto.isReviewRating()){
+            System.out.println("여기야");
+            Integer value = (Integer) redisTemplate.opsForHash().get("review", reviewDto.getRestaurantSeq() + "_true");
+        redisTemplate.opsForHash().put("review", reviewDto.getRestaurantSeq() + "_true",value+1);
+        }
+        Integer value = (Integer) redisTemplate.opsForHash().get("review", reviewDto.getRestaurantSeq() + "_false");
+        redisTemplate.opsForHash().put("review", reviewDto.getRestaurantSeq() + "_false",value+1);
+
 
         Review review = Review.builder()
                 .userSeq(userSeq)
@@ -158,6 +182,18 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void addWriteableReview(WriteableReviewDto writeableReviewDto) {
         writeableReviewRepository.save(writeableReviewDto.toEntity());
+    }
+    
+    /* review redis 제일 처음 초기화 */
+    @Override
+    public void writeReviewRedis()  {
+        int n = (int) restaurantRepository.count();
+        HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
+        Map<Object, Object> map = new HashMap<>();
+        for(int i=1; i<=n; i++) {
+            hashOps.put("review", i+"_false", 0);
+            hashOps.put("review", i+"_true", 0);
+        }
     }
 
 }

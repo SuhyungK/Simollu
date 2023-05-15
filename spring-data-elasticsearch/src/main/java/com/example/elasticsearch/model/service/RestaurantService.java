@@ -1,14 +1,15 @@
 package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
-import com.example.elasticsearch.model.dto.MenuInfoResponse;
-import com.example.elasticsearch.model.dto.RestaurantInfoResponse;
-import com.example.elasticsearch.model.dto.ReviewInfoResponse;
-import com.example.elasticsearch.model.dto.SearchInfoResponse;
+import com.example.elasticsearch.model.dto.main.RestaurantMainInfoListResponse;
+import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
+import com.example.elasticsearch.model.dto.main.RestaurantMainInfoResponse;
+import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.entity.Menu;
 import com.example.elasticsearch.model.entity.Restaurant;
 import com.example.elasticsearch.model.document.RestaurantDocument;
-import com.example.elasticsearch.model.entity.Review;
+import com.example.elasticsearch.repository.elkAdvance.SearchElasticAdvanceRepository;
 import com.example.elasticsearch.repository.jpa.MenuJpaRepository;
 import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepository;
@@ -16,7 +17,6 @@ import com.example.elasticsearch.repository.review.ReviewRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -30,7 +30,7 @@ public class RestaurantService {
     private final MenuJpaRepository menuJpaRepository;
     private final RestaurantElasticBasicRepository restaurantElasticBasicRepository;
     private final ReviewRepository reviewRepository;
-
+    private final SearchElasticAdvanceRepository searchElasticAdvanceRepository;
     private final AwsS3Repository awsS3Repository;
 
     @Transactional
@@ -72,6 +72,7 @@ public class RestaurantService {
         return restaurantInfoResponse;
     }
 
+
     public List<MenuInfoResponse> getMenuInfo(long restaurantSeq){
         List<MenuInfoResponse> menuInfoResponseList = new ArrayList<>();
         List<Menu> menues = menuJpaRepository.findByRestaurantSeq(restaurantSeq);
@@ -86,6 +87,82 @@ public class RestaurantService {
         }
         return menuInfoResponseList;
     }
+
+    @Transactional
+    public RestaurantMainInfoListResponse getMainInfo(Double lat, Double lon) {
+
+        RestaurantMainInfoListResponse restaurantMainInfoListResponse = RestaurantMainInfoListResponse.builder()
+                .restaurantNearByList(getRestaurantNearByList(lat,lon))
+                .restaurantHighRatingList(getRestaurantHighRatingList(lat,lon))
+//                .restaurantLessWaitingList()
+                .koreanFoodTopList(getRestaurantThemeList(lat, lon, "한식"))
+                .westernFoodTopList(getRestaurantThemeList(lat, lon, "양식"))
+                .chineseTopList(getRestaurantThemeList(lat, lon, "증식"))
+                .japanesTopList(getRestaurantThemeList(lat, lon, "일식"))
+                .fastFoodTopList(getRestaurantThemeList(lat, lon, "패스트푸드"))
+                .cafeTopList(getRestaurantThemeList(lat, lon, "카페"))
+                .bakeryTopList(getRestaurantThemeList(lat, lon, "베이커리"))
+                .build();
+        return restaurantMainInfoListResponse;
+
+    }
+
+    private List<RestaurantMainInfoResponse> getRestaurantThemeList(Double lat, Double lon, String theme) {
+        List<RestaurantDocument> restaurantDocument = searchElasticAdvanceRepository.findThemeRestaurantsNearby(lat,lon,theme);
+        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        for(RestaurantDocument r : restaurantDocument){
+            RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantName(r.getRestaurantName())
+                    .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
+                    .restaurantRating(r.getRestaurantRating())
+                    //.restaurantWaitingTime()
+                    .build();
+            restaurantMainInfoList.add(restaurantMainInfoResponse);
+        }
+        return restaurantMainInfoList;
+    }
+
+    private List<RestaurantMainInfoResponse> getRestaurantHighRatingList(Double lat, Double lon) {
+        List<RestaurantDocument> restaurantDocument = searchElasticAdvanceRepository.findTopRatedRestaurantsNearby(lat,lon);
+        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        for(RestaurantDocument r : restaurantDocument){
+            RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantName(r.getRestaurantName())
+                    .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
+                    .restaurantRating(r.getRestaurantRating())
+                    //.restaurantWaitingTime()
+                    .build();
+            restaurantMainInfoList.add(restaurantMainInfoResponse);
+        }
+        return restaurantMainInfoList;
+    }
+
+    // 메인 페이지에서 현재 위치기준 가까운 5가지 뽑아내는 로직
+    private List<RestaurantMainInfoResponse> getRestaurantNearByList(Double lat, Double lon) {
+        List<RestaurantDocument> restaurantDocument =  searchElasticAdvanceRepository.findNearestRestaurants(lat,lon);
+        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        for(RestaurantDocument r : restaurantDocument){
+            RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantName(r.getRestaurantName())
+                    .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
+                    .restaurantRating(r.getRestaurantRating())
+                    //.restaurantWaitingTime()
+                    .build();
+            restaurantMainInfoList.add(restaurantMainInfoResponse);
+        }
+
+        return restaurantMainInfoList;
+    }
+
+    public List<Long> getRestaurantSeq() {
+        List<Restaurant> restaurants = restaurantJpaRepository.findAll();
+        List<Long> responseSeq = new ArrayList<>();
+        for(Restaurant r : restaurants){
+            responseSeq.add(r.getRestaurantSeq());
+        }
+        return responseSeq;
+    }
+
 
 //    private List<ReviewInfoResponse> getReviewInfo(long restaurantSeq) {
 //        List<ReviewInfoResponse> reviewInfoResponseList = new ArrayList<>();

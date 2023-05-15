@@ -1,7 +1,7 @@
 package com.example.elasticsearch.model.entity;
 
 
-import com.example.elasticsearch.model.dto.RestaurantSaveRequest;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantSaveRequest;
 import lombok.*;
 import javax.persistence.*;
 

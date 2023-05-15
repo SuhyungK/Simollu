@@ -1,13 +1,11 @@
 package com.example.elasticsearch.controller;
 
-import com.example.elasticsearch.model.dto.SearchHistoryResponse;
-import com.example.elasticsearch.model.dto.SearchRankResponse;
-import com.example.elasticsearch.model.service.RedisService;
+import com.example.elasticsearch.model.dto.search.SearchHistoryResponse;
+import com.example.elasticsearch.model.dto.search.SearchRankResponse;
 import com.example.elasticsearch.model.service.SearchService;
-import com.example.elasticsearch.model.dto.RestaurantListResponse;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantListResponse;
 import com.example.elasticsearch.utils.RedisUtil;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

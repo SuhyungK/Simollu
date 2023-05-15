@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.search;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

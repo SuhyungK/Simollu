@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.restaurant;
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.document.RestaurantDocument;
 import lombok.AccessLevel;
@@ -15,5 +15,5 @@ public class RestaurantListResponse {
     private String restaurantImg;
     private String restaurantX;
     private String restaurantY;
-    private Double distanceTime;
+    private int distance;
 }

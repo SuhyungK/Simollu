@@ -1,4 +1,4 @@
-package com.example.elasticsearch.model.dto;
+package com.example.elasticsearch.model.dto.search;
 
 import java.io.IOException;
 import lombok.Builder;

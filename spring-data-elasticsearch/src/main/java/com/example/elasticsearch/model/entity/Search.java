@@ -1,10 +1,6 @@
 package com.example.elasticsearch.model.entity;
 
-import com.example.elasticsearch.model.dto.SearchSaveRequest;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import com.example.elasticsearch.model.dto.search.SearchSaveRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
