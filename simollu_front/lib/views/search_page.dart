@@ -27,6 +27,8 @@ class _SearchPageState extends State<SearchPage> {
   bool _canPop = false;
 
   late List<SearchModel> result = [];
+  late List<SearchModel> res = [];
+
   SearchViewModel searchViewModel = SearchViewModel();
 
   _SearchPageState() {
@@ -36,6 +38,21 @@ class _SearchPageState extends State<SearchPage> {
       });
     });
   }
+
+  _onPressedHotKeyword(String keyword) async{
+    // 검색 api 연결
+    res = (await searchViewModel.getSearchResult(keyword)).cast<SearchModel>();
+
+    await searchViewModel.setSearchResult(res);
+
+    // 검색 결과 페이지로 이동
+    _navigatorKey.currentState?.pushNamed(routeB);
+
+    setState(() {
+      _canPop = true;
+    });
+  }
+
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     bool canPop = _navigatorKey.currentState?.canPop() ?? false;
@@ -48,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
   MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
     if (setting.name == routeA) {
       return MaterialPageRoute<dynamic>(
-          builder: (context) => SearchInitialWidget(), settings: setting);
+          builder: (context) => SearchInitialWidget(onPressedHotKeyword: _onPressedHotKeyword,), settings: setting);
     }
     else if (setting.name == routeB) {
       return MaterialPageRoute<dynamic>(
