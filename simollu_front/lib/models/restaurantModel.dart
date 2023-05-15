@@ -22,5 +22,5 @@ class RestaurantModel {
         restaurantRating = json['restaurantRating'] ?? 0,
         restaurantWaitingTime = json['restaurantWaitingTime'] ?? 0,
         restaurantImage = json['restaurantImage'] ?? '';
-  
+
 }
