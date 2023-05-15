@@ -135,6 +135,7 @@ public class RestaurantService {
         List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
         for(RestaurantDocument r : restaurantDocument){
             RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantSeq(r.getRestaurantSeq())
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
@@ -150,6 +151,7 @@ public class RestaurantService {
         List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
         for(RestaurantDocument r : restaurantDocument){
             RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantSeq(r.getRestaurantSeq())
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
@@ -166,6 +168,7 @@ public class RestaurantService {
         List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
         for(RestaurantDocument r : restaurantDocument){
             RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantSeq(r.getRestaurantSeq())
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
