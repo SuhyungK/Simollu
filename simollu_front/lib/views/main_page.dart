@@ -61,6 +61,7 @@ class _MainPageState extends State<MainPage> {
     MainViewModel mainViewModel = Get.find();
 
     userViewModel.getNickname();
+    mainViewModel.getMainInfo();
     // mainViewModel.getDong(location);
   }
 
