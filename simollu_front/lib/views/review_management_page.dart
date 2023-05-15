@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/viewmodels/review_view_model.dart';

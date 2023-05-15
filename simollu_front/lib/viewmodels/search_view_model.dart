@@ -17,7 +17,6 @@ class SearchViewModel extends GetxController {
     hotKeywordList(list);
   }
 
-
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
