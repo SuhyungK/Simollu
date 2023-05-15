@@ -38,8 +38,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
+    bool canPop = _navigatorKey.currentState?.canPop() ?? false;
     setState(() {
-      _canPop = _navigatorKey.currentState?.canPop() ?? false;
+      _canPop = canPop;
     });
     return route.didPop(result);
   }
@@ -78,8 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                   color: Colors.black54,
                   onPressed: () {
                     _navigatorKey.currentState?.pop();
+                    bool temp = _navigatorKey.currentState?.canPop() ?? false;
                     setState(() {
-                      _canPop = false;
+                      _canPop = temp;
                     });
                   },
                 )
