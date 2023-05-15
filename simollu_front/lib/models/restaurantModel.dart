@@ -1,9 +1,4 @@
 
-// "restaurantName": "호샤퀴테리에",
-// "restaurantRating": 0,
-// "restaurantWaitingTime": null,
-// "restaurantImage": ""
-
 class RestaurantModel {
   late String restaurantName;
   late int restaurantRating;
@@ -22,5 +17,4 @@ class RestaurantModel {
         restaurantRating = json['restaurantRating'] ?? 0,
         restaurantWaitingTime = json['restaurantWaitingTime'] ?? 0,
         restaurantImage = json['restaurantImage'] ?? '';
-
 }

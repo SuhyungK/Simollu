@@ -48,6 +48,7 @@ class ReviewViewModel {
 
     try {
       String token = await getToken();
+      print(token);
       var url = createUrl('/restaurant/review');
 
       final response = await http.get(
