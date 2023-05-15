@@ -15,6 +15,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByRestaurantSeq(@Param("restaurantSeq") Long restaurantSeq);
+
     @Query("select new com.example.elasticsearch.model.dto.review.MyReviewDto(r.reviewSeq, r.userSeq, r.restaurantSeq, r.reviewRating" +
             ", r.reviewContent, r.reviewRegistDate, rs.restaurantName, rs.restaurantImg) " +
             "from Review r join Restaurant rs on r.restaurantSeq = rs.restaurantSeq " +
