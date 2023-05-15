@@ -51,15 +51,6 @@ class TmpPage extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WritingReviewPage()));
-                },
-                child: Text('리뷰 쓰기'),
-              ),
-              OutlinedButton(
-                onPressed: () {
                   Get.to(StartPage());
                 },
                 child: Text('로그인'),

@@ -55,10 +55,14 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (context) => WritingReviewPage()),
-                      );
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) =>
+                      //         WritingReviewPage(
+                      //           writeableSeq: 2,
+                      //         )
+                      //     ),
+                      // );
                     },
                     child: Text('리뷰 작성 하기')
                 ),

@@ -15,15 +15,77 @@ class WritableReview extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder(
-          future: reviews,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Card();
-            } else {
-              return CircularProgressIndicator();
-            }
-          }
-        )
+            future: reviews,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: ((context, index) {
+                      WriteableModel review = snapshot.data![index];
+                      return Card(
+                        child: ListTile(
+                          title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  review.restaurantImg ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                                    return Image.network(
+                                      'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 20,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review.restaurantName as String,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>
+                                        WritingReviewPage(
+                                          review: review
+                                        )
+                                      )
+                                    );
+                                  },
+                                  child: Text('리뷰 쓰기')
+                              )
+                            ],
+                          )
+                        ),
+                      );
+                    }));
+              } else {
+                return CircularProgressIndicator();
+              }
+            })
       ],
     );
     // return Card(
