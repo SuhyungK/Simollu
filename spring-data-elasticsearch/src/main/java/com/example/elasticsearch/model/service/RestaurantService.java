@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,9 +35,10 @@ public class RestaurantService {
     private final RestaurantJpaRepository restaurantJpaRepository;
     private final MenuJpaRepository menuJpaRepository;
     private final RestaurantElasticBasicRepository restaurantElasticBasicRepository;
-    private final RedisTemplate redisTemplate;
     private final SearchElasticAdvanceRepository searchElasticAdvanceRepository;
     private final AwsS3Repository awsS3Repository;
+    @Qualifier("jsonRedisTemplate")
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public void saveAllRestaurantDocuments() throws IOException {
