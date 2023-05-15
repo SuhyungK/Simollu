@@ -495,7 +495,7 @@ class _MainPageState extends State<MainPage> {
                                   context,
                                   GetPageRoute(
                                     curve: Curves.fastOutSlowIn,
-                                    page: () => RestaurantDetailpage(),
+                                    page: () => RestaurantDetailpage(restaurantSeq: 124),
                                   ),
                                 );
                               },
@@ -633,7 +633,7 @@ class _MainPageState extends State<MainPage> {
                               context,
                               GetPageRoute(
                                 curve: Curves.fastOutSlowIn,
-                                page: () => RestaurantDetailpage(),
+                                page: () => RestaurantDetailpage(restaurantSeq: 124),
                               ),
                             );
                           },

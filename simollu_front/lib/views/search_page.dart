@@ -49,6 +49,7 @@ class _SearchPageState extends State<SearchPage> {
 
     setState(() {
       _canPop = true;
+      _searchText = keyword;
     });
   }
 
@@ -69,10 +70,6 @@ class _SearchPageState extends State<SearchPage> {
     else if (setting.name == routeB) {
       return MaterialPageRoute<dynamic>(
           builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
-    }
-    else if (setting.name == routeC) {
-      return MaterialPageRoute<dynamic>(
-          builder: (context) => RestaurantDetailpage(), settings: setting);
     }
     else {
       throw Exception('Unknown route: ${setting.name}');

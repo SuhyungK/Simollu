@@ -4,7 +4,12 @@ import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
 class RestaurantDetailpage extends StatefulWidget {
-  const RestaurantDetailpage({super.key});
+  final int restaurantSeq;
+
+  const RestaurantDetailpage({
+    Key? key,
+    required this.restaurantSeq,
+});
 
   @override
   State<RestaurantDetailpage> createState() =>

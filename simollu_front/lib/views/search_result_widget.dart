@@ -69,9 +69,9 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        RootController.to.setRootPageTitles("가게 이름");
+        RootController.to.setRootPageTitles(widget.name);
         RootController.to.setIsMainPage(false);
-        Get.to(RestaurantDetailpage());
+        Get.to(RestaurantDetailpage(restaurantSeq: widget.restaurantSeq));
         // Navigator.push(context,
         //     MaterialPageRoute(
         //         fullscreenDialog: true,
