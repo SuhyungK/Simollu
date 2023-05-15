@@ -33,6 +33,7 @@ class MyReview extends StatelessWidget {
                       child: ListTile(
                           minVerticalPadding: 10,
                           title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 width: 80,
@@ -40,27 +41,23 @@ class MyReview extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                               SizedBox(
-                                width: 10,
+                                width: 20,
                               ),
-                              Container(
-                                constraints: BoxConstraints(minHeight: 80),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      review.restaurantName as String,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(review.reviewContent),
-                                    SizedBox(height: 10),
-                                    _buildRating(review.reviewRating)
-                                  ],
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review.restaurantName as String,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(review.reviewContent),
+                                  SizedBox(height: 20),
+                                  _buildRating(review.reviewRating)
+                                ],
                               )
                             ],
                           )),
@@ -197,7 +194,7 @@ class MyReview extends StatelessWidget {
         child: Text(review['text'],
           style: TextStyle(
             color: Colors.white,
-            fontSize: 15,
+            fontSize: 13,
             fontWeight: FontWeight.bold
           ),
         ),
