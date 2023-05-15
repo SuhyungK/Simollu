@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/views/start_page.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
           Get.put(RootController());
           Get.put(UserViewModel());
           Get.put(SearchViewModel());
+          Get.put(MainViewModel());
         },
       ),
       // home: Root(),
