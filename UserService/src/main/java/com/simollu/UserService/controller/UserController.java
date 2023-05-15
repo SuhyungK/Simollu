@@ -1,6 +1,8 @@
 package com.simollu.UserService.controller;
 
 
+import com.simollu.UserService.aws.AwsS3Repository;
+import com.simollu.UserService.aws.AwsS3Service;
 import com.simollu.UserService.dto.userfork.*;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListRequestDto;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListResponseDto;
@@ -17,6 +19,7 @@ import com.simollu.UserService.dto.userstatus.UserStatusResponseDto;
 import com.simollu.UserService.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +43,7 @@ public class UserController {
     private final UserStatusService userStatusService;
     private final UserPreferenceService userPreferenceService;
     private final UserProfileService userProfileService;
+    private final AwsS3Service awsS3Service;
 
 
 
@@ -93,7 +98,7 @@ public class UserController {
     public ResponseEntity<?> getUserForkLogPage(@RequestHeader("userSeq") String userSeq, @RequestParam int page) {
 
         log.info("UserController - 회원 포크 내역 페이지 입력");
-        
+
         Page<UserForkPageDto> userForkLogPage = userForkService.getUserForkLogPage(userSeq, page);
 
         return ResponseEntity.ok(userForkLogPage);
@@ -116,7 +121,16 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
-    
+
+    @PostMapping("profileImage")
+    public ResponseEntity<?> updateUserProfileImage(@RequestHeader("userSeq") String userSeq,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        userProfileService.updateUserProfileImage(userSeq, file.getOriginalFilename());
+        awsS3Service.upload(file, "profile");
+        return ResponseEntity.ok().build();
+    }
+
+
     @Operation(summary = "닉네임 조회",
             description = "현재 회원이 설정한 닉네임을 보여줍니다.")
     @GetMapping("/nickname")
@@ -154,7 +168,7 @@ public class UserController {
         RegisterUserPreferenceResponseDto responseDto = userPreferenceService.registerUserPreference(userSeq, requestDto);
         return ResponseEntity.ok(responseDto);
     }
-    
+
     // 회원 취향 조회
     @Operation(summary = "회원 취향 조회 ",
             description = "이 회원의 취향을 List<Stirng> 형식으로 조회합니다. ")
@@ -173,7 +187,7 @@ public class UserController {
         UserProfileResponseDto responseDto = userProfileService.getUserProfileImage(userSeq);
         return ResponseEntity.ok(responseDto);
     }
-    
+
     // 회원 리스트 이미지, 닉네임 조회
     @GetMapping("info-list")
     public ResponseEntity<?> getUserInfoList(@RequestBody GetUserInfoListRequestDto requestDto) {
