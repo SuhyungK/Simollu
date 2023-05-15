@@ -31,14 +31,14 @@ public class WaitingServiceImpl implements WaitingService {
     private final RedisService redisService;
 
     private static final String RESTAURANT_KEY = "restaurant_no:";
-    private static final int STATUS_WAITING = 0;
-    private static final int STATUS_CHANGE = 3;
-    private static final int STATUS_DELETE = -1;
+    private static final int STATUS_WAITING = 0; // 웨이팅
+    private static final int STATUS_COMPLETE = 1; // 완료
+    private static final int STATUS_CANCEL = 2; // 취소
+    private static final int STATUS_CHANGE = 3; // 미루기
+    private static final int STATUS_DELETE = -1; // 웨이팅 삭제
 
     /* 웨이팅 걸기 */
-    public Integer registWaiting(WaitingHistoryDto waitingHistoryDto) {
-
-//        String key = "restaurant_no:"+waitingDetailDto.getRestaurantSeq();
+    public WaitingDetailDto registWaiting(WaitingHistoryDto waitingHistoryDto) {
 
         // 대기번호
         Integer waitingNo = getLastWaitingNo(waitingHistoryDto.getRestaurantSeq()) + 1;
@@ -66,7 +66,9 @@ public class WaitingServiceImpl implements WaitingService {
             log.error("registWaiting error!!!!");
         }
 
-        return waitingSeq;
+        waitingDetailDto.setWaitingCurRank(redisService.getIndex(waitingDetailDto.getRestaurantSeq(), waitingSeq));
+        waitingDetailDto.setWaitingTime(getWaitingTime(waitingDetailDto.getRestaurantSeq(), waitingSeq));
+        return waitingDetailDto;
     }
 
 
@@ -128,11 +130,20 @@ public class WaitingServiceImpl implements WaitingService {
         return waitingList;
     }
 
-    /* 웨이팅 예상시간 조회 */
+    /* 사용자의 웨이팅 예상시간 조회 */
     @Override
     public Integer getWaitingTime(Integer restaurantSeq, Integer waitingSeq) {
         int time = 30; // 통계 기반 예상시간
         int cnt = getCurrentWaitingRank(restaurantSeq, waitingSeq);
+
+        return cnt * time;
+    }
+
+    /* 식당의 웨이팅 예상시간 조회 */
+    @Override
+    public Integer getWaitingTime(Integer restaurantSeq) {
+        int time = 30; // 통계 기반 예상시간
+        int cnt = redisService.getWaitingCnt(restaurantSeq);
 
         return cnt * time;
     }
@@ -159,6 +170,12 @@ public class WaitingServiceImpl implements WaitingService {
         if(waitingStatusDto.getWaitingStatusContent() != 0) {
             waitingStatusDto.setWaitingStatusRegistDate(DateTimeUtils.nowFromZone()); // 현재 시간 설정
             redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq(), waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
+            if(waitingStatusDto.getWaitingStatusContent() == STATUS_COMPLETE){
+                // 완료되었습니다 알림
+                // 작성가능후기 DB 추가
+            }else{
+                // 취소되었습니다 알림
+            }
         }
         waitingStatusRepository.save(waitingStatusDto.toEntity());
 

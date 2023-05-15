@@ -10,7 +10,7 @@ import java.util.List;
 public interface WaitingService {
 
     /* 웨이팅 신청 */
-    Integer registWaiting(WaitingHistoryDto waitingDetailDto);
+    WaitingDetailDto registWaiting(WaitingHistoryDto waitingDetailDto);
 
     /* 마지막 웨이팅 번호 가져오기 */
     Integer getLastWaitingNo(Integer restaurantSeq);
@@ -30,6 +30,9 @@ public interface WaitingService {
 
     /* 웨이팅 예상시간 조회 */
     Integer getWaitingTime(Integer restaurantSeq, Integer waitingSeq);
+
+    /* 웨이팅 예상시간 조회 */
+    Integer getWaitingTime(Integer restaurantSeq);
 
     /* 웨이팅 내역 조회 (취소/완료) */
     List<WaitingHistoryDto> getWaitingHistory(String userSeq, int waitingStatusContent);

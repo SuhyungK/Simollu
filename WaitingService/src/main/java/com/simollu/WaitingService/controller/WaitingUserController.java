@@ -21,24 +21,42 @@ public class WaitingUserController {
 
     private final WaitingService waitingService;
 
+    private static final int STATUS_COMPLETE = 1; // 완료
+    private static final int STATUS_CANCEL = 2; // 취소
+
     /*
      * 웨이팅 등록
      * */
     @PostMapping
     public ResponseEntity<?> registWaiting(@RequestHeader("userSeq") String userSeq, @RequestBody WaitingHistoryDto waitingHistoryDto) {
         waitingHistoryDto.setUserSeq(userSeq);
-        Integer waitingSeq = waitingService.registWaiting(waitingHistoryDto);
+        WaitingDetailDto waitingDetailDto = waitingService.registWaiting(waitingHistoryDto);
 
-        return ResponseEntity.ok().body(waitingSeq);
+        return ResponseEntity.ok().body(waitingDetailDto);
     }//registWaiting
 
     /*
-     * 웨이팅 상태변경
-     * 왜 waitingSeq를 헤더에서도 받고 dto에서도 받지..?
+     * 웨이팅 취소
      * */
-    @PostMapping("/status/{waitingSeq}")
-    public ResponseEntity<?> updateStatus(@RequestBody WaitingStatusDto waitingStatusDto){
+    @PostMapping("/cancel")
+    public ResponseEntity<?> updateStatusCancel(@RequestBody WaitingStatusDto waitingStatusDto){
         WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
+        waitingDto.setWaitingStatusContent(STATUS_CANCEL);
+
+        if(waitingService.updateStatus(waitingStatusDto, waitingDto)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }//updateStatus
+
+    /*
+     * 웨이팅 완료
+     * */
+    @PostMapping("/complete")
+    public ResponseEntity<?> updateStatusComplete(@RequestBody WaitingStatusDto waitingStatusDto){
+        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
+        waitingDto.setWaitingStatusContent(STATUS_COMPLETE);
 
         if(waitingService.updateStatus(waitingStatusDto, waitingDto)){
             return ResponseEntity.status(HttpStatus.OK).build();
