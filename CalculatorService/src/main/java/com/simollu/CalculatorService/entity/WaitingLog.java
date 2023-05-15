@@ -21,11 +21,11 @@ public class WaitingLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "waiting_log_seq")
-    private Integer waitingLogSeq; // 대기로그일련번호
+    private Long waitingLogSeq; // 대기로그일련번호
 
     @NotNull
     @Column(name = "restaurant_seq")
-    private Integer restaurantSeq; // 식당일련번호
+    private Long restaurantSeq; // 식당일련번호
 
     @NotNull
     @Column(name = "waiting_person_cnt")

@@ -18,7 +18,7 @@ public class CreateDummyRequestDto {
 
 
     // "2023-05-12" 형식으로 전송
-    private int restaurantSeq;
+    private Long restaurantSeq;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate targetDate;
     private boolean tomorrowIsHoliday;

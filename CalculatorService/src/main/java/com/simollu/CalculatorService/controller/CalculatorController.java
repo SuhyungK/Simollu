@@ -37,13 +37,13 @@ public class CalculatorController {
 
     @GetMapping("findAverageTime")
     public ResponseEntity<?> findAverageTime() throws JsonProcessingException {
-        Map<Integer, Map<String, Double>> response = waitingLogService.getAverageWaitingTime();
+        Map<Long, Map<String, Double>> response = waitingLogService.getAverageWaitingTime();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("findRatioTime")
     public ResponseEntity<?> findRatioTime() {
-        Map<Integer, Map<String, Double>> response = waitingLogService.getAverageWaitingTimePerRank();
+        Map<Long, Map<String, Double>> response = waitingLogService.getAverageWaitingTimePerRank();
         return ResponseEntity.ok(response);
     }
 

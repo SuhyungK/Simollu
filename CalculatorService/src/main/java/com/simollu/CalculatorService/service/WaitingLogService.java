@@ -27,8 +27,12 @@ public class WaitingLogService {
 
 
     private final WaitingLogRepository waitingLogRepository;
+
+
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
+
+
 
 
     // 타켓 날짜에 해당하는 모든 데이터를 가져오는 메소드
@@ -49,7 +53,7 @@ public class WaitingLogService {
 
     // 시간대별 예상 시간
     // 1주전과 2주전의 데이터를 활용
-    public Map<Integer, Map<String, Double>> getAverageWaitingTime() throws JsonProcessingException {
+    public Map<Long, Map<String, Double>> getAverageWaitingTime() throws JsonProcessingException {
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusWeeks(1);
         LocalDate twoWeeksAgo = today.minusWeeks(2);
@@ -58,10 +62,10 @@ public class WaitingLogService {
                 LocalDateTime.of(twoWeeksAgo, LocalTime.MIN),
                 LocalDateTime.of(oneWeekAgo, LocalTime.MAX));
 
-        Map<Integer, Map<String, Double>> resultMap = new HashMap<>();
+        Map<Long, Map<String, Double>> resultMap = new HashMap<>();
 
         for (WaitingLog log : waitingLogs) {
-            int restaurantSeq = log.getRestaurantSeq();
+            Long restaurantSeq = log.getRestaurantSeq();
             LocalDateTime registDate = log.getWaitingStatusRegistDate();
             long waitingTime = log.getWaitingLogTime();
 
@@ -72,7 +76,7 @@ public class WaitingLogService {
         }
 
 
-        for (Map.Entry<Integer, Map<String, Double>> entry : resultMap.entrySet()) {
+        for (Map.Entry<Long, Map<String, Double>> entry : resultMap.entrySet()) {
             String key = "averageWaitingTime:" + entry.getKey();
 
             // 기존 키가 있는 경우 삭제
@@ -121,7 +125,7 @@ public class WaitingLogService {
     // 시간별 순위가 오름에 따라 오르는 비율
     // 일주일, 이주일 전 데이터 사용
     // 대기시간 / 순위 의 비율을 구한 뒤 전체 순위에 또 평균값을 내서 구함
-    public Map<Integer, Map<String, Double>> getAverageWaitingTimePerRank() {
+    public Map<Long, Map<String, Double>> getAverageWaitingTimePerRank() {
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusWeeks(1);
         LocalDate twoWeeksAgo = today.minusWeeks(2);
@@ -130,10 +134,10 @@ public class WaitingLogService {
                 LocalDateTime.of(twoWeeksAgo, LocalTime.MIN),
                 LocalDateTime.of(oneWeekAgo, LocalTime.MAX));
 
-        Map<Integer, Map<String, Double>> resultMap = new HashMap<>();
+        Map<Long, Map<String, Double>> resultMap = new HashMap<>();
 
         for (WaitingLog log : waitingLogs) {
-            int restaurantSeq = log.getRestaurantSeq();
+            Long restaurantSeq = log.getRestaurantSeq();
             LocalDateTime registDate = log.getWaitingStatusRegistDate();
             long waitingTime = log.getWaitingLogTime();
             int waitingLogRank = log.getWaitingLogRank();
@@ -152,7 +156,7 @@ public class WaitingLogService {
 
         }
 
-        for (Map.Entry<Integer, Map<String, Double>> entry : resultMap.entrySet()) {
+        for (Map.Entry<Long, Map<String, Double>> entry : resultMap.entrySet()) {
             String key = "averageWaitingRatioTime:" + entry.getKey();
 
             // 기존 키가 있는 경우 삭제
@@ -165,6 +169,7 @@ public class WaitingLogService {
         }
 
 
+        // 조회 함수
         Map<String, Double> dummy = getAverageWaitingTimeByRestaurantSeq(125);
         System.out.println(dummy.toString());
         for (String one : dummy.keySet()) {
