@@ -11,6 +11,8 @@ import 'package:simollu_front/widgets/custom_marker.dart';
 
 class MapViewModel extends GetxController {
   int polylineId = 0;
+  RxString dong = "내 위치 찾기".obs;
+  Rx<LocationPermission> locationPermission = LocationPermission.denied.obs;
   RxList<Place> placeList = <Place>[].obs;
   RxList<Place> searchPlaceList = <Place>[].obs;
   RxList<Polyline> polylineList = <Polyline>[].obs;
@@ -31,6 +33,25 @@ class MapViewModel extends GetxController {
       <Place, List<PathSegment>>{}.obs;
 
   RxSet<Marker> markers = <Marker>{}.obs;
+
+  Future<void> getDong() async {
+    String newDong = await KakaoMapAPI().getCurrentLocationAddress(LatLng(
+        currentPosition.value!.latitude, currentPosition.value!.longitude));
+
+    dong.value = newDong;
+  }
+
+  Future<void> getLocationPermission() async {
+    locationPermission.value = await Geolocator.requestPermission();
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) async {
+      currentPosition.value = position;
+    });
+    if (locationPermission.value != LocationPermission.denied &&
+        locationPermission.value != LocationPermission.deniedForever) {
+      getDong();
+    }
+  }
 
   Future<void> addMarker() async {
     Marker destinationMarker = await CustomMarker(

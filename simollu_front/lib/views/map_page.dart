@@ -90,11 +90,16 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
+    if (mapViewModel.locationPermission.value == LocationPermission.denied ||
+        mapViewModel.locationPermission.value ==
+            LocationPermission.deniedForever) {
       // return Future.error('위치 권한 거부');
-      return;
+      await mapViewModel.getLocationPermission();
+      if (mapViewModel.locationPermission.value == LocationPermission.denied ||
+          mapViewModel.locationPermission.value ==
+              LocationPermission.deniedForever) {
+        return;
+      }
     }
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
