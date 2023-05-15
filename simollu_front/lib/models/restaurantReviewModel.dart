@@ -1,20 +1,24 @@
 
 class RestaurantReviewModel {
-  int? reviewSeq;
-  String? userSeq;
-  int? restaurantSeq;
-  bool? reviewRating;
-  String? reviewContent;
-  String? reviewRegistDate;
+  late int reviewSeq;
+  late String userSeq;
+  late int restaurantSeq;
+  late bool reviewRating;
+  late String reviewContent;
+  late String reviewRegistDate;
+  late String userImg;
+  late String userNickname;
 
-  RestaurantReviewModel(
-      {
-        this.reviewSeq,
-        this.userSeq,
-        this.restaurantSeq,
-        this.reviewRating,
-        this.reviewContent,
-        this.reviewRegistDate});
+  RestaurantReviewModel({
+        required this.reviewSeq,
+        required this.userSeq,
+        required this.restaurantSeq,
+        required this.reviewRating,
+        required this.reviewContent,
+        required this.reviewRegistDate,
+        required this.userImg,
+        required this.userNickname,
+      });
 
   RestaurantReviewModel.fromJson(Map<String, dynamic> json) {
     reviewSeq = json['reviewSeq'];
@@ -23,6 +27,8 @@ class RestaurantReviewModel {
     reviewRating = json['reviewRating'];
     reviewContent = json['reviewContent'];
     reviewRegistDate = json['reviewRegistDate'];
+    userImg = json[userImg];
+    userNickname = json[userNickname];
   }
 
   Map<String, dynamic> toJson() {

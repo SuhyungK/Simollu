@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
@@ -29,7 +30,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
   ];
-  late List<Map<String, dynamic>> reviewList = [];
+  late List<RestaurantReviewModel> reviewList = [];
   bool _isLike = false;
 
   @override
@@ -41,9 +42,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
 
   Future<void> fetchReviewData() async {
     RestaurantViewModel restaurantViewModel = RestaurantViewModel();
-    List<Map<String, dynamic>> result = await restaurantViewModel.fetchReview(2);
+    List<RestaurantReviewModel> result = await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
-    reviewList.sort((a, b) => (b['reviewRating'] ? 1 : 0) - (a['reviewRating'] ? 1 : 0));
+
     print(result);
     setState(() {
       reviewList = result;
