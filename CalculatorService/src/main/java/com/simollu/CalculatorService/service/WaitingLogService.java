@@ -8,6 +8,7 @@ import com.simollu.CalculatorService.dto.GetEstimatedWaitingTimeDto;
 import com.simollu.CalculatorService.entity.WaitingLog;
 import com.simollu.CalculatorService.repository.WaitingLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -70,11 +71,6 @@ public class WaitingLogService {
             resultMap.get(restaurantSeq).compute(timeSlot, (k, v) -> v == null ? (double) waitingTime : Math.round((v + waitingTime) / 2.0));
         }
 
-        // 결과 Redis 저장
-        //for (Map.Entry<Integer, Map<String, Double>> entry : resultMap.entrySet()) {
-        //    String key = "averageWaitingTime:" + entry.getKey();
-        //    redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(entry.getValue()));
-        //}
 
         for (Map.Entry<Integer, Map<String, Double>> entry : resultMap.entrySet()) {
             String key = "averageWaitingTime:" + entry.getKey();
@@ -84,11 +80,40 @@ public class WaitingLogService {
                 redisTemplate.delete(key);
             }
 
-            redisTemplate.opsForHash().putAll(key, entry.getValue());
+
+            HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
+            Map<Object, Object> map = new HashMap<>();
+
+            // 시간과 값을 가져와서 Redis에 저장
+            for (Map.Entry<String, Double> timeEntry : entry.getValue().entrySet()) {
+                String time = timeEntry.getKey();
+                Double value = timeEntry.getValue();
+                hashOps.put(key, time, value.toString());
+            }
+
+
+
+            // redisTemplate.opsForHash().putAll(key, entry.getValue());
+        }
+
+        Map<Object, Object> averageWaitingTime = getAverageWaitingTime(125);
+        for(Object data : averageWaitingTime.keySet()) {
+            System.out.println(data + " " + averageWaitingTime.get(data).toString());
         }
 
         return resultMap;
     }
+
+
+    // 식당 예상 대기 시간
+    public Map<Object, Object> getAverageWaitingTime(Integer restaurantSeq) {
+        String key = "averageWaitingTime:" + restaurantSeq;
+        HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
+        return hashOps.entries(key);
+    }
+
+
+
 
 
 
@@ -140,11 +165,11 @@ public class WaitingLogService {
         }
 
 
-//        Map<String, Double> dummy = getAverageWaitingTimeByRestaurantSeq(125);
-//        System.out.println(dummy.toString());
-//        for (String one : dummy.keySet()) {
-//            System.out.println(dummy.get(one));
-//        }
+        Map<String, Double> dummy = getAverageWaitingTimeByRestaurantSeq(125);
+        System.out.println(dummy.toString());
+        for (String one : dummy.keySet()) {
+            System.out.println(dummy.get(one));
+        }
 
         return resultMap;
     }
