@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/address_model.dart';
 
 import 'package:simollu_front/models/place.dart';
 
@@ -16,9 +17,11 @@ class KakaoMapAPI {
       'Authorization': dotenv.env['kakaoMapApiKey']!,
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      AddressModel address = AddressModel.fromJSON(
+          json.decode(response.body)['documents'][0]['address']);
+      return (address.region3DepthName);
     }
-    return "";
+    return "내 위치 찾기";
   }
 
   Future<List<Place>> getPlaces(LatLng dest, String keyword) async {
