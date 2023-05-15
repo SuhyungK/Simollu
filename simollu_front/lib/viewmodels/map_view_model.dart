@@ -9,58 +9,30 @@ import 'package:simollu_front/services/kakao_map_api.dart';
 import 'package:simollu_front/services/t_map_api.dart';
 import 'package:simollu_front/widgets/custom_marker.dart';
 
-enum LoadingStatus { completed, loading, empty }
-
 class MapViewModel extends GetxController {
-  LoadingStatus loadingStatus = LoadingStatus.empty;
-  LoadingStatus placeLoadingStatus = LoadingStatus.empty;
-
-  RxList<PathSegment> paths = <PathSegment>[].obs;
+  int polylineId = 0;
   RxList<Place> placeList = <Place>[].obs;
   RxList<Place> searchPlaceList = <Place>[].obs;
   RxList<Polyline> polylineList = <Polyline>[].obs;
-  RxMap<Place, List<Polyline>> polylineMap = {
-    Place(
-      address: "",
-      lat: 0,
-      lng: 0,
-      id: "default",
-      name: "default",
-    ): <Polyline>[],
-  }.obs;
+  RxMap<Place, List<Polyline>> polylineMap = <Place, List<Polyline>>{}.obs;
 
-  Rx<Position?> currentPosition = null.obs;
+  Rx<Position?> currentPosition = Rx<Position?>(null);
 
-  Rx<LatLng> start = Rx<LatLng>(LatLng(37.5013068, 127.0396597));
+  Rx<LatLng> start = LatLng(37.5013068, 127.0396597).obs;
   Rx<LatLng> destination = LatLng(37.5047984, 127.0434318).obs;
   Rx<LatLng> center = LatLng(37.5013068, 127.0396597).obs;
   RxMap<String, List<String>> routes = {
     "default": <String>[],
   }.obs;
 
-  RxMap<Place, List<PathSegment>> pathMap = {
-    Place(
-      address: "",
-      lat: 0,
-      lng: 0,
-      id: "default",
-      name: "default",
-    ): <PathSegment>[],
-  }.obs;
+  RxMap<Place, List<PathSegment>> pathMap = <Place, List<PathSegment>>{}.obs;
 
-  RxMap<Place, List<PathSegment>> searchPathMap = {
-    Place(
-      address: "",
-      lat: 0,
-      lng: 0,
-      id: "default",
-      name: "default",
-    ): <PathSegment>[],
-  }.obs;
+  RxMap<Place, List<PathSegment>> searchPathMap =
+      <Place, List<PathSegment>>{}.obs;
 
   RxSet<Marker> markers = <Marker>{}.obs;
 
-  void addMarker() async {
+  Future<void> addMarker() async {
     Marker destinationMarker = await CustomMarker(
             markerId: "destination",
             latLng: destination.value,
@@ -68,34 +40,69 @@ class MapViewModel extends GetxController {
         .getMarker();
 
     markers.add(destinationMarker);
-    final Position? position = currentPosition.value;
+    // final Position? position = currentPosition.value;
 
-    Marker start = await CustomMarker(
-            markerId: "start", latLng: _start, type: MarkerType.start)
+    Marker startMarker = await CustomMarker(
+            markerId: "start", latLng: start.value, type: MarkerType.start)
         .getMarker();
 
-    _markers.add(start);
+    markers.add(startMarker);
   }
 
-  Future<List<PathSegment>> findPaths(
-      LatLng start, LatLng end, String passList) async {
-    paths = await TMapAPI().findPaths(start, end, passList);
-    loadingStatus = LoadingStatus.loading;
-    notifyListeners();
+  Future<void> findPaths(Place place, String passList) async {
+    List<PathSegment> pathList =
+        await TMapAPI().findPaths(start.value, destination.value, passList);
 
-    loadingStatus =
-        paths.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
-    return paths;
+    pathMap[place] = pathList;
+
+    List<Polyline> polylineList = [];
+    for (PathSegment path in pathList) {
+      for (int i = 0; i < path.coordinates.length - 1; i++) {
+        polylineList.add(Polyline(
+          polylineId: PolylineId(polylineId.toString()),
+          points: [
+            LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+            LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0]),
+          ],
+          color: Colors.red,
+          width: 5,
+        ));
+        polylineId++;
+      }
+    }
+    polylineMap[place] = polylineList;
   }
 
-  Future<List<Place>> getPlaces(LatLng dest, String keyword) async {
-    places = await KakaoMapAPI().getPlaces(dest, keyword);
-    placeLoadingStatus = LoadingStatus.loading;
-    notifyListeners();
+  Future<void> searchPaths(Place place, String passList) async {
+    List<PathSegment> pathList =
+        await TMapAPI().findPaths(start.value, destination.value, passList);
 
-    placeLoadingStatus =
-        places.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
+    searchPathMap[place] = pathList;
 
-    return places;
+    List<Polyline> polylineList = [];
+    for (PathSegment path in pathList) {
+      for (int i = 0; i < path.coordinates.length - 1; i++) {
+        polylineList.add(Polyline(
+          polylineId: PolylineId(polylineId.toString()),
+          points: [
+            LatLng(path.coordinates[i][1], path.coordinates[i][0]),
+            LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0]),
+          ],
+          color: Colors.red,
+          width: 5,
+        ));
+        polylineId++;
+      }
+    }
+    polylineMap[place] = polylineList;
+  }
+
+  Future<void> getPlaces(String keyword) async {
+    placeList.value = await KakaoMapAPI().getPlaces(destination.value, keyword);
+  }
+
+  Future<void> searchPlaces(String keyword) async {
+    searchPlaceList.value =
+        await KakaoMapAPI().getPlaces(destination.value, keyword);
   }
 }
