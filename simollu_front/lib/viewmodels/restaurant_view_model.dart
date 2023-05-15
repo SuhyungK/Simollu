@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/restaurantModel.dart';
+import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class RestaurantViewModel {

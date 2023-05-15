@@ -4,6 +4,8 @@ import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/writable_review_widget.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
+import '../models/reviewModel.dart';
+
 List<String> myReviews = ['리뷰 1', '리뷰 2', '리뷰 3'];
 List<String> writableReviews = ['작성 가능 리뷰 1', '작성 가능 리뷰 2'];
 
