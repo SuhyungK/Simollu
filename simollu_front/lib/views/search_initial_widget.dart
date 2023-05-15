@@ -5,38 +5,27 @@ import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/views/recent_search_keyword_widget.dart';
 import 'package:simollu_front/views/search_hot_keyword_widget.dart';
 import 'package:simollu_front/views/search_recommendation_button.dart';
-import 'package:simollu_front/views/search_result_page.dart';
-
-import '../models/searchModel.dart';
 import '../models/search_hot_keyword_model.dart';
 
 class SearchInitialWidget extends StatefulWidget {
-  const SearchInitialWidget({Key? key}) : super(key: key);
+  final Function(String keyword) onPressedHotKeyword;
+
+  SearchInitialWidget({Key? key, required Function(String keyword) onPressedHotKeyword}) :
+        this.onPressedHotKeyword = onPressedHotKeyword,
+        super(key: key);
 
   @override
   State<SearchInitialWidget> createState() => _SearchInitialWidgetState();
 }
-const routeB = "/B";
+
 class _SearchInitialWidgetState extends State<SearchInitialWidget> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
   SearchApi searchApi = SearchApi();
   late List<SearchHotKeywordModel> keywordList = [];
-  late List<SearchModel> result = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
-    if (setting.name == routeB) {
-      return MaterialPageRoute<dynamic>(
-          builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
-    }
-    else {
-      throw Exception('Unknown route: ${setting.name}');
-    }
   }
 
   @override
@@ -92,33 +81,30 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                           children: [
                             SearchRecommendationButton(
                               text: '한식',
-                              onPressed: () async{
+                              onPressed: () {
                                 print('한식 클릭!!!!!!!!');
-                                // 검색 api 연결
-                                result = (await searchViewModel.getSearchResult("한식")).cast<SearchModel>();
-
-                                await searchViewModel.setSearchResult(result);
-
-                                // 검색 결과 페이지로 이동
-                                _navigatorKey.currentState?.pushNamed(routeB);
+                                widget.onPressedHotKeyword("한식");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '양식',
                               onPressed: () {
                                 print('양식 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("양식");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '일식',
                               onPressed: () {
-                                print('사진 클릭!!!!!!!!');
+                                print('일식 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("일식");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '브런치',
                               onPressed: () {
                                 print('브런치 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("브런치");
                               },
                             ),
                           ],
@@ -133,24 +119,28 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                               text: '패스트푸드',
                               onPressed: () {
                                 print('패스트푸드 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("패스트푸드");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '카페',
                               onPressed: () {
                                 print('카페 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("카페");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '베이커리',
                               onPressed: () {
                                 print('베이커리 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("베이커리");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '육류',
                               onPressed: () {
                                 print('육류 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("육류");
                               },
                             ),
                           ],
@@ -165,24 +155,28 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                               text: '피자',
                               onPressed: () {
                                 print('피자 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("피자");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '김밥',
                               onPressed: () {
                                 print('김밥 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("김밥");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '중식당',
                               onPressed: () {
                                 print('중식당 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("중식당");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '다이어트',
                               onPressed: () {
                                 print('다이어트 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("다이어트");
                               },
                             ),
                           ],
@@ -197,18 +191,21 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                               text: '돼지고기구이',
                               onPressed: () {
                                 print('돼지고기구이 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("돼지고기구이");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '분식',
                               onPressed: () {
                                 print('분식 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("분식");
                               },
                             ),
                             SearchRecommendationButton(
                               text: '베트남음식',
                               onPressed: () {
                                 print('베트남음식 클릭!!!!!!!!');
+                                widget.onPressedHotKeyword("베트남음식");
                               },
                             ),
                           ],

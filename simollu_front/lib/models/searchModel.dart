@@ -12,7 +12,7 @@ class SearchModel {
   late String restaurantImg;
   late double restaurantX;
   late double restaurantY;
-  late int distance;
+  late double distance;
   // "restaurantSeq": 7,
   // "restaurantName": "코애식당",
   // "restaurantRating": 0,

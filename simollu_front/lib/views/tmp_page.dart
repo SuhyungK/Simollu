@@ -79,7 +79,7 @@ class TmpPage extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  Get.to(RestaurantDetailpage());
+                  // Get.to(RestaurantDetailpage());
                 },
                 child: Text('가게 정보'),
               ),
