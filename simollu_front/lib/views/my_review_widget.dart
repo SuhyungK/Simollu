@@ -4,18 +4,77 @@ import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/views/review_management_star_button.dart';
 
 class MyReview extends StatelessWidget {
-  const MyReview({Key? key}) : super(key: key);
+  late Future<List<ReviewModel>> myReivews;
+  List<Map<dynamic, dynamic>> ratingText = [
+    {'text': '별로예요', Color: Colors.red},
+    {'text': '기다릴만해요', Color: Colors.amber},
+  ];
+
+  MyReview({
+    Key? key,
+    required this.myReivews,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
-        OutlinedButton(
-            onPressed: () {
-          },
-            child: Text('버튼'),
-        ),
+        FutureBuilder(
+            future: myReivews,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    ReviewModel review = snapshot.data![index];
+                    return Card(
+                      child: ListTile(
+                          minVerticalPadding: 10,
+                          title: Row(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                constraints: BoxConstraints(minHeight: 80),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      review.restaurantName as String,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(review.reviewContent),
+                                    SizedBox(height: 10),
+                                    _buildRating(review.reviewRating)
+                                  ],
+                                ),
+                              )
+                            ],
+                          )),
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
         Card(
           elevation: 2.0, //그림자 깊이
           child: Container(
@@ -69,34 +128,34 @@ class MyReview extends StatelessWidget {
                         width: 190,
                         margin: EdgeInsets.only(top: 6),
                         child: Text(
-                              '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나',
-                              maxLines: 8,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontFamily: 'Roboto',
-                                // fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.normal,
-                                letterSpacing: 0,
-                                wordSpacing: 0,
-                                height: 1.0,
-                                shadows: [],
-                                decoration: TextDecoration.none,
-                              ),
-                            softWrap: true,
-                            ),
+                          '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나',
+                          maxLines: 8,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            // fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0,
+                            wordSpacing: 0,
+                            height: 1.0,
+                            shadows: [],
+                            decoration: TextDecoration.none,
+                          ),
+                          softWrap: true,
+                        ),
                       ),
                       Container(
                           padding: EdgeInsets.only(top: 6),
                           // margin: EdgeInsets.only(top: 19),
                           child: ReviewStarBox(
                             text: '기다릴만해요',
-                          )
-                      ),
+                          )),
                     ],
                   ),
                 ),
-                Expanded( // 나머지 공간을 차지하기 위한 Expanded 위젯
+                Expanded(
+                  // 나머지 공간을 차지하기 위한 Expanded 위젯
                   child: Container(),
                 ),
                 Container(
@@ -122,6 +181,27 @@ class MyReview extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Container _buildRating(int reviewRating) {
+    var review = ratingText[reviewRating];
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: review[Color],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
+        child: Text(review['text'],
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
     );
   }
 }
