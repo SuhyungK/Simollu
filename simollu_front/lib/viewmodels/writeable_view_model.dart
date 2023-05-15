@@ -32,10 +32,13 @@ class WriteableViewModel {
     );
 
     if (response.statusCode == 200) {
-      print(jsonDecode(utf8.decode(response.bodyBytes)));
+      final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
+      result = (decodedList as List).map((item) =>
+        WriteableModel.fromJson(item)).toList();
     } else {
       throw Error();
     }
+    print(result);
     return result;
   }
 }
