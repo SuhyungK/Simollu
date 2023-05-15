@@ -12,6 +12,7 @@ import com.example.elasticsearch.repository.jpa.SearchJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.SearchElasticBasicRepository;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantListResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class SearchService {
     private final RedisTemplate redisTemplate;
 
     /*elk 검색*/
-    public List<RestaurantListResponse> findByContainsDescription(String description, String cx, String cy, Pageable pageable) {
+    public List<RestaurantListResponse> findByContainsDescription(String description, String lon, String lat, Pageable pageable) {
         // elk에서 목록을 가져옴
-        List<RestaurantDocument> restaurants = searchElasticAdvanceRepository.findByDescription(description, cx, cy, pageable);
+        List<RestaurantDocument> restaurants = searchElasticAdvanceRepository.findByDescription(description, lon, lat, pageable);
         List<RestaurantListResponse> restaurantResponses = new ArrayList<>();
         for (RestaurantDocument restaurant : restaurants) {
             RestaurantListResponse restaurantListResponse = RestaurantListResponse.builder()
@@ -44,7 +45,7 @@ public class SearchService {
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
                     .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
-                    .distance((int)calculateDistance(Double.parseDouble(cy),Double.parseDouble(cx),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
+                    .distance(calculateDistance(Double.parseDouble(lat),Double.parseDouble(lon),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
                     .build();
             restaurantResponses.add(restaurantListResponse);
         }
@@ -95,7 +96,12 @@ public class SearchService {
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(startLat)) * Math.cos(Math.toRadians(endLat)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distanceInKm = earthRadiusKm * c;
-        return distanceInKm;
+
+        // 반올림하여 소수점 둘째 자리까지 표시
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formattedDistance = df.format(distanceInKm);
+        double roundedDistance = Double.parseDouble(formattedDistance) +0.2;
+        return roundedDistance;
     }
 
     public List<SearchHistoryResponse> SearchHistory() {

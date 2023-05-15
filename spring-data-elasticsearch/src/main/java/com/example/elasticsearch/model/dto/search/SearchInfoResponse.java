@@ -17,4 +17,5 @@ public class SearchInfoResponse {
     private List<MenuInfoResponse> menuInfoList;
     private List<ReviewInfoResponse> reviewInfoList;
 
+
 }

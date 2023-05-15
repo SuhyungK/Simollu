@@ -37,7 +37,6 @@ public class ReviewServiceImpl implements ReviewService {
         System.out.println(reviewDto.isReviewRating());
 
         if(reviewDto.isReviewRating()){
-            System.out.println("여기야");
             Integer value = (Integer) redisTemplate.opsForHash().get("review", reviewDto.getRestaurantSeq() + "_true");
         redisTemplate.opsForHash().put("review", reviewDto.getRestaurantSeq() + "_true",value+1);
         }

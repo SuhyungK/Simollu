@@ -51,7 +51,7 @@ dependencies {
 
     // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4' // 사용하는 Jackson 버전에 맞춰 업데이트
 }
 

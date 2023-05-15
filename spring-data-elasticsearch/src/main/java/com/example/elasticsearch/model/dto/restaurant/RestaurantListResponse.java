@@ -15,5 +15,5 @@ public class RestaurantListResponse {
     private String restaurantImg;
     private String restaurantX;
     private String restaurantY;
-    private int distance;
+    private Double distance;
 }

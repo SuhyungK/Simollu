@@ -46,7 +46,7 @@ public class SearchElasticAdvanceRepository {
     private final RestHighLevelClient restHighLevelClient;
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public List<RestaurantDocument> findByDescription(String des, String cx, String cy, Pageable pageable) {
+    public List<RestaurantDocument> findByDescription(String des, String lon, String lat, Pageable pageable) {
         // ElasticsearchTemplate을 사용하여 검색 쿼리 생성
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.multiMatchQuery(des, "restaurantName", "restaurantCategory", "restaurantAddress"))

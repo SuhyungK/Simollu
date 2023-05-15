@@ -5,11 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 //@EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
 //        type = FilterType.ASSIGNABLE_TYPE,
 //        classes = MemberSearchRepository.class))
 @SpringBootApplication
+@EnableFeignClients
 public class ElasticsearchApplication {
 
 
