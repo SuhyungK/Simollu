@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/services/search_api.dart';
+import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/views/recent_search_keyword_widget.dart';
 import 'package:simollu_front/views/search_hot_keyword_widget.dart';
 import 'package:simollu_front/views/search_recommendation_button.dart';
+import 'package:simollu_front/views/search_result_page.dart';
+
+import '../models/searchModel.dart';
+import '../models/search_hot_keyword_model.dart';
 
 class SearchInitialWidget extends StatefulWidget {
   const SearchInitialWidget({Key? key}) : super(key: key);
@@ -9,10 +16,33 @@ class SearchInitialWidget extends StatefulWidget {
   @override
   State<SearchInitialWidget> createState() => _SearchInitialWidgetState();
 }
-
+const routeB = "/B";
 class _SearchInitialWidgetState extends State<SearchInitialWidget> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  SearchApi searchApi = SearchApi();
+  late List<SearchHotKeywordModel> keywordList = [];
+  late List<SearchModel> result = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
+    if (setting.name == routeB) {
+      return MaterialPageRoute<dynamic>(
+          builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
+    }
+    else {
+      throw Exception('Unknown route: ${setting.name}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    SearchViewModel searchViewModel = Get.find();
+
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
@@ -62,8 +92,15 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                           children: [
                             SearchRecommendationButton(
                               text: '한식',
-                              onPressed: () {
+                              onPressed: () async{
                                 print('한식 클릭!!!!!!!!');
+                                // 검색 api 연결
+                                result = (await searchViewModel.getSearchResult("한식")).cast<SearchModel>();
+
+                                await searchViewModel.setSearchResult(result);
+
+                                // 검색 결과 페이지로 이동
+                                _navigatorKey.currentState?.pushNamed(routeB);
                               },
                             ),
                             SearchRecommendationButton(
@@ -202,9 +239,12 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                     // 실시간 검색어 : 1~5위, 6~10위
                     child: Row(
                       children: [
-                        SearchHotKeyword(),
-                        SearchHotKeyword()
-                      ],
+                        Obx(() => SearchHotKeyword(list:
+                        searchViewModel.hotKeywordList.value.isEmpty ? RxList():
+                        searchViewModel.hotKeywordList.value.sublist(0,5))),
+                        Obx(() => SearchHotKeyword(list:
+                        searchViewModel.hotKeywordList.value.isEmpty ? RxList():
+                        searchViewModel.hotKeywordList.value.sublist(5))),],
                     )
                 ),
               ],

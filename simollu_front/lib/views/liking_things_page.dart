@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:simollu_front/models/preferenceModel.dart';
 import 'package:simollu_front/root.dart';
-import 'package:simollu_front/viewmodels/PreferenceViewModel.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/views/liking_things_button.dart';
 
 class LikingThings extends StatefulWidget {

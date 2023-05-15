@@ -1,30 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/search_hot_keyword_model.dart';
 
 class SearchHotKeyword extends StatelessWidget {
+  final List<SearchHotKeywordModel> list;
+
+  SearchHotKeyword({required this.list});
+
   @override
   Widget build(BuildContext context) {
-    final keywordList = [
-      {
-        "order": 1,
-        "keyword": "런던베이글뮤지엄"
-      },
-      {
-        "order": 2,
-        "keyword": "바스버거"
-      },
-      {
-        "order": 3,
-        "keyword": "동래정"
-      },
-      {
-        "order": 4,
-        "keyword": "성심당"
-      },
-      {
-        "order": 5,
-        "keyword": "대우부대찌개"
-      },
-    ];
+
     final width = MediaQuery.of(context).size.width;
     final halfWidth = width / 2; // 가로 크기와 같은 비율의 높이 계산
 
@@ -48,13 +32,13 @@ class SearchHotKeyword extends StatelessWidget {
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
+              itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
                 return Row(
                   children: [
                     Container(
                       margin: EdgeInsets.only(bottom: 25),
-                      child: Text("${keywordList[index]["order"]}. ",
+                      child: Text(list[index].order.toString()+". ",
                         style: TextStyle(
                           color: Colors.black,
                           fontFamily: 'Roboto',
@@ -71,7 +55,7 @@ class SearchHotKeyword extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.only(bottom: 25),
-                      child: Text("${keywordList[index]["keyword"]}",
+                      child: Text(list[index].keyword,
                         style: TextStyle(
                           color: Colors.black,
                           fontFamily: 'Roboto',

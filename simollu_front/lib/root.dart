@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simollu_front/viewmodels/main_view_model.dart';
+import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 
 import 'package:simollu_front/views/main_page.dart';
@@ -32,8 +34,15 @@ class RootController extends GetxController {
     rootPageIndex(index);
     if (index == 0 && isMainPages[0].value) {
       UserViewModel userViewModel = Get.find();
+      MainViewModel mainViewModel = Get.find();
       userViewModel.getNickname();
-    } else if (index == 2 && isMainPages[2].value) {
+    }
+    else if(index == 1 && isMainPages[1].value) {
+      SearchViewModel searchViewModel = Get.find();
+      searchViewModel.getHotKeywordList();
+
+    }
+    else if (index == 2 && isMainPages[2].value) {
       UserViewModel userViewModel = Get.find();
       userViewModel.getNickname();
       print("teststset");

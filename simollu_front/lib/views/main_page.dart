@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:simollu_front/root.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simollu_front/services/main_api.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
@@ -53,6 +54,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   UserViewModel userViewModel = UserViewModel();
+  MainApi mainApi = MainApi();
 
   void getData() {
     UserViewModel userViewModel = Get.find();
@@ -150,6 +152,8 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     UserViewModel userViewModel = Get.find();
+    MainViewModel mainViewModel = Get.find();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

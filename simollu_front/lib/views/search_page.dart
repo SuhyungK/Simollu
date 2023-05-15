@@ -38,8 +38,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
+    bool canPop = _navigatorKey.currentState?.canPop() ?? false;
     setState(() {
-      _canPop = _navigatorKey.currentState?.canPop() ?? false;
+      _canPop = canPop;
     });
     return route.didPop(result);
   }
@@ -78,8 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                   color: Colors.black54,
                   onPressed: () {
                     _navigatorKey.currentState?.pop();
+                    bool temp = _navigatorKey.currentState?.canPop() ?? false;
                     setState(() {
-                      _canPop = false;
+                      _canPop = temp;
                     });
                   },
                 )
@@ -100,6 +102,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             child: TextField(
+              cursorColor: Colors.amber,
               focusNode: focusNode,
               autofocus: true,
               controller: _filter,
@@ -127,6 +130,9 @@ class _SearchPageState extends State<SearchPage> {
                 // 검색 결과 페이지로 이동
                 _navigatorKey.currentState?.pushNamed(routeB);
               },
+              onEditingComplete: () {
+
+                },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
                 suffixIcon: focusNode.hasFocus

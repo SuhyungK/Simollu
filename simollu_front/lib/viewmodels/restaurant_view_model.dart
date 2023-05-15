@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/restaurantModel.dart';
+import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class RestaurantViewModel {
@@ -16,7 +16,8 @@ class RestaurantViewModel {
   Future<List<Map<String, dynamic>>> fetchReview(int restaurantSeq) async {
     String token = await getToken();
     var url = createUrl('/restaurant/review/$restaurantSeq');
-    final response = await http.get(url,
+    final response = await http.get(
+      url,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "Authorization": token
@@ -24,11 +25,15 @@ class RestaurantViewModel {
     );
 
     final testjsonList = json.decode(response.body);
-    List<dynamic> reviewList = testjsonList.map((json) => RestaurantReviewModel.fromJson(json)).toList();
+    List<dynamic> reviewList = testjsonList
+        .map((json) => RestaurantReviewModel.fromJson(json))
+        .toList();
 
     final jsonList = jsonDecode(utf8.decode(response.bodyBytes));
     // final jsonList = jsonDecode(utf8.decode(response.bodyBytes));
-    List<Map<String, dynamic>> result = jsonList.map<Map<String, dynamic>>((review) => review as Map<String, dynamic>).toList();
+    List<Map<String, dynamic>> result = jsonList
+        .map<Map<String, dynamic>>((review) => review as Map<String, dynamic>)
+        .toList();
     return result;
   }
 
@@ -36,7 +41,8 @@ class RestaurantViewModel {
   Future<RestaurantReviewModel> fetchReviewDetail(int reviewSeq) async {
     String token = await getToken();
     var url = createUrl('/restaurant/review/detail/$reviewSeq');
-    final response = await http.get(url,
+    final response = await http.get(
+      url,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "Authorization": token
