@@ -1,5 +1,6 @@
 package com.example.elasticsearch.model.dto.review;
 
+import com.example.elasticsearch.model.entity.WriteableReview;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +25,13 @@ public class WriteableReviewDto {
     private String restaurantName; // 식당 이름
 
     private String restaurantImg; // 식당 이미지
+
+    public WriteableReview toEntity() {
+        return WriteableReview.builder()
+                .userSeq(userSeq)
+                .restaurantSeq(restaurantSeq)
+                .waitingCompleteDate(waitingCompleteDate)
+                .build();
+    }
 
 }

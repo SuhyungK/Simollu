@@ -3,7 +3,7 @@ package com.example.elasticsearch.controller;
 
 import com.example.elasticsearch.model.dto.review.ModifyReviewDto;
 import com.example.elasticsearch.model.dto.review.MyReviewDto;
-import com.example.elasticsearch.model.dto.review.ReviewDto;
+import com.example.elasticsearch.model.dto.review.RestaurantReviewDto;
 import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.example.elasticsearch.model.service.ReviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +25,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<?> writeReview(
             @RequestHeader("userSeq") String userSeq,
-            @RequestBody ReviewDto reviewDto) {
+            @RequestBody RestaurantReviewDto reviewDto) {
         return ResponseEntity.ok(reviewService.writeReview(userSeq, reviewDto));
     }
 
@@ -43,8 +43,8 @@ public class ReviewController {
     }
 
     /* 후기 수정 */
-    @PutMapping("detail/{reviewSeq}")
-    public ResponseEntity<?> modifyReview(@RequestBody ModifyReviewDto modifyReviewDto, @PathVariable Long reviewSeq) {
+    @PutMapping("detail")
+    public ResponseEntity<?> modifyReview(@RequestBody ModifyReviewDto modifyReviewDto) {
         return ResponseEntity.ok(reviewService.modifyReview(modifyReviewDto));
     }
 
