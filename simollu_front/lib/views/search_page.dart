@@ -27,7 +27,6 @@ class _SearchPageState extends State<SearchPage> {
   bool _canPop = false;
 
   late List<SearchModel> result = [];
-  late List<SearchModel> res = [];
 
   SearchViewModel searchViewModel = SearchViewModel();
 
@@ -41,9 +40,9 @@ class _SearchPageState extends State<SearchPage> {
 
   _onPressedHotKeyword(String keyword) async{
     // 검색 api 연결
-    res = (await searchViewModel.getSearchResult(keyword)).cast<SearchModel>();
+    result = (await searchViewModel.getSearchResult(keyword)).cast<SearchModel>();
 
-    await searchViewModel.setSearchResult(res);
+    await searchViewModel.setSearchResult(result);
 
     // 검색 결과 페이지로 이동
     _navigatorKey.currentState?.pushNamed(routeB);

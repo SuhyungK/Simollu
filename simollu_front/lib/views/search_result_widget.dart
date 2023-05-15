@@ -12,6 +12,7 @@ class SearchResultWidget extends StatefulWidget {
   final int restaurantSeq;
   final String name;
   final String imageUrl;
+  final double distance;
   final String waitingTime;
   final String queueSize;
   final int numberOfPeople;
@@ -22,6 +23,7 @@ class SearchResultWidget extends StatefulWidget {
     required this.restaurantSeq,
     required this.name,
     required this.imageUrl,
+    required this.distance,
     required this.waitingTime,
     required this.queueSize,
     required this.numberOfPeople,
@@ -177,7 +179,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("0.48km"),
+                                  Text(widget.distance.toString()+"km"),
                                 ],
                               ),
                               Expanded(child: Container()),
