@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/models/writeableModel.dart';
 import 'package:simollu_front/utils/token.dart';
 import 'package:http/http.dart' as http;
