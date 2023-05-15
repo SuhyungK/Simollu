@@ -5,6 +5,7 @@ import com.example.elasticsearch.model.dto.main.RestaurantMainInfoListResponse;
 import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.WaitingTimeResponse;
 import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.entity.Menu;
 import com.example.elasticsearch.model.entity.Restaurant;
@@ -16,7 +17,10 @@ import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepos
 import com.example.elasticsearch.repository.review.ReviewRepository;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -29,7 +33,7 @@ public class RestaurantService {
     private final RestaurantJpaRepository restaurantJpaRepository;
     private final MenuJpaRepository menuJpaRepository;
     private final RestaurantElasticBasicRepository restaurantElasticBasicRepository;
-    private final ReviewRepository reviewRepository;
+    private final RedisTemplate redisTemplate;
     private final SearchElasticAdvanceRepository searchElasticAdvanceRepository;
     private final AwsS3Repository awsS3Repository;
 
@@ -51,9 +55,25 @@ public class RestaurantService {
                 .restaurantInfo(getRestaurantInfo(restaurantSeq))
                 .menuInfoList(getMenuInfo(restaurantSeq))
 //                .reviewInfoList(getReviewInfo(restaurantSeq))
+                .waitingTimeList(getWaitingTimeList(restaurantSeq))
                 .build();
 
         return searchInfoResponse;
+    }
+
+    private List<WaitingTimeResponse> getWaitingTimeList(long restaurantSeq) {
+        String key = "averageWaitingTime:" + restaurantSeq;
+        HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
+        Map<Object, Object> s = hashOps.entries(key);
+        List<WaitingTimeResponse> response = new ArrayList<>();
+        for (Object data : s.keySet()) {
+            WaitingTimeResponse w = WaitingTimeResponse.builder()
+                    .timeZone((String) data)
+                    .expectedWaitingTime((String) s.get(data))
+                .build();
+            response.add(w);
+        }
+        return response;
     }
 
 

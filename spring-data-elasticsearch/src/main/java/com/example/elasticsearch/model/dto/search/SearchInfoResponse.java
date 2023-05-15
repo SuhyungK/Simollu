@@ -1,6 +1,7 @@
 package com.example.elasticsearch.model.dto.search;
 
 import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.WaitingTimeResponse;
 import com.example.elasticsearch.model.dto.review.ReviewInfoResponse;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
 import java.util.List;
@@ -16,6 +17,7 @@ public class SearchInfoResponse {
     private RestaurantInfoResponse restaurantInfo;
     private List<MenuInfoResponse> menuInfoList;
     private List<ReviewInfoResponse> reviewInfoList;
+    private List<WaitingTimeResponse> waitingTimeList;
 
 
 }
