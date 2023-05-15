@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.codehaus.jettison.json.JSONException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class SearchController {
     @GetMapping("/contains")
     @Transactional(readOnly = false)
     public ResponseEntity<Map<String, List>> findByContainsDescription(@RequestParam String description, String lon, String lat, Pageable pageable)
-            throws JSONException, IOException, InterruptedException {
+            throws  IOException, InterruptedException {
         // 단어 db 저장
         searchService.saveSearch(description);
         List<RestaurantListResponse> restaurantResponsesList = searchService.findByContainsDescription(description,lon, lat, pageable);

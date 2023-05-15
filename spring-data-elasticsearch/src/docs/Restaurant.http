@@ -6,7 +6,7 @@ POST http://localhost:8080/restaurantDocuments
 ###
 # 포함하는 것 찾기
 # GET http://localhost:8080/api/search/contains?description=동동쓰&cx=126.8828469&cy=37.48272445&size=10
-GET http://localhost:8080/search/contains?description=동래정&lat=37.5013068&lon=127.0396597&size=10
+GET http://localhost:8080/search/contains?description=김밥&lat=37.5013068&lon=127.0396597&size=10
 
 # 랭킹
 ###

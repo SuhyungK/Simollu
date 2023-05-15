@@ -12,6 +12,8 @@ import com.example.elasticsearch.repository.jpa.SearchJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.SearchElasticBasicRepository;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantListResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,10 +100,10 @@ public class SearchService {
         double distanceInKm = earthRadiusKm * c;
 
         // 반올림하여 소수점 둘째 자리까지 표시
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedDistance = df.format(distanceInKm);
-        double roundedDistance = Double.parseDouble(formattedDistance) +0.2;
-        return roundedDistance;
+        BigDecimal bd = new BigDecimal(distanceInKm).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal roundedDistance = bd.add(new BigDecimal(0.2)).setScale(2, RoundingMode.HALF_UP); // 덧셈도 BigDecimal을 사용하여 수행
+
+        return roundedDistance.doubleValue();
     }
 
     public List<SearchHistoryResponse> SearchHistory() {
