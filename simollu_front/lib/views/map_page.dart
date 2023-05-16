@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/path_segment.dart';
@@ -21,150 +22,55 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  // 지도 카메라 컨트롤
   final Completer<GoogleMapController> _controller = Completer();
-  bool _locationPermission = false;
-  late Position _currentPosition;
-  Set<Marker> _markers = {};
+
   late StreamSubscription<Position> positionStreamSubscription;
 
-  Map<Place, List<PathSegment>> pathMap = {};
-  Map<Place, List<PathSegment>> searchPathMap = {};
+  bool _locationPermission = false;
 
-  List<Place> placeList = [];
-  List<Place> searchPlaceList = [];
-  List<Polyline> _polylineList = [];
-  Map<Place, List<Polyline>> _polylineMap = {};
-  late Map<String, List<String>> routes;
-
-  late final LatLng _start;
-  final LatLng _center = const LatLng(37.5013068, 127.0396597);
-  final LatLng _arrive = const LatLng(37.5047984, 127.0434318);
-
-  void addMarker() async {
-    Marker destination = await CustomMarker(
-            markerId: "destination",
-            latLng: _arrive,
-            type: MarkerType.destination)
-        .getMarker();
-
-    _markers.add(destination);
-
-    _start = LatLng(_currentPosition.latitude, _currentPosition.longitude);
-    Marker start = await CustomMarker(
-            markerId: "start", latLng: _start, type: MarkerType.start)
-        .getMarker();
-
-    _markers.add(start);
-  }
+  late MapViewModel mapViewModel;
 
   @override
   void initState() {
     super.initState();
 
-    // _markers.add(Marker(
-    //   markerId: MarkerId("destination"),
-    //   position: _arrive,
-    // ));
+    mapViewModel = Get.find();
 
-    void _listening() async {
+    void listening() async {
       await _getCurrentLocation();
+
+      mapViewModel.start.value = LatLng(
+          mapViewModel.currentPosition.value!.latitude,
+          mapViewModel.currentPosition.value!.longitude);
       if (_locationPermission) {
-        addMarker();
+        await mapViewModel.addMarker();
         // 관심 검색하는 부분
-        List<Place> newPlaceList =
-            await Provider.of<MapViewModel>(context, listen: false)
-                .getPlaces(_arrive, "PC방");
 
-        Map<Place, List<PathSegment>> newPathMap = {};
-        Map<Place, List<Polyline>> newPolylineMap = {};
+        await mapViewModel.getPlaces("PC방");
 
-        int polylineId = 0;
-
-        if (newPlaceList.isNotEmpty) {
-          for (Place place in newPlaceList) {
-            List<PathSegment> pathList =
-                await Provider.of<MapViewModel>(context, listen: false)
-                    .findPaths(
-              LatLng(_currentPosition.latitude, _currentPosition.longitude),
-              _arrive,
-              place.lng.toString() + "," + place.lat.toString(),
-            );
-            newPathMap[place] = pathList;
-
-            List<Polyline> polylineList = [];
-            for (PathSegment path in pathList) {
-              for (int i = 0; i < path.coordinates.length - 1; i++) {
-                polylineList.add(Polyline(
-                  polylineId: PolylineId(polylineId.toString()),
-                  points: [
-                    LatLng(path.coordinates[i][1], path.coordinates[i][0]),
-                    LatLng(
-                        path.coordinates[i + 1][1], path.coordinates[i + 1][0])
-                  ], // 시작점과 끝점 좌표
-                  color: Colors.red, // 선 색상
-                  width: 5,
-                ));
-                polylineId++;
-              }
-            }
-            newPolylineMap[place] = polylineList;
+        if (mapViewModel.placeList.isNotEmpty) {
+          for (Place place in mapViewModel.placeList) {
+            await mapViewModel.findPaths(
+                place, place.lng.toString() + "," + place.lat.toString());
           }
         } else {
-          List<PathSegment> pathList =
-              await Provider.of<MapViewModel>(context, listen: false).findPaths(
-                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
-                  _arrive,
-                  "");
-
-          List<Polyline> polylineList = [];
-          for (PathSegment path in pathList) {
-            for (int i = 0; i < path.coordinates.length - 1; i++) {
-              polylineList.add(Polyline(
-                polylineId: PolylineId(polylineId.toString()),
-                points: [
-                  LatLng(path.coordinates[i][1], path.coordinates[i][0]),
-                  LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0])
-                ], // 시작점과 끝점 좌표
-                color: Colors.red, // 선 색상
-                width: 5,
-              ));
-              polylineId++;
-            }
-          }
-          Place place = Place(
-            address: "",
-            lat: 0,
-            lng: 0,
-            id: "",
-            name: "동래정",
-          );
-          newPolylineMap[place] = polylineList;
-          newPathMap[place] = pathList;
+          await mapViewModel.findPaths(
+              Place(
+                address: "",
+                lat: 0,
+                lng: 0,
+                id: "",
+                name: "동래정",
+              ),
+              "");
         }
-
-        setState(() {
-          _polylineMap = newPolylineMap;
-          placeList = newPlaceList;
-          pathMap = newPathMap;
-        });
-        _startListening();
       }
+      _startListening();
     }
 
-    _listening();
+    listening();
   }
-
-  // Future<void> _addMarkers() async {
-  //   destinationMarker = await CustomMarker(
-  //     markerId: "destination",
-  //     latLng: _arrive,
-  //     type: MarkerType.destination,
-  //   ).getMarker();
-
-  //   setState(() {
-  //     _markers.add(destinationMarker);
-  //   });
-  // }
 
   @override
   void dispose() {
@@ -184,25 +90,33 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
+    if (mapViewModel.locationPermission.value == LocationPermission.denied ||
+        mapViewModel.locationPermission.value ==
+            LocationPermission.deniedForever) {
       // return Future.error('위치 권한 거부');
-      return;
+      await mapViewModel.getLocationPermission();
+      if (mapViewModel.locationPermission.value == LocationPermission.denied ||
+          mapViewModel.locationPermission.value ==
+              LocationPermission.deniedForever) {
+        return;
+      }
     }
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
-      _currentPosition = position;
+      mapViewModel.currentPosition.value = position;
       Marker myLocation = await CustomMarker(
               markerId: "myLocation",
-              latLng:
-                  LatLng(_currentPosition.latitude, _currentPosition.longitude),
+              latLng: LatLng(mapViewModel.currentPosition.value!.latitude,
+                  mapViewModel.currentPosition.value!.longitude),
               type: MarkerType.myLocation)
           .getMarker();
-      setState(() {
-        _markers.add(myLocation);
-      });
+      mapViewModel.markers.add(myLocation);
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 19,
+      )));
     }).catchError((e) {
       print(e);
     });
@@ -213,19 +127,16 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onLocationChanged(Position position) async {
-    _currentPosition = position;
+    mapViewModel.currentPosition.value = position;
     Marker myLocation = await CustomMarker(
             markerId: "myLocation",
-            latLng:
-                LatLng(_currentPosition.latitude, _currentPosition.longitude),
+            latLng: LatLng(mapViewModel.currentPosition.value!.latitude,
+                mapViewModel.currentPosition.value!.longitude),
             type: MarkerType.myLocation)
         .getMarker();
-    setState(() {
-      _markers.remove(_markers
-          .firstWhere((marker) => marker.markerId == MarkerId('myLocation')));
-
-      _markers.add(myLocation);
-    });
+    mapViewModel.markers.remove(mapViewModel.markers
+        .firstWhere((marker) => marker.markerId == MarkerId('myLocation')));
+    mapViewModel.markers.add(myLocation);
 
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -238,83 +149,54 @@ class _MapPageState extends State<MapPage> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
-        target: LatLng((_currentPosition.latitude + _arrive.latitude) / 2,
-            (_currentPosition.longitude + _arrive.longitude) / 2),
+        target: LatLng(
+            (mapViewModel.start.value.latitude +
+                    mapViewModel.destination.value.latitude) /
+                2,
+            (mapViewModel.start.value.longitude +
+                    mapViewModel.destination.value.longitude) /
+                2),
         zoom: 16.0,
       ),
     ));
 
-    Marker? waypoint = _markers.firstWhere(
+    Marker? waypoint = mapViewModel.markers.firstWhere(
       (marker) => marker.markerId == MarkerId('waypoint'),
       orElse: () => Marker(
         markerId: MarkerId('default'),
       ),
     );
     if (waypoint.markerId != MarkerId('default')) {
-      _markers.remove(waypoint);
+      mapViewModel.markers.remove(waypoint);
     }
     waypoint = await CustomMarker(
             markerId: "waypoint",
             latLng: LatLng(key.lat, key.lng),
             type: MarkerType.waypoint)
         .getMarker();
-    _markers.add(waypoint);
+    mapViewModel.markers.add(waypoint);
 
-    setState(() {
-      _polylineList = _polylineMap[key]!;
-    });
+    mapViewModel.polylineList.value = mapViewModel.polylineMap[key]!;
   }
 
   void search(String keyword) async {
-    List<Place> newSearchPlaceList =
-        await Provider.of<MapViewModel>(context, listen: false)
-            .getPlaces(_arrive, keyword);
-    Map<Place, List<PathSegment>> newSearchPathMap = {};
-    Map<Place, List<Polyline>> newPolylineMap = _polylineMap;
+    await mapViewModel.searchPlaces(keyword);
 
-    int polylineId = 0;
-    for (Place place in newSearchPlaceList) {
-      List<PathSegment> pathList =
-          await Provider.of<MapViewModel>(context, listen: false).findPaths(
-        LatLng(_currentPosition.latitude, _currentPosition.longitude),
-        _arrive,
-        place.lng.toString() + "," + place.lat.toString(),
-      );
-      newSearchPathMap[place] = pathList;
-
-      List<Polyline> polylineList = [];
-
-      for (PathSegment path in pathList) {
-        for (int i = 0; i < path.coordinates.length - 1; i++) {
-          polylineList.add(Polyline(
-            polylineId: PolylineId(polylineId.toString()),
-            points: [
-              LatLng(path.coordinates[i][1], path.coordinates[i][0]),
-              LatLng(path.coordinates[i + 1][1], path.coordinates[i + 1][0])
-            ], // 시작점과 끝점 좌표
-            color: Colors.red, // 선 색상
-            width: 5,
-          ));
-          polylineId++;
-        }
-      }
-      newPolylineMap[place] = polylineList;
+    mapViewModel.searchPathMap.clear();
+    for (Place place in mapViewModel.searchPlaceList) {
+      await mapViewModel.searchPaths(
+          place, place.lng.toString() + "," + place.lat.toString());
     }
 
-    Marker waypoint = _markers.firstWhere(
+    Marker waypoint = mapViewModel.markers.firstWhere(
       (marker) => marker.markerId == MarkerId('waypoint'),
       orElse: () => Marker(markerId: MarkerId('default')),
     );
 
-    setState(() {
-      if (waypoint.markerId != MarkerId('default')) {
-        _markers.remove(waypoint);
-      }
-      _polylineList = [];
-      _polylineMap = newPolylineMap;
-      searchPlaceList = newSearchPlaceList;
-      searchPathMap = newSearchPathMap;
-    });
+    if (waypoint.markerId != MarkerId('default')) {
+      mapViewModel.markers.remove(waypoint);
+    }
+    mapViewModel.polylineList.value = [];
   }
 
   @override
@@ -387,18 +269,20 @@ class _MapPageState extends State<MapPage> {
           Expanded(
             child: Stack(
               children: [
-                GoogleMap(
-                  polylines: Set<Polyline>.of(_polylineList),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 19.0,
+                Obx(
+                  () => GoogleMap(
+                    polylines: Set<Polyline>.of(mapViewModel.polylineList),
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: mapViewModel.center.value,
+                      zoom: 19.0,
+                    ),
+                    zoomControlsEnabled: false,
+                    markers: mapViewModel.markers,
+                    mapType: MapType.terrain,
                   ),
-                  zoomControlsEnabled: false,
-                  markers: _markers,
-                  mapType: MapType.terrain,
                 ),
                 Positioned(
                   bottom: 20,
@@ -413,8 +297,11 @@ class _MapPageState extends State<MapPage> {
                             controller
                                 .animateCamera(CameraUpdate.newCameraPosition(
                               CameraPosition(
-                                target: LatLng(_currentPosition.latitude,
-                                    _currentPosition.longitude),
+                                target: LatLng(
+                                    mapViewModel
+                                        .currentPosition.value!.latitude,
+                                    mapViewModel
+                                        .currentPosition.value!.longitude),
                                 zoom: 19.0,
                               ),
                             ));
@@ -432,11 +319,9 @@ class _MapPageState extends State<MapPage> {
               tabs: ['추천 경로', '검색'],
               tabViews: [
                 PathRecommended(
-                  routes: pathMap,
                   event: onClickPath,
                 ),
                 PathSearchResult(
-                  routes: searchPathMap,
                   clickEvent: onClickPath,
                   search: search,
                 ),
