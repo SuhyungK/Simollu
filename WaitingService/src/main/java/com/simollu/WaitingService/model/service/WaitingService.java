@@ -1,9 +1,6 @@
 package com.simollu.WaitingService.model.service;
 
-import com.simollu.WaitingService.model.dto.WaitingDetailDto;
-import com.simollu.WaitingService.model.dto.WaitingDto;
-import com.simollu.WaitingService.model.dto.WaitingHistoryDto;
-import com.simollu.WaitingService.model.dto.WaitingStatusDto;
+import com.simollu.WaitingService.model.dto.*;
 
 import java.util.List;
 
@@ -36,5 +33,16 @@ public interface WaitingService {
 
     /* 웨이팅 내역 조회 (취소/완료) */
     List<WaitingHistoryDto> getWaitingHistory(String userSeq, int waitingStatusContent);
+
+
+
+    /* 식당 리스트를 받으면 식당 별 대기팀과 웨이팅 시간 반환  */
+    RestaurantWaitingStatusResponseDto getRestaurantWaitingStatus(RestaurantWaitingStatusRequestDto requestDto);
+
+    /* 식당 리스트를 받으면 식당 별 웨이팅 시간 반환 */
+    RestaurantWaitingTimeResponseDto getRestaurantWaitingTime(RestaurantWaitingStatusRequestDto requestDto);
+
+
+
 
 }//WaitingService

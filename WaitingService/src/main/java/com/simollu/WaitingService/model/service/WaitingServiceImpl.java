@@ -1,10 +1,7 @@
 package com.simollu.WaitingService.model.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.simollu.WaitingService.model.dto.WaitingDetailDto;
-import com.simollu.WaitingService.model.dto.WaitingDto;
-import com.simollu.WaitingService.model.dto.WaitingHistoryDto;
-import com.simollu.WaitingService.model.dto.WaitingStatusDto;
+import com.simollu.WaitingService.model.dto.*;
 import com.simollu.WaitingService.model.entity.Waiting;
 import com.simollu.WaitingService.repository.WaitingRepository;
 import com.simollu.WaitingService.repository.WaitingStatusRepository;
@@ -16,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -29,6 +28,7 @@ public class WaitingServiceImpl implements WaitingService {
     private final WaitingStatusRepository waitingStatusRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisService redisService;
+    private final RedisCacheService redisCacheService; // 추가
 
     private static final String RESTAURANT_KEY = "restaurant_no:";
     private static final int STATUS_WAITING = 0; // 웨이팅
@@ -133,19 +133,25 @@ public class WaitingServiceImpl implements WaitingService {
     /* 사용자의 웨이팅 예상시간 조회 */
     @Override
     public Integer getWaitingTime(Integer restaurantSeq, Integer waitingSeq) {
-        int time = 30; // 통계 기반 예상시간
-        int cnt = getCurrentWaitingRank(restaurantSeq, waitingSeq);
 
-        return cnt * time;
+        // LocalTime inputTime = LocalTime.now();
+        LocalTime inputTime = LocalTime.of(18, 25);
+        Double ratioValue = redisCacheService.getAverageWaitingTime(restaurantSeq, inputTime); // 시간별 예상 대기 시간
+        int cnt = getCurrentWaitingRank(restaurantSeq, waitingSeq); // 현재 내 순서
+
+        return  Integer.valueOf((int) (cnt * ratioValue));
     }
 
     /* 식당의 웨이팅 예상시간 조회 */
     @Override
     public Integer getWaitingTime(Integer restaurantSeq) {
-        int time = 30; // 통계 기반 예상시간
+
+        // LocalTime inputTime = LocalTime.now();
+        LocalTime inputTime = LocalTime.of(18, 25);
+        Double ratioValue = redisCacheService.getAverageWaitingTime(restaurantSeq, inputTime); // 시간별 예상 대기 시간
         int cnt = redisService.getWaitingCnt(restaurantSeq);
 
-        return cnt * time;
+        return (int)(cnt * ratioValue);
     }
 
     /* 대기 순서 구하기 */
@@ -161,6 +167,8 @@ public class WaitingServiceImpl implements WaitingService {
 
         return waitingList;
     }
+
+
 
     /* 웨이팅 상태 변경 (취소, 완료) */
     @Override
@@ -229,6 +237,86 @@ public class WaitingServiceImpl implements WaitingService {
         dto.setWaitingCurRank(getCurrentWaitingRank(dto.getRestaurantSeq(), waitingSeq));
 
         return dto;
+    }
+
+
+
+
+
+    // ----------------------------------------------------------------------------------------------------
+
+
+
+    // 식당 리스트를 받으면 식당 별 대기팀과 웨이팅 시간을 반환
+    // restaurnatSeq 는 Long 인데 Redis에서 검색하는 것은 int 이다.
+    // 민정이와 함께 테스트 해보자
+    @Override
+    public RestaurantWaitingStatusResponseDto getRestaurantWaitingStatus(RestaurantWaitingStatusRequestDto requestDto) {
+
+        List<Long> restaurantList = requestDto.getRestaurantList();
+        LocalTime inputTime = LocalTime.now();
+        // LocalTime inputTime = LocalTime.of(18, 25);
+
+        HashMap<Long, List<Integer>> waitingTimeAndTeamMap = new HashMap<>();
+        List<Integer> waitingTimeAndTeam = null;
+        for (Long restaurantSeq : restaurantList) {
+            int restaurantSeqInt = restaurantSeq.intValue(); // Long -> int
+            Integer waitingCnt = redisService.getWaitingCnt(restaurantSeqInt);// 현재 대기 팀 수
+            Double ratioValue = redisCacheService.getAverageWaitingTime(restaurantSeqInt, inputTime); // 시간별 예상 대기 시간
+
+            int waitingTime = 0;
+            if(waitingCnt == null || ratioValue == null) {
+                waitingTime = 0;
+                waitingCnt = 0;
+            }
+            else {
+                waitingTime = (int)(waitingCnt * ratioValue); // 예상 대기 시간
+            }
+
+
+
+            waitingTimeAndTeam = new ArrayList<>();
+            waitingTimeAndTeam.add(waitingTime);
+            waitingTimeAndTeam.add(waitingCnt);
+
+            waitingTimeAndTeamMap.put(restaurantSeq, waitingTimeAndTeam);
+        }
+
+        return RestaurantWaitingStatusResponseDto.builder()
+                .waitingTimeAndTeam(waitingTimeAndTeamMap)
+                .build();
+    }
+
+
+    /* 식당 리스트를 받으면 식당 별 웨이팅 시간 반환 */
+    // 내일 민정이와 함께 테스트
+    @Override
+    public RestaurantWaitingTimeResponseDto getRestaurantWaitingTime(RestaurantWaitingStatusRequestDto requestDto) {
+
+        List<Long> restaurantList = requestDto.getRestaurantList();
+        LocalTime inputTime = LocalTime.now();
+
+        HashMap<Long, Integer> waitingTimeMap = new HashMap<>();
+
+        for (Long restaurantSeq : restaurantList) {
+            int restaurantSeqInt = restaurantSeq.intValue(); // Long -> int
+            Integer waitingCnt = redisService.getWaitingCnt(restaurantSeqInt);// 현재 대기 팀 수
+            Double ratioValue = redisCacheService.getAverageWaitingTime(restaurantSeqInt, inputTime); // 시간별 예상 대기 시간
+
+            int waitingTime = 0;
+            if(waitingCnt == null || ratioValue == null) {
+                waitingTime = 0;
+            }
+            else {
+                waitingTime = (int)(waitingCnt * ratioValue); // 예상 대기 시간
+            }
+            waitingTimeMap.put(restaurantSeq, waitingTime);
+        }
+
+
+        return RestaurantWaitingTimeResponseDto.builder()
+                .waitingTimeMap(waitingTimeMap)
+                .build();
     }
 
 

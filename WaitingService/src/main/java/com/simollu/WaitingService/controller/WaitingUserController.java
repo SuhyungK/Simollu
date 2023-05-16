@@ -1,9 +1,6 @@
 package com.simollu.WaitingService.controller;
 
-import com.simollu.WaitingService.model.dto.WaitingDetailDto;
-import com.simollu.WaitingService.model.dto.WaitingDto;
-import com.simollu.WaitingService.model.dto.WaitingHistoryDto;
-import com.simollu.WaitingService.model.dto.WaitingStatusDto;
+import com.simollu.WaitingService.model.dto.*;
 import com.simollu.WaitingService.model.service.WaitingService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -42,6 +41,7 @@ public class WaitingUserController {
     public ResponseEntity<?> updateStatusCancel(@RequestBody WaitingStatusDto waitingStatusDto){
         WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
         waitingDto.setWaitingStatusContent(STATUS_CANCEL);
+        waitingStatusDto.setWaitingStatusContent(STATUS_CANCEL);
 
         if(waitingService.updateStatus(waitingStatusDto, waitingDto)){
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -52,11 +52,13 @@ public class WaitingUserController {
 
     /*
      * 웨이팅 완료
+     * 동언 - waitinglog에 insert 처야함
      * */
     @PostMapping("/complete")
     public ResponseEntity<?> updateStatusComplete(@RequestBody WaitingStatusDto waitingStatusDto){
         WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
         waitingDto.setWaitingStatusContent(STATUS_COMPLETE);
+        waitingStatusDto.setWaitingStatusContent(STATUS_COMPLETE);
 
         if(waitingService.updateStatus(waitingStatusDto, waitingDto)){
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -108,9 +110,36 @@ public class WaitingUserController {
     @GetMapping("status/{waitingStatusContent}")
     public ResponseEntity<?> getWaitingHistory(
             @RequestHeader("userSeq") String userSeq, @PathVariable("waitingStatusContent")int waitingStatusContent) {
-
-        return ResponseEntity.ok(waitingService.getWaitingHistory(userSeq, waitingStatusContent));
+        List<WaitingHistoryDto> waitingHistory = waitingService.getWaitingHistory(userSeq, waitingStatusContent);
+        if (waitingHistory == null) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.ok(waitingHistory);
     }
+
+
+
+
+    /* 식당 리스트 웨이팅 상태 조회(예상 대기 시간, 대기 팀 수 ) */
+    @PostMapping("restaurant-list-status")
+    public ResponseEntity<?> getRestaurantWaitingStatus(@RequestBody RestaurantWaitingStatusRequestDto requestDto)  {
+        RestaurantWaitingStatusResponseDto responseDto = waitingService.getRestaurantWaitingStatus(requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+    /* 식당 리스트 웨이팅 시간 조회 */
+    @PostMapping("restaurant-list-time")
+    public ResponseEntity<?> getRestaurantWaitingTime(@RequestBody RestaurantWaitingStatusRequestDto requestDto)  {
+        RestaurantWaitingTimeResponseDto responseDto = waitingService.getRestaurantWaitingTime(requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+
+
+
+
 
 
 }//WaitingUserController
