@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/root.dart';
@@ -19,8 +20,9 @@ class _MyPageEditState extends State<MyPageEdit> {
   UserViewModel userViewModel = Get.find();
 
   Future postNickname(String text) async {
-    bool status = await userViewModel.postNickname(text);
-    if (status) {
+    bool nicknameStatus = await userViewModel.postNickname(text);
+    bool profileImageStatus = await userViewModel.updateProfileImage();
+    if (nicknameStatus && profileImageStatus) {
       RootController.to.onWillPop();
     }
   }
@@ -34,6 +36,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   @override
   void dispose() {
     nameController.dispose();
+    userViewModel.updatedProfileImage.value = null;
     super.dispose();
   }
 
@@ -54,8 +57,13 @@ class _MyPageEditState extends State<MyPageEdit> {
                     Obx(
                       () => CircleAvatar(
                         radius: 50,
-                        backgroundImage:
-                            NetworkImage(userViewModel.image.value),
+                        backgroundImage: userViewModel.image.value == ""
+                            ? AssetImage("assets/logo.png")
+                            : (userViewModel.updatedProfileImage.value == null
+                                ? CachedNetworkImageProvider(
+                                    userViewModel.image.value) as ImageProvider
+                                : FileImage(
+                                    userViewModel.updatedProfileImage.value!)),
                       ),
                     ),
                     Positioned(
@@ -63,7 +71,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       right: 0,
                       child: InkWell(
                         onTap: () {
-                          print("프로필 사진 변경");
+                          userViewModel.onChangeProfileImage();
                         },
                         child: Icon(
                           Icons.camera_alt,
@@ -71,7 +79,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           size: 30,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

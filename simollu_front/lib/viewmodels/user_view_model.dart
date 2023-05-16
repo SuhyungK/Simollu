@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
 import 'package:simollu_front/models/forkModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
@@ -11,6 +14,8 @@ class UserViewModel extends GetxController {
   String token = ""; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
   RxString nickname = "".obs;
   RxString image = "".obs;
+  // Rx<File?> profileImage = Rx<File?>(null);
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
 
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
@@ -28,6 +33,7 @@ class UserViewModel extends GetxController {
       "Authorization": token
     }, uri);
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       newImage = jsonDecode(responseBody)['userProfileUrl'];
@@ -48,11 +54,8 @@ class UserViewModel extends GetxController {
     }, uri);
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      print(responseBody);
       newNickname = jsonDecode(responseBody)['userNicknameContent'];
 
-      // nickname = jsonDecode(response.body)['userNicknameContent'];
-      // print(nickname);
       nickname(newNickname);
     }
   }
@@ -102,6 +105,50 @@ class UserViewModel extends GetxController {
     }
 
     return fork;
+  }
+
+  // 프로필 이미지 변경
+  Future<void> onChangeProfileImage() async {
+    await initialize();
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      updatedProfileImage.value = File(pickedImage.path);
+    }
+  }
+
+  // [POST] User 프로필 이미지 변경
+  Future<bool> updateProfileImage() async {
+    Uri uri = baseUri.resolve("/api/user/user/profileImage");
+
+    if (updatedProfileImage.value == null) {
+      return true;
+    }
+
+    print(uri.toString());
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      "Authorization": token,
+    });
+
+    // 파일 첨부
+    request.files.add(
+      await http.MultipartFile.fromPath(
+          'file', updatedProfileImage.value!.path),
+    );
+
+    var response = await request.send();
+
+    print(response.statusCode.toString() + " asdfasdf");
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.encode(await response.stream.bytesToString());
+      print(responseBody);
+    }
+
+    return false;
   }
 
   // [GET] User 포크 내역 리스트 조회
