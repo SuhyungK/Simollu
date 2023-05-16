@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simollu_front/models/writeableModel.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
@@ -25,9 +26,11 @@ class WritableReview extends StatelessWidget {
                     itemBuilder: ((context, index) {
                       WriteableModel review = snapshot.data![index];
                       return Card(
-                        child: ListTile(
-                          title: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        elevation: 2.0, //그림자 깊이
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start, // 위젯 위쪽 정렬
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
@@ -46,39 +49,104 @@ class WritableReview extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              SizedBox(width: 20,),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review.restaurantName as String,
-                                    style: TextStyle(
+                              SizedBox(width: 10,),
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '동래정 선릉직영점',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Roboto',
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16
+                                        fontStyle: FontStyle.normal,
+                                        letterSpacing: 0,
+                                        wordSpacing: 0,
+                                        height: 1.0,
+                                        shadows: [],
+                                        decoration: TextDecoration.none,
+                                      ),
                                     ),
-                                  )
+
+                                    Container(
+                                      margin: EdgeInsets.only(top: 19),
+                                      child: Text(
+                                        '2023-04-12 (수) 19:14',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontFamily: 'Roboto',
+                                          // fontWeight: FontWeight.w600,
+                                          fontStyle: FontStyle.normal,
+                                          letterSpacing: 0,
+                                          wordSpacing: 0,
+                                          height: 1.0,
+                                          shadows: [],
+                                          decoration: TextDecoration.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded( // 나머지 공간을 차지하기 위한 Expanded 위젯
+                                child: Container(
+                                  // width: 20,
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Column(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            GetPageRoute(
+                                              curve: Curves.fastOutSlowIn,
+                                              page: () => WritingReviewPage(review: review)
+                                            ),
+                                          );
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          backgroundColor: Color(0xFFFFD200),
+                                          side: BorderSide(
+                                            color: Color(0xFFFFD200),
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        child: SizedBox(
+                                          child: Text(
+                                            '리뷰 쓰기',
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.normal,
+                                              letterSpacing: 0,
+                                              wordSpacing: 0,
+                                              height: 1.0,
+                                              shadows: [],
+                                              decoration: TextDecoration.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) =>
-                                        WritingReviewPage(
-                                          review: review
-                                        )
-                                      )
-                                    );
-                                  },
-                                  child: Text('리뷰 쓰기')
-                              )
-                            ],
-                          )
                         ),
                       );
                     }));
