@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/menuInfoModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/services/restaurant_detail_api.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
+
+import '../models/restaurantDetailModel.dart';
 
 class RestaurantDetailpage extends StatefulWidget {
   final int restaurantSeq;
@@ -20,24 +23,18 @@ class RestaurantDetailpage extends StatefulWidget {
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   late TabController? _tabController;
+  late RestaurantDetailModel result;
 
   getRestaurantDetailInfo() async {
     RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
 
-    await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
+    result = await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
+    print('가게 상세 정보 조회 api 연결 후 결과 :');
+    print(result.menuInfoList);
+    print(result.restaurantInfo);
+    print(result.waitingTimeList);
   }
 
-  final List<List<String>> _menuList = [
-    ['burger.jpg', '햄버거', '15,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-    ['potato.jpg', '감자튀김', '13,000'],
-  ];
   late List<RestaurantReviewModel> reviewList = [];
   bool _isLike = false;
 
@@ -68,17 +65,17 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
           length: 3,
           tabs: ['메뉴', '매장 정보', '리뷰'],
           tabViews: [
-            _menuDetail(_menuList),
+            _menuDetail(result.menuInfoList),
             _restaurantInfo(),
             RestaurantReviewPage(reviewList: reviewList)
           ],
           hasSliverAppBar: true,
-          flexibleImage: 'assets/Rectangle 42.png',
+          flexibleImage:result.restaurantInfo.restaurantImg,
           bottomWidget: Container(
             color: Colors.white,
             height: 140,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -93,23 +90,23 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Text(
-                              '바스버거',
+                              result.restaurantInfo.restaurantName,
                               style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 23,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(width: 5),
+                            SizedBox(width: 3),
                             Text(
-                              '양식',
+                              result.restaurantInfo.restaurantCategory,
                               style: TextStyle(
-                                  fontSize: 15, color: Colors.black54),
+                                  fontSize: 12, color: Colors.black54),
                             ),
                           ],
                         ),
                         SizedBox(height: 3),
                         Text(
-                          '서울특별시 강남구 역삼동 777',
+                          result.restaurantInfo.restaurantAddress,
                           style: TextStyle(color: Colors.black38),
                         ),
                         SizedBox(
@@ -235,7 +232,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   //   )
   // );
   // }
-  Widget _menuDetail(List<List<String>> menuList) {
+  Widget _menuDetail(List<MenuInfoModel> menuList) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -245,12 +242,24 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/${menu[0]}',
-                      width: 100,
+                    Image.network(
+                      menu.menuImage ??
+                          'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                      width: 80,
+                      // height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // 이미지 로딩 실패 시 대체 이미지 보여주기
+                        return Image.network(
+                          'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
                     Column(
-                      children: [Text(menu[1]), Text(menu[2])],
+                      children: [Text(menu.menuName), Text(menu.menuPrice)],
                     )
                   ],
                 ),

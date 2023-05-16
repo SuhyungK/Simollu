@@ -47,7 +47,7 @@ class _CustomTabBarState extends State<CustomTabBar>
                     automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Image.asset(
+                      background: Image.network(
                         widget.flexibleImage!,
                         fit: BoxFit.cover,
                       ),

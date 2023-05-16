@@ -13,8 +13,9 @@ class SearchResultWidget extends StatefulWidget {
   final String name;
   final String imageUrl;
   final double distance;
-  final String waitingTime;
-  final String queueSize;
+  final int waitingTime;
+  final int queueSize;
+  final int restaurantRating;
   final int numberOfPeople;
   final VoidCallback onWait;
 
@@ -26,6 +27,7 @@ class SearchResultWidget extends StatefulWidget {
     required this.distance,
     required this.waitingTime,
     required this.queueSize,
+    required this.restaurantRating,
     required this.numberOfPeople,
     required this.onWait,
   }) : super(key: key);
@@ -169,7 +171,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                 size: 19,
                               ),
                               Text(
-                                "기다릴만해요",
+                                "기다릴만해요 ${widget.restaurantRating}%",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.amber),
@@ -197,7 +199,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                     size: 21,
                                   ),
                                   Text(
-                                    '1시간 30분 웨이팅',
+                                    '${widget.waitingTime}분 웨이팅',
                                     maxLines: 2,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -254,7 +256,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                   size: 21,
                                 ),
                                 Text(
-                                  '현재 3팀 대기 중',
+                                  '현재 ${widget.queueSize}팀 대기 중',
                                   maxLines: 2,
                                   style: TextStyle(
                                     color: Colors.black,
