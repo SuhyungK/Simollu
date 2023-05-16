@@ -34,4 +34,9 @@ public class RestaurantController {
         return restaurantService.getRestaurantFavoriteInfo(restaurantFavoriteList);
     }
 
+    @GetMapping("/favorite/{restaurantSeq}")
+    public RestaurantFavoriteResponse  receiveRestaurant(@PathVariable("restaurantSeq") Long restaurantSeq) {
+        return restaurantService.getRestaurantFavorite(restaurantSeq);
+    }
+
 }

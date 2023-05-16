@@ -236,6 +236,26 @@ public class RestaurantService {
         return list;
     }
 
+
+
+    public RestaurantFavoriteResponse  getRestaurantFavorite(Long restaurantSeq) {
+
+
+            Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(restaurantSeq);
+            RestaurantFavoriteResponse restaurantFavoriteResponse = RestaurantFavoriteResponse.builder()
+                    .restaurantSeq(restaurant.getRestaurantSeq())
+                    .restaurantName(restaurant.getRestaurantName())
+                    .restaurantAddress(slicingAddress(restaurant.getRestaurantAddress()))
+                    .restaurantRating(restaurant.getRestaurantRating())
+                    .restaurantCategory(restaurant.getRestaurantCategory())
+                    .restaurantImg(restaurant.getRestaurantImg())
+                    .build();
+
+
+
+        return restaurantFavoriteResponse;
+    }
+
     private String slicingAddress(String restaurantAddress) {
         String[] parts = restaurantAddress.split(" "); // 공백을 기준으로 문자열을 여러 부분으로 나눕니다.
 
