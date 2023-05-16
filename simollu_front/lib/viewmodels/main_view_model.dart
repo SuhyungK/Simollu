@@ -22,6 +22,8 @@ enum Category {
 class MainViewModel extends GetxController {
   Rx<SortBy> sortBy = SortBy.NearBy.obs;
   Rx<Category> category = Category.Korean.obs;
+  RxList<RestaurantModel> recentlyHotList = <RestaurantModel>[].obs;
+  RxList<RestaurantModel> tryHereList = <RestaurantModel>[].obs;
   Rx<MainInfoModel> mainInfo = MainInfoModel(
     restaurantNearByList: [],
     restaurantHighRatingList: [],
@@ -38,13 +40,54 @@ class MainViewModel extends GetxController {
 
   void changeSortBy(SortBy newSortBy) {
     sortBy.value = newSortBy;
+    switch (newSortBy) {
+      case SortBy.NearBy:
+        tryHereList.value = mainInfo.value.restaurantNearByList;
+        break;
+      case SortBy.HighRaiting:
+        tryHereList.value = mainInfo.value.restaurantHighRatingList;
+        break;
+      case SortBy.LessWaiting:
+        tryHereList.value = mainInfo.value.restaurantLessWaitingList;
+        break;
+      default:
+        break;
+    }
   }
 
   void changeCategroy(Category newCategory) {
     category.value = newCategory;
+    switch (newCategory) {
+      case Category.Korean:
+        recentlyHotList.value = mainInfo.value.koreanFoodTopList;
+        break;
+      case Category.Western:
+        recentlyHotList.value = mainInfo.value.westernFoodTopList;
+        break;
+      case Category.Chinese:
+        recentlyHotList.value = mainInfo.value.chineseTopList;
+        break;
+      case Category.Japanese:
+        recentlyHotList.value = mainInfo.value.japaneseTopList;
+        break;
+      case Category.FastFood:
+        recentlyHotList.value = mainInfo.value.fastFoodTopList;
+        break;
+      case Category.Cafe:
+        recentlyHotList.value = mainInfo.value.cafeTopList;
+        break;
+      case Category.Bakery:
+        recentlyHotList.value = mainInfo.value.bakeryTopList;
+        break;
+      default:
+        break;
+    }
   }
 
   void getMainInfo() async {
     mainInfo.value = await MainApi().getRestaurantList();
+
+    recentlyHotList.value = mainInfo.value.koreanFoodTopList;
+    tryHereList.value = mainInfo.value.restaurantNearByList;
   }
 }

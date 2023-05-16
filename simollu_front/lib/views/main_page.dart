@@ -53,13 +53,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  UserViewModel userViewModel = UserViewModel();
-  MainApi mainApi = MainApi();
+  UserViewModel userViewModel = Get.find();
+  MainViewModel mainViewModel = Get.find();
 
   void getData() {
-    UserViewModel userViewModel = Get.find();
-    MainViewModel mainViewModel = Get.find();
-
     userViewModel.getNickname();
     mainViewModel.getMainInfo();
     // mainViewModel.getDong(location);
@@ -112,15 +109,15 @@ class _MainPageState extends State<MainPage> {
   List<Map<String, Object>> sortingOptions = [
     {
       "label": "가까운 순",
-      "state": false,
+      "state": SortBy.NearBy,
     },
     {
       "label": "별점높은 순",
-      "state": false,
+      "state": SortBy.HighRaiting,
     },
     {
       "label": "대기시간 적은 순",
-      "state": false,
+      "state": SortBy.LessWaiting,
     }
   ];
 
@@ -153,7 +150,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     UserViewModel userViewModel = Get.find();
-    MainViewModel mainViewModel = Get.find();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -449,28 +445,31 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               ...List.generate(
                                 3,
-                                (index) => ShadowButton(
-                                  event: () {
-                                    setState(() {
-                                      sortingOptions[index]["state"] =
-                                          !(sortingOptions[index]["state"]
-                                              as bool);
-                                    });
-                                  },
-                                  color: sortingOptions[index]["state"] as bool
-                                      ? 0xFFFFD200
-                                      : 0xFFAAAAAA,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    child: Text(
-                                      sortingOptions[index]["label"] as String,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                (index) => Obx(
+                                  () => ShadowButton(
+                                    event: () {
+                                      mainViewModel.changeSortBy(
+                                          sortingOptions[index]["state"]
+                                              as SortBy);
+                                    },
+                                    color: sortingOptions[index]["state"]
+                                                as SortBy ==
+                                            mainViewModel.sortBy.value
+                                        ? 0xFFFFD200
+                                        : 0xFFAAAAAA,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      child: Text(
+                                        sortingOptions[index]["label"]
+                                            as String,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -481,83 +480,92 @@ class _MainPageState extends State<MainPage> {
                           // 음식 리스트
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                ...List.generate(
-                                  restaurants.length,
-                                  (index) => Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        RootController.to.setRootPageTitles(
-                                            restaurants[index].name);
-                                        RootController.to.setIsMainPage(false);
-                                        Navigator.push(
-                                          context,
-                                          GetPageRoute(
-                                            curve: Curves.fastOutSlowIn,
-                                            page: () => RestaurantDetailpage(),
+                            child: Obx(
+                              () => Row(
+                                children: [
+                                  ...List.generate(
+                                    mainViewModel.tryHereList.length,
+                                    (index) => Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          RootController.to.setRootPageTitles(
+                                              mainViewModel.tryHereList[index]
+                                                  .restaurantName);
+                                          RootController.to
+                                              .setIsMainPage(false);
+                                          Navigator.push(
+                                            context,
+                                            GetPageRoute(
+                                              curve: Curves.fastOutSlowIn,
+                                              page: () =>
+                                                  RestaurantDetailpage(),
+                                            ),
+                                          );
+                                        },
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: double.infinity,
+                                                height: 120,
+                                                child: Image.network(
+                                                  mainViewModel
+                                                      .tryHereList[index]
+                                                      .restaurantImage,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              Text(
+                                                mainViewModel.tryHereList[index]
+                                                    .restaurantName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.timer_outlined,
+                                                    color: Color(0xFFFFD200),
+                                                  ),
+                                                  Text(
+                                                    "${mainViewModel.tryHereList[index].restaurantRating}%",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.grey
+                                                          .withOpacity(0.8),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.schedule,
+                                                    color: Colors.grey
+                                                        .withOpacity(0.8),
+                                                    size: 20,
+                                                  ),
+                                                  Text(
+                                                    "${mainViewModel.tryHereList[index].restaurantWaitingTime}m",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.grey
+                                                          .withOpacity(0.8),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        );
-                                      },
-                                      child: SizedBox(
-                                        width: 120,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: double.infinity,
-                                              child: Image.asset(
-                                                restaurants[index].imagePath,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Text(
-                                              restaurants[index].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.timer_outlined,
-                                                  color: Color(0xFFFFD200),
-                                                ),
-                                                Text(
-                                                  "${restaurants[index].likes}%",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.8),
-                                                  ),
-                                                ),
-                                                Icon(
-                                                  Icons.schedule,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.8),
-                                                  size: 20,
-                                                ),
-                                                Text(
-                                                  "${restaurants[index].watingMinutes}m",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.8),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],
