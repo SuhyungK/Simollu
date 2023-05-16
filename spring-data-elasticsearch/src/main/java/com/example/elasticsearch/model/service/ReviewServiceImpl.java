@@ -99,7 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 사용자 정보 리스트
         GetUserInfoListRequestDto requestDto = new GetUserInfoListRequestDto(userSeqList);
-        List<GetUserInfoListResponseDto> userInfoList = null;
+        List<GetUserInfoListResponseDto> userInfoList = new ArrayList<>();
         try {
             userInfoList = userServiceClient.getUserInfoList(requestDto);
 //            System.out.println("받아와 지니?");
@@ -107,7 +107,7 @@ public class ReviewServiceImpl implements ReviewService {
                 //System.out.println(key.getUserNicknameContent());
                 if(key.getUserNicknameContent() == null) key.setUserNicknameContent("닉네임");
                 if(key.getUserProfileUrl() == null) key.setEmptyProfileUrl();
-                userInfoList.add(key);
+
             }
 
         }catch (FeignException e) {
