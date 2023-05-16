@@ -8,6 +8,7 @@
 // "restaurantRating": 0
 
 class RestaurantInfoModel {
+
   late int restaurantSeq;
   late String restaurantName;
   late String restaurantCategory;
