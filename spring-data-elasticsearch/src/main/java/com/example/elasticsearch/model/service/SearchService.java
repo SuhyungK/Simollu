@@ -1,6 +1,7 @@
 package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
+import com.example.elasticsearch.client.UserServiceClient;
 import com.example.elasticsearch.client.WaitingClientService;
 import com.example.elasticsearch.model.document.RestaurantDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
@@ -40,6 +41,7 @@ public class SearchService {
 
     // feign client
     private final WaitingClientService waitingClientService;
+    private final UserServiceClient userServiceClient;
 
     /* 동언 테스트  */
     public WaitingOneResponseDto testOne() {
@@ -49,7 +51,7 @@ public class SearchService {
 
     /*elk 검색*/
     /* 동언 */
-    public List<RestaurantListResponse> findByContainsDescription(String description, String lon, String lat, Pageable pageable) {
+    public List<RestaurantListResponse> findByContainsDescription(String userSeq, String description, String lon, String lat, Pageable pageable) {
 
 
         // elk에서 목록을 가져옴
@@ -73,7 +75,7 @@ public class SearchService {
                     .restaurantWaitingTeam(restaurantWaitingStatus.getWaitingTeam())
                     .restaurantRating(restaurant.getRestaurantRating())
                     .distance(calculateDistance(Double.parseDouble(lat),Double.parseDouble(lon),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
-                    .restaurantLike(false)
+                    .restaurantLike(checkUserLike(userSeq, restaurant.getRestaurantSeq()))
                     .build();
             restaurantResponses.add(restaurantListResponse);
         }
@@ -145,5 +147,14 @@ public class SearchService {
         }
         return searchHistoryListResponse;
     }
+
+
+
+    // 회원과 식당에 관심 식당 등록 여부 파악
+    public boolean checkUserLike(String userSeq, Long restaurantSeq) {
+        return userServiceClient.checkUserRestaurant(userSeq,restaurantSeq);
+    }
+
+
 
 }

@@ -25,14 +25,25 @@ public class RestaurantController {
 
     // 레스토랑 상세검색
     @GetMapping("/{restaurantSeq}")
-    public ResponseEntity<SearchInfoResponse> getSearchInfo(@PathVariable("restaurantSeq") long restaurantSeq) throws IOException {
-        return ResponseEntity.ok(restaurantService.getSearchInfo(restaurantSeq));
+    public ResponseEntity<SearchInfoResponse> getSearchInfo(
+            @RequestHeader("userSeq") String userSeq,
+            @PathVariable("restaurantSeq") long restaurantSeq) throws IOException {
+        return ResponseEntity.ok(restaurantService.getSearchInfo(userSeq, restaurantSeq));
     }
 
 
     @GetMapping("/favorite/{restaurantSeq}")
-    public RestaurantFavoriteResponse  receiveRestaurant(@PathVariable("restaurantSeq") Long restaurantSeq) {
-        return restaurantService.getRestaurantFavorite(restaurantSeq);
+    public RestaurantFavoriteResponse receiveRestaurant(
+            @RequestHeader("userSeq") String userSeq,
+            @PathVariable("restaurantSeq") Long restaurantSeq) {
+        return restaurantService.getRestaurantFavorite(userSeq, restaurantSeq);
     }
 
+
+    @GetMapping("testUserLike/{restaurantSeq}")
+    public boolean testUserLike(
+            @RequestHeader("userSeq") String userSeq,
+            @PathVariable("restaurantSeq") Long restaurantSeq) {
+        return restaurantService.checkUserLike(userSeq, restaurantSeq);
+    }
 }

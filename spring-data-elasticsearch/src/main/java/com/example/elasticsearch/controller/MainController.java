@@ -19,8 +19,11 @@ public class MainController {
 
     // main 거리순 보내기
     @GetMapping("/{lat}/{lon}")
-    public ResponseEntity<RestaurantMainInfoListResponse> mainInfoList(@PathVariable("lat") Double lat, @PathVariable("lon") Double lon) throws IOException {
-        return ResponseEntity.ok(restaurantService.getMainInfo(lat,lon));
+    public ResponseEntity<RestaurantMainInfoListResponse> mainInfoList(
+            @RequestHeader("userSeq") String userSeq,
+            @PathVariable("lat") Double lat,
+            @PathVariable("lon") Double lon) throws IOException {
+        return ResponseEntity.ok(restaurantService.getMainInfo(userSeq,lat,lon));
     }
 
 

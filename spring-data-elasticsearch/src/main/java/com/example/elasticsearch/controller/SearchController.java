@@ -39,11 +39,13 @@ public class SearchController {
     /*검색기능*/
     @GetMapping("/contains")
     @Transactional(readOnly = false)
-    public ResponseEntity<Map<String, List>> findByContainsDescription(@RequestParam String description, String lon, String lat, Pageable pageable)
+    public ResponseEntity<Map<String, List>> findByContainsDescription(
+            @RequestHeader("userSeq") String userSeq,
+            @RequestParam String description, String lon, String lat, Pageable pageable)
             throws  IOException, InterruptedException {
         // 단어 db 저장
         searchService.saveSearch(description);
-        List<RestaurantListResponse> restaurantResponsesList = searchService.findByContainsDescription(description,lon, lat, pageable);
+        List<RestaurantListResponse> restaurantResponsesList = searchService.findByContainsDescription(userSeq, description,lon, lat, pageable);
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("result", restaurantResponsesList);
         return ResponseEntity.ok(resultMap);
