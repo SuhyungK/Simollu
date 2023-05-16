@@ -18,4 +18,5 @@ public class RestaurantListResponse {
     private int restaurantWaitingTime;
     private int restaurantWaitingTeam;
     private Double distance;
+    private boolean restaurantLike;
 }

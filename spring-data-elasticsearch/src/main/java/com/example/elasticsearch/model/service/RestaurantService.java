@@ -21,15 +21,14 @@ import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepos
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +42,7 @@ public class RestaurantService {
     private final AwsS3Repository awsS3Repository;
     @Qualifier("jsonRedisTemplate")
     private final RedisTemplate<String, Object> redisTemplate;
-
-
     private final WaitingClientService waitingClientService;
-
 
 
     // 시간 계산
@@ -57,8 +53,7 @@ public class RestaurantService {
 
     }
 
-
-
+    // MYSQL -> ELK
     @Transactional
     public void saveAllRestaurantDocuments() throws IOException {
         List<RestaurantDocument> restaurantDocumentList = new ArrayList<>();
@@ -70,20 +65,18 @@ public class RestaurantService {
         restaurantElasticBasicRepository.saveAll(restaurantDocumentList);
     }
 
-
-    public SearchInfoResponse getSearchInfo(long restaurantSeq) {
-
+    //레스토랑 상세검색
+    public SearchInfoResponse getSearchInfo(Long restaurantSeq) {
         SearchInfoResponse searchInfoResponse = SearchInfoResponse.builder()
                 .restaurantInfo(getRestaurantInfo(restaurantSeq))
                 .menuInfoList(getMenuInfo(restaurantSeq))
-//                .reviewInfoList(getReviewInfo(restaurantSeq))
                 .waitingTimeList(getWaitingTimeList(restaurantSeq))
                 .build();
-
         return searchInfoResponse;
     }
 
-    private List<WaitingTimeResponse> getWaitingTimeList(long restaurantSeq) {
+    // 레스토랑 상세검색 -> 대기 시간 리스트
+    private List<WaitingTimeResponse> getWaitingTimeList(Long restaurantSeq) {
         String key = "averageWaitingTime:" + restaurantSeq;
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         Map<Object, Object> s = hashOps.entries(key);
@@ -98,7 +91,7 @@ public class RestaurantService {
         return response;
     }
 
-
+    // 레스토랑 상세검색 -> 레스토랑 정보
     public RestaurantInfoResponse getRestaurantInfo(long restaurantSeq){
         Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(restaurantSeq);
         RestaurantInfoResponse restaurantInfoResponse = RestaurantInfoResponse.builder()
@@ -110,11 +103,12 @@ public class RestaurantService {
                 .restaurantBusinessHours(restaurant.getRestaurantBusinessHours())
                 .restaurantSeq(restaurant.getRestaurantSeq())
                 .restaurantPhoneNumber(restaurant.getRestaurantPhoneNumber())
+                .restaurantLike(false)
                 .build();
         return restaurantInfoResponse;
     }
 
-
+    // 레스토랑 상세검색 -> 레스토랑 메뉴 정보
     public List<MenuInfoResponse> getMenuInfo(long restaurantSeq){
         List<MenuInfoResponse> menuInfoResponseList = new ArrayList<>();
         List<Menu> menues = menuJpaRepository.findByRestaurantSeq(restaurantSeq);
@@ -130,9 +124,9 @@ public class RestaurantService {
         return menuInfoResponseList;
     }
 
+    // 메인 화면 정보
     @Transactional
     public RestaurantMainInfoListResponse getMainInfo(Double lat, Double lon) {
-
         RestaurantMainInfoListResponse restaurantMainInfoListResponse = RestaurantMainInfoListResponse.builder()
                 .restaurantNearByList(getRestaurantNearByList(lat,lon))
                 .restaurantHighRatingList(getRestaurantHighRatingList(lat,lon))
@@ -149,16 +143,48 @@ public class RestaurantService {
 
     }
 
+    public class RestaurantWaitingTime implements Comparable<RestaurantWaitingTime> {
+        private final Long restaurantSeq;
+        private final int waitingTime;
+
+        public RestaurantWaitingTime(Long restaurantSeq, int waitingTime) {
+            this.restaurantSeq = restaurantSeq;
+            this.waitingTime = waitingTime;
+        }
+
+        public Long getRestaurantSeq() {
+            return restaurantSeq;
+        }
+
+        public int getWaitingTime() {
+            return waitingTime;
+        }
+
+        @Override
+        public int compareTo(RestaurantWaitingTime other) {
+            // 내림차순 정렬
+            return Integer.compare(other.waitingTime, this.waitingTime);
+        }
+    }
+
     private List<RestaurantMainInfoResponse> getRestaurantLessWaitingList(Double lat, Double lon) {
         List<RestaurantDocument> restaurantDocument = searchElasticAdvanceRepository.findLessWaitingRestaurant(lat,lon);
-        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        List<RestaurantWaitingTime> restaurantWaitingTimes = new ArrayList<>();
         for(RestaurantDocument r : restaurantDocument){
+            restaurantWaitingTimes.add(new RestaurantWaitingTime(r.getRestaurantSeq(), getWaitingTime(r.getRestaurantSeq())));
+        }
+        Collections.sort(restaurantWaitingTimes);
+        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        for (RestaurantWaitingTime rwt : restaurantWaitingTimes) {
+            Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(rwt.restaurantSeq);
             RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
-                    .restaurantSeq(r.getRestaurantSeq())
-                    .restaurantName(r.getRestaurantName())
-                    .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
-                    .restaurantRating(r.getRestaurantRating())
-                    .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
+                    .restaurantSeq(restaurant.getRestaurantSeq())
+                    .restaurantName(restaurant.getRestaurantName())
+                    .restaurantImage(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
+                    .restaurantRating(restaurant.getRestaurantRating())
+                    .restaurantWaitingTime(getWaitingTime(restaurant.getRestaurantSeq()))
+                    .restaurantWaitingTime(rwt.waitingTime)
+                    .restaurantLike(false)
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
@@ -177,6 +203,7 @@ public class RestaurantService {
                     .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
                     .restaurantAddress(slicingAddress(r.getRestaurantAddress()))
                     .distance(calculateDistance(lat, lon, Double.parseDouble(r.getRestaurantY()), Double.parseDouble(r.getRestaurantX())))
+                    .restaurantLike(false)
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
@@ -193,14 +220,14 @@ public class RestaurantService {
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
                     .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
+                    .restaurantLike(false)
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
         return restaurantMainInfoList;
     }
 
-    // 메인 페이지에서 현재 위치기준 가까운 5가지 뽑아내는 로직
-    /* 동언 */
+
     private List<RestaurantMainInfoResponse> getRestaurantNearByList(Double lat, Double lon) {
         List<RestaurantDocument> restaurantDocument =  searchElasticAdvanceRepository.findNearestRestaurants(lat,lon);
         List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
@@ -211,6 +238,7 @@ public class RestaurantService {
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
                     .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
+                    .restaurantLike(false)
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
@@ -227,29 +255,8 @@ public class RestaurantService {
         return responseSeq;
     }
 
-    public List<RestaurantFavoriteResponse>  getRestaurantFavoriteInfo(List<Long> restaurantFavoriteList) {
-        List<RestaurantFavoriteResponse> list = new ArrayList<>();
-        for(Long r : restaurantFavoriteList){
-            Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(r);
-            RestaurantFavoriteResponse restaurantFavoriteResponse = RestaurantFavoriteResponse.builder()
-                    .restaurantSeq(restaurant.getRestaurantSeq())
-                    .restaurantName(restaurant.getRestaurantName())
-                    .restaurantAddress(slicingAddress(restaurant.getRestaurantAddress()))
-                    .restaurantRating(restaurant.getRestaurantRating())
-                    .restaurantCategory(restaurant.getRestaurantCategory())
-                    .restaurantImg(restaurant.getRestaurantImg())
-                    .build();
-            list.add(restaurantFavoriteResponse);
-
-        }
-        return list;
-    }
-
-
 
     public RestaurantFavoriteResponse  getRestaurantFavorite(Long restaurantSeq) {
-
-
             Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(restaurantSeq);
             RestaurantFavoriteResponse restaurantFavoriteResponse = RestaurantFavoriteResponse.builder()
                     .restaurantSeq(restaurant.getRestaurantSeq())
@@ -258,10 +265,8 @@ public class RestaurantService {
                     .restaurantRating(restaurant.getRestaurantRating())
                     .restaurantCategory(restaurant.getRestaurantCategory())
                     .restaurantImg(restaurant.getRestaurantImg())
+                    .restaurantLike(false)
                     .build();
-
-
-
         return restaurantFavoriteResponse;
     }
 
@@ -291,15 +296,5 @@ public class RestaurantService {
 
         return roundedDistance.doubleValue();
     }
-//    private List<ReviewInfoResponse> getReviewInfo(long restaurantSeq) {
-//        List<ReviewInfoResponse> reviewInfoResponseList = new ArrayList<>();
-//        List<Review> reviews = reviewRepository.findByRestaurantSeq(restaurantSeq);
-//        for(Review r : reviews){
-//            ReviewInfoResponse reviewInfoResponse = ReviewInfoResponse.builder()
-//
-//                    .build();
-//            reviewInfoResponseList.add(restaurantInfoResponse);
-//        }
-//        return reviewInfoResponseList;
-//    }
+
 }

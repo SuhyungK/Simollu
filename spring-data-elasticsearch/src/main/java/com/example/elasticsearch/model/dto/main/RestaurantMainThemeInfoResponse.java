@@ -13,4 +13,5 @@ public class RestaurantMainThemeInfoResponse {
     private int restaurantRating;
     private int restaurantWaitingTime;
     private String restaurantImage;
+    private boolean restaurantLike;
 }

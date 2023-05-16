@@ -13,4 +13,5 @@ public class RestaurantSaveRequest {
     private String restaurantX;
     private String restaurantY;
     private String restaurantImg;
+    private boolean restaurantLike;
 }

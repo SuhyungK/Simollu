@@ -16,7 +16,6 @@ import lombok.Getter;
 public class SearchInfoResponse {
     private RestaurantInfoResponse restaurantInfo;
     private List<MenuInfoResponse> menuInfoList;
-    private List<ReviewInfoResponse> reviewInfoList;
     private List<WaitingTimeResponse> waitingTimeList;
 
 

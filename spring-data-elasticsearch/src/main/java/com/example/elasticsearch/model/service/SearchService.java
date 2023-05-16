@@ -71,8 +71,9 @@ public class SearchService {
                     .restaurantName(restaurant.getRestaurantName())
                     .restaurantWaitingTime(time)
                     .restaurantWaitingTeam(restaurantWaitingStatus.getWaitingTeam())
-                    .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
+                    .restaurantRating(restaurant.getRestaurantRating())
                     .distance(calculateDistance(Double.parseDouble(lat),Double.parseDouble(lon),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
+                    .restaurantLike(false)
                     .build();
             restaurantResponses.add(restaurantListResponse);
         }
@@ -145,15 +146,4 @@ public class SearchService {
         return searchHistoryListResponse;
     }
 
-    public int calculateRating(Long restaurantSeq) {
-        Integer f = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_false");
-        Integer t = (Integer) redisTemplate.opsForHash().get("review", restaurantSeq+"_true");
-        int percentage = 0;
-        if (t != 0) {
-            System.out.println();
-            double ratio = (double) t / (t + f);
-            percentage = (int) (ratio * 100);
-        }
-        return percentage;
-    }
 }

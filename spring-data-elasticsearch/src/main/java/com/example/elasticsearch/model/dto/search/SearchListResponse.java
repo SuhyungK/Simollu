@@ -11,4 +11,5 @@ public class SearchListResponse {
     private String restaurantX;
     private String restaurantY;
     private String restaurantImg;
+    private boolean restaurantLike;
 }

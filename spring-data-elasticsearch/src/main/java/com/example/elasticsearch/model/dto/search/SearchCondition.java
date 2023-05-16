@@ -17,5 +17,6 @@ public class SearchCondition {
     private String restaurantX;
     private String restaurantY;
     private String restaurantImg;
+    private boolean restaurantLike;
 
 }

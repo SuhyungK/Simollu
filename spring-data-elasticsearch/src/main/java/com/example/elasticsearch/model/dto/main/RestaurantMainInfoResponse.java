@@ -11,5 +11,6 @@ public class RestaurantMainInfoResponse {
     private int restaurantRating;
     private int restaurantWaitingTime;
     private String restaurantImage;
+    private boolean restaurantLike;
 
 }

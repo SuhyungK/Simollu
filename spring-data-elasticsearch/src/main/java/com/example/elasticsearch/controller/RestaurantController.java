@@ -29,10 +29,6 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getSearchInfo(restaurantSeq));
     }
 
-    @PostMapping("/favoriteList")
-    public List<RestaurantFavoriteResponse>  receiveListOfPersons(@RequestBody List<Long> restaurantFavoriteList) {
-        return restaurantService.getRestaurantFavoriteInfo(restaurantFavoriteList);
-    }
 
     @GetMapping("/favorite/{restaurantSeq}")
     public RestaurantFavoriteResponse  receiveRestaurant(@PathVariable("restaurantSeq") Long restaurantSeq) {
