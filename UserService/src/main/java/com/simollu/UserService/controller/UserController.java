@@ -3,6 +3,8 @@ package com.simollu.UserService.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.simollu.UserService.dto.restaurant.RestaurantFavoriteResponse;
+import com.simollu.UserService.dto.userRestaurant.RegisterUserRestaurantRequestDto;
 import com.simollu.UserService.dto.userfirebasetoken.FirebaseTokenRequestDto;
 import com.simollu.UserService.aws.AwsS3Repository;
 import com.simollu.UserService.aws.AwsS3Service;
@@ -19,6 +21,7 @@ import com.simollu.UserService.dto.userprofile.UserProfileResponseDto;
 import com.simollu.UserService.dto.userstatus.RegisterUserStatusRequestDto;
 import com.simollu.UserService.dto.userstatus.RegisterUserStatusResponseDto;
 import com.simollu.UserService.dto.userstatus.UserStatusResponseDto;
+import com.simollu.UserService.entity.UserRestaurant;
 import com.simollu.UserService.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +49,10 @@ public class UserController {
     private final UserStatusService userStatusService;
     private final UserPreferenceService userPreferenceService;
     private final UserProfileService userProfileService;
+
+    private final UserRestaurantService userRestaurantService;
+
+
     private final AwsS3Service awsS3Service;
 
     private final RedisService redisService;
@@ -224,9 +231,40 @@ public class UserController {
     @GetMapping("firebase-token")
     public ResponseEntity<?> getUserFirebaseToken(@RequestHeader("userSeq") String userSeq) {
         String token = redisService.getFirebaseToken(userSeq);
-        if (token.equals("null")) return ResponseEntity.status(204).build();
+        if (token == null || token.equals("null")) return ResponseEntity.status(204).build();
 
         return ResponseEntity.ok(token);
+    }
+
+
+
+
+
+
+
+    // --------------------------------------------------
+
+    // 관심 식당 등록
+    @PostMapping("restaurant")
+    public ResponseEntity<?> registerUserRestaurant(
+            @RequestHeader("userSeq") String userSeq,
+            @RequestBody RegisterUserRestaurantRequestDto requestDto) {
+        String comment = userRestaurantService.registerUserRestaurant(userSeq, requestDto);
+        return ResponseEntity.ok(comment);
+    }
+
+    // 관심 식당 여부 확인
+    @GetMapping("restaurant/{restaurantSeq}")
+    public ResponseEntity<?> checkUserRestaurant(@RequestHeader("userSeq") String userSeq, @PathVariable Long restaurantSeq) {
+        boolean response = userRestaurantService.checkUserRestaurant(userSeq, restaurantSeq);
+        return ResponseEntity.ok(response);
+    }
+
+    // 관심 식당 전체 조회
+    @GetMapping("restaurant-list")
+    public ResponseEntity<?> getUserRestaurantList(@RequestHeader("userSeq") String userSeq) {
+        List<RestaurantFavoriteResponse> responseDto = userRestaurantService.getUserRestaurantList(userSeq);
+        return ResponseEntity.ok(responseDto);
     }
 
 
