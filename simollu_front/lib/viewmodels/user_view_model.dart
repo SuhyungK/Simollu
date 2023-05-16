@@ -7,12 +7,32 @@ import 'package:simollu_front/models/forkModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class UserViewModel extends GetxController {
-  Uri uri = Uri.parse('https://simollu.com/api/user/user/nickname');
+  Uri baseUri = Uri.parse('https://simollu.com');
   String token = ""; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
   RxString nickname = "".obs;
+  RxString image = "".obs;
 
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
+  }
+
+  // [GET] User 프로필 이미지 조회
+  Future<void> getProfileImage() async {
+    await initialize();
+
+    String newImage = "";
+
+    Uri uri = baseUri.resolve("/api/user/user/profile-image");
+    final response = await http.get(headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Authorization": token
+    }, uri);
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.decode(response.bodyBytes);
+      newImage = jsonDecode(responseBody)['userProfileUrl'];
+      image(newImage);
+    }
   }
 
   // [GET] User 닉네임 조회
@@ -21,13 +41,14 @@ class UserViewModel extends GetxController {
 
     String newNickname = "";
 
+    Uri uri = baseUri.resolve("/api/user/user/nickname");
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
     }, uri);
-
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
+      print(responseBody);
       newNickname = jsonDecode(responseBody)['userNicknameContent'];
 
       // nickname = jsonDecode(response.body)['userNicknameContent'];
@@ -39,6 +60,8 @@ class UserViewModel extends GetxController {
   // [POST] User 닉네임 수정
   Future<String> postNickname(String nickname) async {
     String res = "";
+
+    Uri uri = baseUri.resolve("/api/user/user/nickname");
 
     await initialize();
 
@@ -63,7 +86,7 @@ class UserViewModel extends GetxController {
 
   // [GET] User 포크 수 조회
   Future<int> getForkNumber() async {
-    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork");
+    Uri uri = baseUri.resolve("/api/user/user/fork");
 
     await initialize();
 
@@ -72,7 +95,7 @@ class UserViewModel extends GetxController {
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
-    }, uri2);
+    }, uri);
     print("---------@@@@@" + response.body);
 
     if (response.statusCode == 200) {
@@ -86,7 +109,7 @@ class UserViewModel extends GetxController {
 
   // [GET] User 포크 내역 리스트 조회
   Future<List<ForkModel>> getForkList() async {
-    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork-list");
+    Uri uri = baseUri.resolve("/api/user/user/fork-list");
 
     await initialize();
 
@@ -95,7 +118,7 @@ class UserViewModel extends GetxController {
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
-    }, uri2);
+    }, uri);
     print("---------@@@@@" + response.body);
 
     if (response.statusCode == 200) {

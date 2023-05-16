@@ -66,9 +66,12 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child:
                         // 프사
-                        CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/cat.jpg"),
+                        Obx(
+                      () => CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            NetworkImage(userViewModel.image.value),
+                      ),
                     ),
                   ),
                   Expanded(
