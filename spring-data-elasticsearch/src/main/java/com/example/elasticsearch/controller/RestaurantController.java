@@ -1,8 +1,10 @@
 package com.example.elasticsearch.controller;
 
+import com.example.elasticsearch.model.dto.restaurant.RestaurantFavoriteResponse;
 import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
 import com.example.elasticsearch.model.service.RestaurantService;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,14 @@ public class RestaurantController {
     }
 
     // 레스토랑 상세검색
-    @GetMapping("/restaurant/{restaurantSeq}")
+    @GetMapping("/{restaurantSeq}")
     public ResponseEntity<SearchInfoResponse> getSearchInfo(@PathVariable("restaurantSeq") long restaurantSeq) throws IOException {
         return ResponseEntity.ok(restaurantService.getSearchInfo(restaurantSeq));
     }
 
+    @PostMapping("/favoriteList")
+    public List<RestaurantFavoriteResponse>  receiveListOfPersons(@RequestBody List<Long> restaurantFavoriteList) {
+        return restaurantService.getRestaurantFavoriteInfo(restaurantFavoriteList);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.example.elasticsearch.model.service;
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoListResponse;
 import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
+import com.example.elasticsearch.model.dto.restaurant.RestaurantFavoriteResponse;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoResponse;
 import com.example.elasticsearch.model.dto.restaurant.WaitingTimeResponse;
@@ -14,12 +15,10 @@ import com.example.elasticsearch.repository.elkAdvance.SearchElasticAdvanceRepos
 import com.example.elasticsearch.repository.jpa.MenuJpaRepository;
 import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepository;
-import com.example.elasticsearch.repository.review.ReviewRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -189,6 +188,35 @@ public class RestaurantService {
         return responseSeq;
     }
 
+    public List<RestaurantFavoriteResponse>  getRestaurantFavoriteInfo(List<Long> restaurantFavoriteList) {
+        List<RestaurantFavoriteResponse> list = new ArrayList<>();
+        for(Long r : restaurantFavoriteList){
+            Restaurant restaurant = restaurantJpaRepository.findByRestaurantSeq(r);
+            RestaurantFavoriteResponse restaurantFavoriteResponse = RestaurantFavoriteResponse.builder()
+                    .restaurantSeq(restaurant.getRestaurantSeq())
+                    .restaurantName(restaurant.getRestaurantName())
+                    .restaurantAddress(slicingAddress(restaurant.getRestaurantAddress()))
+                    .restaurantRating(restaurant.getRestaurantRating())
+                    .restaurantCategory(restaurant.getRestaurantCategory())
+                    .restaurantImg(restaurant.getRestaurantImg())
+                    .build();
+            list.add(restaurantFavoriteResponse);
+
+        }
+        return list;
+    }
+
+    private String slicingAddress(String restaurantAddress) {
+        String[] parts = restaurantAddress.split(" "); // 공백을 기준으로 문자열을 여러 부분으로 나눕니다.
+
+        String slicedAddress = "";
+        for (int i = 0; i < parts.length; i++) {
+            if (i < 2) { // 첫 번째와 두 번째 부분만 결합합니다.
+                slicedAddress += parts[i] + " ";
+            }
+        }
+        return slicedAddress.trim();
+    }
 
 //    private List<ReviewInfoResponse> getReviewInfo(long restaurantSeq) {
 //        List<ReviewInfoResponse> reviewInfoResponseList = new ArrayList<>();

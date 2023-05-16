@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/main")
 public class MainController {
 
     private final RestaurantService restaurantService;
 
     // main 거리순 보내기
-    @GetMapping("/main/{lat}/{lon}")
+    @GetMapping("/{lat}/{lon}")
     public ResponseEntity<RestaurantMainInfoListResponse> mainInfoList(@PathVariable("lat") Double lat, @PathVariable("lon") Double lon) throws IOException {
         return ResponseEntity.ok(restaurantService.getMainInfo(lat,lon));
     }
