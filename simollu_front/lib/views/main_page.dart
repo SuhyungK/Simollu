@@ -76,34 +76,41 @@ class _MainPageState extends State<MainPage> {
   //   waitingCount: 15,
   //   waitingNumber: 2,
   // );
-  List<Map<String, String>> foodTypeIcons = [
+  List<Map<String, Object>> foodTypeIcons = [
     {
       "imagePath": "assets/icons/korean.png",
       "label": "한식",
+      "state": Category.Korean,
     },
     {
       "imagePath": "assets/icons/western.png",
       "label": "양식",
+      "state": Category.Western,
     },
     {
       "imagePath": "assets/icons/chinese.png",
       "label": "중식",
+      "state": Category.Chinese,
     },
     {
       "imagePath": "assets/icons/japanese.png",
       "label": "일식",
+      "state": Category.Japanese,
     },
     {
       "imagePath": "assets/icons/fastfood.png",
       "label": "패스트푸드",
+      "state": Category.FastFood,
     },
     {
       "imagePath": "assets/icons/cafe.png",
       "label": "카페",
+      "state": Category.Cafe,
     },
     {
       "imagePath": "assets/icons/bakery.png",
       "label": "베이커리",
+      "state": Category.Bakery,
     },
   ];
   List<Map<String, Object>> sortingOptions = [
@@ -615,7 +622,9 @@ class _MainPageState extends State<MainPage> {
                               ShadowButton(
                                 color: 0xFFFFD200,
                                 event: () {
-                                  print(foodTypeIcons[index]["label"]);
+                                  mainViewModel.changeCategroy(
+                                      foodTypeIcons[index]["state"]
+                                          as Category);
                                 },
                                 child: SizedBox(
                                   width: 64,
@@ -637,105 +646,113 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      ...List.generate(
-                        restaurants.length,
-                        (index) => GestureDetector(
-                          onTap: () {
-                            RootController.to
-                                .setRootPageTitles(restaurants[index].name);
-                            RootController.to.setIsMainPage(false);
-                            Navigator.push(
-                              context,
-                              GetPageRoute(
-                                curve: Curves.fastOutSlowIn,
-                                page: () => RestaurantDetailpage(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  width: 0.5,
+                  Obx(
+                    () => Column(
+                      children: [
+                        ...List.generate(
+                          mainViewModel.recentlyHotList.length,
+                          (index) => GestureDetector(
+                            onTap: () {
+                              RootController.to.setRootPageTitles(mainViewModel
+                                  .recentlyHotList[index].restaurantName);
+                              RootController.to.setIsMainPage(false);
+                              Navigator.push(
+                                context,
+                                GetPageRoute(
+                                  curve: Curves.fastOutSlowIn,
+                                  page: () => RestaurantDetailpage(),
                                 ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  child:
-                                      Image.asset(restaurants[index].imagePath),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          restaurants[index].name,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.timer_outlined,
-                                              color: Color(0xFFFFD200),
-                                            ),
-                                            Text(
-                                              "${restaurants[index].likes}%",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey
-                                                    .withOpacity(0.8),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Icon(
-                                              Icons.schedule,
-                                              color:
-                                                  Colors.grey.withOpacity(0.8),
-                                              size: 20,
-                                            ),
-                                            Text(
-                                              "${restaurants[index].watingMinutes}m",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey
-                                                    .withOpacity(0.8),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          "${restaurants[index].location} ${restaurants[index].distance}km",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 0.5,
+                                    color: Colors.grey.withOpacity(0.8),
                                   ),
                                 ),
-                              ],
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.network(
+                                      mainViewModel.recentlyHotList[index]
+                                          .restaurantImage,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            mainViewModel.recentlyHotList[index]
+                                                .restaurantName,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.timer_outlined,
+                                                color: Color(0xFFFFD200),
+                                              ),
+                                              Text(
+                                                "${mainViewModel.recentlyHotList[index].restaurantRating}%",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.8),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Icon(
+                                                Icons.schedule,
+                                                color: Colors.grey
+                                                    .withOpacity(0.8),
+                                                size: 20,
+                                              ),
+                                              Text(
+                                                "${mainViewModel.recentlyHotList[index].restaurantWaitingTime}m",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.8),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            "동네 거리km 오후에 수정",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
