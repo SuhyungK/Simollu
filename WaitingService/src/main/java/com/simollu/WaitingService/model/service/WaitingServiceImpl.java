@@ -319,5 +319,33 @@ public class WaitingServiceImpl implements WaitingService {
                 .build();
     }
 
+    /* 식당 seq 대기 시간 조회 */
+    public WaitingOneResponseDto getOneRestaurantWaitingStatus(Long restaurantSeq) {
+
+        int restaurantSeqInt = restaurantSeq.intValue();
+
+        // LocalTime inputTime = LocalTime.now();
+        LocalTime inputTime = LocalTime.of(18, 25);
+
+        Integer waitingCnt = redisService.getWaitingCnt(restaurantSeqInt);// 현재 대기 팀 수
+        Double ratioValue = redisCacheService.getAverageWaitingTime(restaurantSeqInt, inputTime); // 시간별 예상 대기 시간
+
+
+        int waitingTime = 0;
+        if(waitingCnt == null || ratioValue == null) {
+            waitingTime = 0;
+            waitingCnt = 0;
+        }
+        else {
+            waitingTime = (int)(waitingCnt * ratioValue); // 예상 대기 시간
+        }
+
+        return WaitingOneResponseDto.builder()
+                .waitingTeam(waitingCnt)
+                .waitingTime(waitingTime)
+                .build();
+
+    }
+
 
 }//WaitingService

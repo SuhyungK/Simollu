@@ -141,6 +141,15 @@ public class WaitingUserController {
 
 
 
+    // ---------------------------------------
+    /* 식당 seq 웨이팅 시간 조회 */
+    @GetMapping("restaurant-status/{restaurantSeq}")
+    public ResponseEntity<?> getRestaurantWaitingStatus(@PathVariable("restaurantSeq") Long restaurantSeq)  {
+        WaitingOneResponseDto responseDto = waitingService.getOneRestaurantWaitingStatus(restaurantSeq);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
 
 
 }//WaitingUserController

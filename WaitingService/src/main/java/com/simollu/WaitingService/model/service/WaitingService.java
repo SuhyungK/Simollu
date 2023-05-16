@@ -44,5 +44,6 @@ public interface WaitingService {
 
 
 
+    public WaitingOneResponseDto getOneRestaurantWaitingStatus(Long restaurantSeq);
 
 }//WaitingService
