@@ -1,10 +1,13 @@
 package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
+import com.example.elasticsearch.client.WaitingClientService;
 import com.example.elasticsearch.model.document.RestaurantDocument;
 import com.example.elasticsearch.model.document.SearchDocument2;
 import com.example.elasticsearch.model.dto.search.SearchHistoryResponse;
 import com.example.elasticsearch.model.dto.search.SearchRankResponse;
+import com.example.elasticsearch.model.dto.waiting.RestaurantWaitingStatusResponseDto;
+import com.example.elasticsearch.model.dto.waiting.WaitingOneResponseDto;
 import com.example.elasticsearch.model.entity.Search;
 import com.example.elasticsearch.model.document.SearchDocument;
 import com.example.elasticsearch.repository.elkAdvance.SearchElasticAdvanceRepository;
@@ -34,18 +37,48 @@ public class SearchService {
     private final AwsS3Repository awsS3Repository;
     private final RedisTemplate redisTemplate;
 
+
+    // feign client
+    private final WaitingClientService waitingClientService;
+
+    /* 동언 테스트  */
+    public WaitingOneResponseDto testOne() {
+        return waitingClientService.getRestaurantWaitingStatus(124l);
+    }
+
+
     /*elk 검색*/
+    /* 동언 */
     public List<RestaurantListResponse> findByContainsDescription(String description, String lon, String lat, Pageable pageable) {
+
+
         // elk에서 목록을 가져옴
         List<RestaurantDocument> restaurants = searchElasticAdvanceRepository.findByDescription(description, lon, lat, pageable);
+
+        // feign client 연결
         List<RestaurantListResponse> restaurantResponses = new ArrayList<>();
         for (RestaurantDocument restaurant : restaurants) {
+
+            WaitingOneResponseDto restaurantWaitingStatus = waitingClientService.getRestaurantWaitingStatus(restaurant.getRestaurantSeq());
+            int hour = restaurantWaitingStatus.getWaitingTime() / 60;
+            int minutes = restaurantWaitingStatus.getWaitingTime() % 60;
+
+            String estimatedTime = "";
+            if (hour == 0) {
+                estimatedTime = minutes + "분";
+            } else {
+                estimatedTime = hour + "시" + minutes + "분";
+            }
+
+
             RestaurantListResponse restaurantListResponse = RestaurantListResponse.builder()
                     .restaurantSeq(restaurant.getRestaurantSeq())
                     .restaurantX(restaurant.getRestaurantX())
                     .restaurantY(restaurant.getRestaurantY())
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
+                    .restaurantWaitingTime(estimatedTime)
+                    .restaurantWaitingTeam(restaurantWaitingStatus.getWaitingTeam())
                     .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
                     .distance(calculateDistance(Double.parseDouble(lat),Double.parseDouble(lon),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
                     .build();

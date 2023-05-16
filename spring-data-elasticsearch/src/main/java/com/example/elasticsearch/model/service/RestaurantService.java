@@ -1,6 +1,7 @@
 package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
+import com.example.elasticsearch.client.WaitingClientService;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoListResponse;
 import com.example.elasticsearch.model.dto.main.RestaurantMainThemeInfoResponse;
 import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
@@ -9,6 +10,7 @@ import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoResponse;
 import com.example.elasticsearch.model.dto.restaurant.WaitingTimeResponse;
 import com.example.elasticsearch.model.dto.search.SearchInfoResponse;
+import com.example.elasticsearch.model.dto.waiting.WaitingOneResponseDto;
 import com.example.elasticsearch.model.entity.Menu;
 import com.example.elasticsearch.model.entity.Restaurant;
 import com.example.elasticsearch.model.document.RestaurantDocument;
@@ -41,6 +43,28 @@ public class RestaurantService {
     private final AwsS3Repository awsS3Repository;
     @Qualifier("jsonRedisTemplate")
     private final RedisTemplate<String, Object> redisTemplate;
+
+
+    private final WaitingClientService waitingClientService;
+
+
+
+    // 시간 계산
+    public String getWaitingTime(Long restaurantSeq) {
+        WaitingOneResponseDto restaurantWaitingStatus = waitingClientService.getRestaurantWaitingStatus(restaurantSeq);
+        int hour = restaurantWaitingStatus.getWaitingTime() / 60;
+        int minutes = restaurantWaitingStatus.getWaitingTime() % 60;
+        String estimatedTime = "";
+        if (hour == 0) {
+            estimatedTime = minutes + "분";
+        }
+        else {
+            estimatedTime = hour + "시 " + minutes + "분";
+        }
+        return estimatedTime;
+    }
+
+
 
     @Transactional
     public void saveAllRestaurantDocuments() throws IOException {
@@ -141,7 +165,7 @@ public class RestaurantService {
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
-                    //.restaurantWaitingTime()
+                    .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
                     .restaurantAddress(slicingAddress(r.getRestaurantAddress()))
                     .distance(calculateDistance(lat, lon, Double.parseDouble(r.getRestaurantY()), Double.parseDouble(r.getRestaurantX())))
                     .build();
@@ -159,7 +183,7 @@ public class RestaurantService {
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
-                    //.restaurantWaitingTime()
+                    .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
@@ -167,6 +191,7 @@ public class RestaurantService {
     }
 
     // 메인 페이지에서 현재 위치기준 가까운 5가지 뽑아내는 로직
+    /* 동언 */
     private List<RestaurantMainInfoResponse> getRestaurantNearByList(Double lat, Double lon) {
         List<RestaurantDocument> restaurantDocument =  searchElasticAdvanceRepository.findNearestRestaurants(lat,lon);
         List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
@@ -176,7 +201,7 @@ public class RestaurantService {
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
-                    //.restaurantWaitingTime()
+                    .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }

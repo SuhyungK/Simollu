@@ -2,6 +2,8 @@ package com.example.elasticsearch.controller;
 
 import com.example.elasticsearch.model.dto.search.SearchHistoryResponse;
 import com.example.elasticsearch.model.dto.search.SearchRankResponse;
+import com.example.elasticsearch.model.dto.waiting.RestaurantWaitingStatusResponseDto;
+import com.example.elasticsearch.model.dto.waiting.WaitingOneResponseDto;
 import com.example.elasticsearch.model.service.SearchService;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantListResponse;
 import com.example.elasticsearch.utils.RedisUtil;
@@ -25,6 +27,14 @@ public class SearchController {
     private final SearchService searchService;
     private final RedisUtil redisUtil;
     private final RedisTemplate redisTemplate;
+
+
+    /* 동언 test */
+    @GetMapping("/testOne")
+    public ResponseEntity<?> testOne() throws  IOException, InterruptedException {
+        WaitingOneResponseDto responseDto = searchService.testOne();
+        return ResponseEntity.ok(responseDto);
+    }
 
     /*검색기능*/
     @GetMapping("/contains")
