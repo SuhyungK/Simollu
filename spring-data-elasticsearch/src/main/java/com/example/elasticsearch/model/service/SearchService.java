@@ -60,15 +60,7 @@ public class SearchService {
         for (RestaurantDocument restaurant : restaurants) {
 
             WaitingOneResponseDto restaurantWaitingStatus = waitingClientService.getRestaurantWaitingStatus(restaurant.getRestaurantSeq());
-            int hour = restaurantWaitingStatus.getWaitingTime() / 60;
-            int minutes = restaurantWaitingStatus.getWaitingTime() % 60;
-
-            String estimatedTime = "";
-            if (hour == 0) {
-                estimatedTime = minutes + "분";
-            } else {
-                estimatedTime = hour + "시" + minutes + "분";
-            }
+            int time = restaurantWaitingStatus.getWaitingTime();
 
 
             RestaurantListResponse restaurantListResponse = RestaurantListResponse.builder()
@@ -77,7 +69,7 @@ public class SearchService {
                     .restaurantY(restaurant.getRestaurantY())
                     .restaurantImg(awsS3Repository.getTemporaryUrl(restaurant.getRestaurantImg()))
                     .restaurantName(restaurant.getRestaurantName())
-                    .restaurantWaitingTime(estimatedTime)
+                    .restaurantWaitingTime(time)
                     .restaurantWaitingTeam(restaurantWaitingStatus.getWaitingTeam())
                     .restaurantRating(calculateRating(restaurant.getRestaurantSeq()))
                     .distance(calculateDistance(Double.parseDouble(lat),Double.parseDouble(lon),Double.parseDouble(restaurant.getRestaurantY()), Double.parseDouble(restaurant.getRestaurantX())))
