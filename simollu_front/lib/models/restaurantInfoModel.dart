@@ -13,9 +13,19 @@ class RestaurantInfoModel {
   late String restaurantCategory;
   late String restaurantBusinessHours;
   late String restaurantPhoneNumber;
-  late int restaurantRating;
+  late String restaurantAddress;
   late String restaurantImg;
-  late double restaurantX;
-  late double restaurantY;
-  late int distance;
-}
+  late int restaurantRating;
+
+
+  RestaurantInfoModel.fromJSON(Map<String, dynamic> json)
+      : restaurantSeq = json['restaurantSeq'],
+        restaurantName = json['restaurantName'] ?? '',
+        restaurantCategory = json['restaurantCategory'] ?? '',
+        restaurantBusinessHours = json['restaurantBusinessHours'] ?? '',
+        restaurantPhoneNumber = json['restaurantPhoneNumber'] ?? '',
+        restaurantAddress = json['restaurantAddress'] ?? '',
+        restaurantImg = json['restaurantImg'],
+        restaurantRating = json['restaurantRating'];
+  }
+

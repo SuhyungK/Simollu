@@ -1,21 +1,27 @@
 import 'dart:convert';
 
-import '../utils/token.dart';
-import 'package:simollu_front/models/waitingRecordModel.dart';
+import 'package:simollu_front/models/writeableModel.dart';
+import 'package:simollu_front/utils/token.dart';
 import 'package:http/http.dart' as http;
 
-class WaitingViewModel {
+class WriteableViewModel {
+  late int writeableSeq;
+  late String userSeq;
+  late int restaurantSeq;
+  late String waitingCompleteDate;
+  late String restaurantName;
+  late String restaurantImg;
 
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
   }
 
-  // 웨이팅 내역 조회(완료)
-  static Future<List<WaitingRecordModel>> fetchWaitingRecord(int waitingStatusContent) async {
-    List<WaitingRecordModel> result = [];
+  // 작성 가능 리뷰 목록 가져오기
+  static Future<List<WriteableModel>> fetchReviews() async {
+    List<WriteableModel> result = [];
     String token = await getToken();
-    var url = createUrl('/waiting/user/status/$waitingStatusContent');
+    var url = createUrl('/restaurant/review/writeable');
     final response = await http.get(
       url,
       headers: {
@@ -27,8 +33,7 @@ class WaitingViewModel {
     if (response.statusCode == 200) {
       final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
       result = (decodedList as List).map((item) =>
-        WaitingRecordModel.fromJson(item)
-      ).toList();
+        WriteableModel.fromJson(item)).toList();
     } else {
       throw Error();
     }

@@ -3,7 +3,7 @@ import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 
 class RestaurantReviewPage extends StatefulWidget {
-  final List<Map<String, dynamic>> reviewList;
+  final List<RestaurantReviewModel> reviewList;
 
   const RestaurantReviewPage({
     Key? key,
@@ -36,7 +36,7 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
             final review = widget.reviewList[index];
             return InkWell(
               onTap: () {
-                _handleTap(review['reviewSeq']);
+                _handleTap(review.reviewSeq);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
@@ -65,13 +65,13 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
                             ),
                           ),
                           SizedBox(height: 3,),
-                          review['reviewRating'] ?
+                          review.reviewRating?
                             Text("기다릴만해요", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),)
                               :
                             Text('아쉬워요', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
                           SizedBox(height: 3,),
                           Text(
-                            review['reviewContent'],
+                            review.reviewContent,
                             softWrap: true,
                           ),
                         ],

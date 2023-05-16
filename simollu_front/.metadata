@@ -4,7 +4,7 @@
 # This file should be version controlled.
 
 version:
-  revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
+  revision: 76a9f683259ea4ad1844250c9772b5437e04c200
   channel: master
 
 project_type: app
@@ -13,14 +13,11 @@ project_type: app
 migration:
   platforms:
     - platform: root
-      create_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
-      base_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
-    - platform: android
-      create_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
-      base_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
+      create_revision: 76a9f683259ea4ad1844250c9772b5437e04c200
+      base_revision: 76a9f683259ea4ad1844250c9772b5437e04c200
     - platform: ios
-      create_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
-      base_revision: b04efe4ecf8eb29f07e8a2bea870d1ae7980e91b
+      create_revision: 76a9f683259ea4ad1844250c9772b5437e04c200
+      base_revision: 76a9f683259ea4ad1844250c9772b5437e04c200
 
   # User provided section
 

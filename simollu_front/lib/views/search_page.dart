@@ -27,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
   bool _canPop = false;
 
   late List<SearchModel> result = [];
+
   SearchViewModel searchViewModel = SearchViewModel();
 
   _SearchPageState() {
@@ -36,6 +37,22 @@ class _SearchPageState extends State<SearchPage> {
       });
     });
   }
+
+  _onPressedHotKeyword(String keyword) async{
+    // 검색 api 연결
+    result = (await searchViewModel.getSearchResult(keyword)).cast<SearchModel>();
+
+    await searchViewModel.setSearchResult(result);
+
+    // 검색 결과 페이지로 이동
+    _navigatorKey.currentState?.pushNamed(routeB);
+
+    setState(() {
+      _canPop = true;
+      _searchText = keyword;
+    });
+  }
+
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     bool canPop = _navigatorKey.currentState?.canPop() ?? false;
@@ -48,15 +65,11 @@ class _SearchPageState extends State<SearchPage> {
   MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
     if (setting.name == routeA) {
       return MaterialPageRoute<dynamic>(
-          builder: (context) => SearchInitialWidget(), settings: setting);
+          builder: (context) => SearchInitialWidget(onPressedHotKeyword: _onPressedHotKeyword,), settings: setting);
     }
     else if (setting.name == routeB) {
       return MaterialPageRoute<dynamic>(
           builder: (context) => SearchResultPage(searchResults: result,), settings: setting);
-    }
-    else if (setting.name == routeC) {
-      return MaterialPageRoute<dynamic>(
-          builder: (context) => RestaurantDetailpage(), settings: setting);
     }
     else {
       throw Exception('Unknown route: ${setting.name}');

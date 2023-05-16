@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
 class RestaurantDetailpage extends StatefulWidget {
-  const RestaurantDetailpage({super.key});
+  final int restaurantSeq;
+
+  const RestaurantDetailpage({
+    Key? key,
+    required this.restaurantSeq,
+  });
 
   @override
-  State<RestaurantDetailpage> createState() =>
-      _RestaurantDetailpageState();
+  State<RestaurantDetailpage> createState() => _RestaurantDetailpageState();
 }
 
-class _RestaurantDetailpageState extends State<RestaurantDetailpage> with SingleTickerProviderStateMixin {
+class _RestaurantDetailpageState extends State<RestaurantDetailpage>
+    with SingleTickerProviderStateMixin {
   late TabController? _tabController;
   final List<List<String>> _menuList = [
     ['burger.jpg', '햄버거', '15,000'],
@@ -24,7 +30,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
     ['potato.jpg', '감자튀김', '13,000'],
     ['potato.jpg', '감자튀김', '13,000'],
   ];
-  late List<Map<String, dynamic>> reviewList = [];
+  late List<RestaurantReviewModel> reviewList = [];
   bool _isLike = false;
 
   @override
@@ -36,9 +42,10 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
 
   Future<void> fetchReviewData() async {
     RestaurantViewModel restaurantViewModel = RestaurantViewModel();
-    List<Map<String, dynamic>> result = await restaurantViewModel.fetchReview(2);
+    List<RestaurantReviewModel> result =
+        await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
-    reviewList.sort((a, b) => (b['reviewRating'] ? 1 : 0) - (a['reviewRating'] ? 1 : 0));
+
     print(result);
     setState(() {
       reviewList = result;
@@ -144,7 +151,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                           '서울특별시 강남구 역삼동 777',
                           style: TextStyle(color: Colors.black38),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -170,22 +179,27 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _isLike ? IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isLike = false;
-                                });
-                              },
-                              icon: Icon(Icons.favorite, color: Colors.pink,)
-                          ) : IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isLike = true;
-                                });
-                              },
-                              icon: Icon(Icons.favorite_border, color: Colors.pink,)
-                          )
-                          ,
+                          _isLike
+                              ? IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isLike = false;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: Colors.pink,
+                                  ))
+                              : IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isLike = true;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.pink,
+                                  )),
                           ButtonTheme(
                             child: OutlinedButton(
                                 onPressed: () {},
@@ -195,14 +209,11 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                                       color: Colors.black12,
                                     ),
                                     fixedSize: Size(
-                                        MediaQuery.of(context).size.width *
-                                            0.3,
+                                        MediaQuery.of(context).size.width * 0.3,
                                         40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-
-                                        BorderRadius.circular(20.0))),
-
+                                            BorderRadius.circular(20.0))),
                                 child: Text(
                                   '예상대기시간',
                                   maxLines: 1,
@@ -213,8 +224,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -271,17 +281,20 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage> with Single
         children: menuList
             .map(
               (menu) => Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Row(
-              children: [
-                Image.asset('assets/${menu[0]}', width: 100,),
-                Column(
-                  children: [Text(menu[1]), Text(menu[2])],
-                )
-              ],
-            ),
-          ),
-        )
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/${menu[0]}',
+                      width: 100,
+                    ),
+                    Column(
+                      children: [Text(menu[1]), Text(menu[2])],
+                    )
+                  ],
+                ),
+              ),
+            )
             .toList(),
       ),
     );
@@ -321,7 +334,8 @@ class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
   MyTabBarDelegate({required this.tabBar});
 
   @override
-  Widget build(BuildContext context, double shrinkOffest, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffest, bool overlapsContent) {
     return Container(
       color: Colors.white,
       child: tabBar,
@@ -335,5 +349,6 @@ class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => tabBar.preferredSize.height;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

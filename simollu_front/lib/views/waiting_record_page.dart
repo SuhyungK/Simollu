@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
+
+import '../models/waitingRecordModel.dart';
 
 class WaitingRecordPage extends StatefulWidget {
   const WaitingRecordPage({Key? key}) : super(key: key);
@@ -10,6 +13,19 @@ class WaitingRecordPage extends StatefulWidget {
 }
 
 class _WaitingRecordPageState extends State<WaitingRecordPage> {
+  late final Future<List<WaitingRecordModel>> waitingRecords;
+  late final Future<List<WaitingRecordModel>> cancleRecords;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    waitingRecords = WaitingViewModel.fetchWaitingRecord(1);
+    cancleRecords = WaitingViewModel.fetchWaitingRecord(2);
+    print(waitingRecords);
+    print('취소용$cancleRecords');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
