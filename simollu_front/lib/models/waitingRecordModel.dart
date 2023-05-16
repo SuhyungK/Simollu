@@ -1,45 +1,45 @@
 class WaitingRecordModel {
-  int? reviewSeq;
+  int? waitingSeq;
   String? userSeq;
   int? restaurantSeq;
-  late final bool reviewRating;
-  late final String reviewContent;
-  String? reviewRegistDate;
+  int? waitingPersonCnt;
+  int? waitingNo;
   String? restaurantName;
-  String? restaurantImg;
+  String? waitingStatusRegistDate;
+  int? waitingStatusContent;
 
   WaitingRecordModel(
       {
-        this.reviewSeq,
+        this.waitingSeq,
         this.userSeq,
         this.restaurantSeq,
-        required this.reviewRating,
-        required this.reviewContent,
-        this.reviewRegistDate,
+        this.waitingPersonCnt,
+        this.waitingNo,
         this.restaurantName,
-        this.restaurantImg
+        this.waitingStatusRegistDate,
+        this.waitingStatusContent
       });
 
-  WaitingRecordModel.fromJson(Map<String, dynamic> json) {
-    reviewSeq = json['reviewSeq'];
-    userSeq = json['userSeq'];
-    restaurantSeq = json['restaurantSeq'];
-    reviewRating = json['reviewRating'];
-    reviewContent = json['reviewContent'];
-    reviewRegistDate = json['reviewRegistDate'];
-    restaurantName = json['restaurantName'];
-    restaurantImg = json['restaurantImg'];
-  }
+  WaitingRecordModel.fromJson(Map<String, dynamic> json)
+    : waitingSeq = json['waitingSeq'],
+      userSeq = json['userSeq'],
+      restaurantSeq = json['restaurantSeq'],
+      waitingPersonCnt = json['waitingPersonCnt'],
+      waitingNo = json['waitingNo'],
+      restaurantName = json['restaurantName'],
+      waitingStatusRegistDate = json['waitingStatusRegistDate'],
+      waitingStatusContent = json['waitingStatusContent'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['reviewSeq'] = reviewSeq;
+    data['waitingSeq'] = waitingSeq;
+    data['userSeq'] = userSeq;
     data['restaurantSeq'] = restaurantSeq;
-    data['reviewRating'] = reviewRating;
-    data['reviewContent'] = reviewContent;
-    data['reviewRegistDate'] = reviewRegistDate;
+    data['waitingPersonCnt'] = waitingPersonCnt;
+    data['waitingNo'] = waitingNo;
     data['restaurantName'] = restaurantName;
-    data['restaurantImg'] = restaurantImg;
+    data['waitingStatusRegistDate'] = waitingStatusRegistDate;
+    data['waitingStatusContent'] = waitingStatusContent;
     return data;
   }
 }

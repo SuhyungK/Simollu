@@ -35,18 +35,42 @@ class _WaitingRecordPageState extends State<WaitingRecordPage> {
           '취소 내역'
         ], tabViews: [
           // 위젯 리스트
-          usageHistory(),
-          cancelWaiting(),
+          usageHistory(records: waitingRecords),
+          usageHistory(records: cancleRecords),
         ]));
   }
 
-  Widget usageHistory() {
+  Widget usageHistory({required Future<List<WaitingRecordModel>> records}) {
     // 사용 내역 tabView 내용 위젯
     return Column(
       children: [
-        WaitingRecordcard(),
-        WaitingRecordcard(),
-        WaitingRecordcard(),
+        // WaitingRecordcard(),
+        FutureBuilder(
+          future: records,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.isNotEmpty) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: ((context, index) {
+                    WaitingRecordModel record = snapshot.data![index];
+                    return WaitingRecordcard(
+                      record: record,
+                    );
+                  }),
+                );
+              } else {
+                return Center(
+                  child: Text('취소 내역 없음!!!!!!!!!!'),
+                );
+              }
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        )
       ],
     );
   }
@@ -55,18 +79,18 @@ class _WaitingRecordPageState extends State<WaitingRecordPage> {
     // 이용 취소 tabView 내용 위젯
     return Column(
       children: [
-        WaitingRecordcard(
-          isCanclled: true,
-        ),
-        WaitingRecordcard(
-          isCanclled: true,
-        ),
-        WaitingRecordcard(
-          isCanclled: true,
-        ),
-        WaitingRecordcard(
-          isCanclled: true,
-        ),
+        // WaitingRecordcard(
+        //   isCanclled: true,
+        // ),
+        // WaitingRecordcard(
+        //   isCanclled: true,
+        // ),
+        // WaitingRecordcard(
+        //   isCanclled: true,
+        // ),
+        // WaitingRecordcard(
+        //   isCanclled: true,
+        // ),
       ],
     );
   }
