@@ -18,15 +18,16 @@ class RestaurantViewModel {
   // 식당 리뷰들 조회
   Future<List<RestaurantReviewModel>> fetchReview(int restaurantSeq) async {
     String token = await getToken();
-    var url = createUrl('/restaurant/review/$restaurantSeq');
+    Uri uri = Uri.parse('https://simollu.com/api/restaurant/review/${restaurantSeq}');
+
     final response = await http.get(
-      url,
+      uri,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "Authorization": token
       },
     );
-
+    print(response.body);
     List<RestaurantReviewModel> result = [];
 
     print('가게 리뷰 리스트 조회 : ');
