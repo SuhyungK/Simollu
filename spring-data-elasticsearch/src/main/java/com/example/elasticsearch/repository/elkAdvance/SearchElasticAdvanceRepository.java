@@ -221,5 +221,38 @@ public class SearchElasticAdvanceRepository {
         }
     }
 
+    public List<RestaurantDocument> findLessWaitingRestaurant(Double lat, Double lon) {
+        int limit = 5; // 최대 검색 결과 개수
+
+        // 레스토랑 평점을 내림차순으로 정렬하는 설정
+
+        // 검색 쿼리 설정: 3km 반경 내의 레스토랑 검색
+        GeoDistanceQueryBuilder queryBuilder = new GeoDistanceQueryBuilder("location")
+                .point(lat, lon)
+                .distance(1, DistanceUnit.KILOMETERS);
+
+        // 검색 요청 생성
+        SearchRequest searchRequest = new SearchRequest("restaurant");
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(queryBuilder)
+                .size(limit);
+        searchRequest.source(sourceBuilder);
+
+        try {
+            // Elasticsearch에 검색 요청 후 결과 받기
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+            // 검색 결과 파싱
+            List<RestaurantDocument> restaurantList = new ArrayList<>();
+            searchResponse.getHits().forEach(hit -> {
+                RestaurantDocument restaurant = new ObjectMapper().convertValue(hit.getSourceAsMap(), RestaurantDocument.class);
+                restaurantList.add(restaurant);
+            });
+
+            return restaurantList;
+        } catch (IOException e) {
+            throw new RuntimeException("Error occurred while searching restaurants.", e);
+        }
+    }
 }
 

@@ -50,18 +50,11 @@ public class RestaurantService {
 
 
     // 시간 계산
-    public String getWaitingTime(Long restaurantSeq) {
+    public int getWaitingTime(Long restaurantSeq) {
         WaitingOneResponseDto restaurantWaitingStatus = waitingClientService.getRestaurantWaitingStatus(restaurantSeq);
-        int hour = restaurantWaitingStatus.getWaitingTime() / 60;
-        int minutes = restaurantWaitingStatus.getWaitingTime() % 60;
-        String estimatedTime = "";
-        if (hour == 0) {
-            estimatedTime = minutes + "분";
-        }
-        else {
-            estimatedTime = hour + "시 " + minutes + "분";
-        }
-        return estimatedTime;
+        return restaurantWaitingStatus.getWaitingTime();
+
+
     }
 
 
@@ -143,7 +136,7 @@ public class RestaurantService {
         RestaurantMainInfoListResponse restaurantMainInfoListResponse = RestaurantMainInfoListResponse.builder()
                 .restaurantNearByList(getRestaurantNearByList(lat,lon))
                 .restaurantHighRatingList(getRestaurantHighRatingList(lat,lon))
-//                .restaurantLessWaitingList()
+                .restaurantLessWaitingList(getRestaurantLessWaitingList(lat,lon))
                 .koreanFoodTopList(getRestaurantThemeList(lat, lon, "한식"))
                 .westernFoodTopList(getRestaurantThemeList(lat, lon, "양식"))
                 .chineseTopList(getRestaurantThemeList(lat, lon, "증식"))
@@ -154,6 +147,22 @@ public class RestaurantService {
                 .build();
         return restaurantMainInfoListResponse;
 
+    }
+
+    private List<RestaurantMainInfoResponse> getRestaurantLessWaitingList(Double lat, Double lon) {
+        List<RestaurantDocument> restaurantDocument = searchElasticAdvanceRepository.findLessWaitingRestaurant(lat,lon);
+        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        for(RestaurantDocument r : restaurantDocument){
+            RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+                    .restaurantSeq(r.getRestaurantSeq())
+                    .restaurantName(r.getRestaurantName())
+                    .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
+                    .restaurantRating(r.getRestaurantRating())
+                    .restaurantWaitingTime(getWaitingTime(r.getRestaurantSeq()))
+                    .build();
+            restaurantMainInfoList.add(restaurantMainInfoResponse);
+        }
+        return restaurantMainInfoList;
     }
 
     private List<RestaurantMainThemeInfoResponse> getRestaurantThemeList(Double lat, Double lon, String theme) {

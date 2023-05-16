@@ -11,6 +11,6 @@ public class RestaurantMainThemeInfoResponse {
     private String restaurantAddress;
     private Double distance;
     private int restaurantRating;
-    private String restaurantWaitingTime;
+    private int restaurantWaitingTime;
     private String restaurantImage;
 }
