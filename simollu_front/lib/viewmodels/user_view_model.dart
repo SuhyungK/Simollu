@@ -141,6 +141,7 @@ class UserViewModel extends GetxController {
 
     if (response.statusCode == 200) {
       await getProfileImage();
+      updatedProfileImage.value = null;
       return true;
     }
 
