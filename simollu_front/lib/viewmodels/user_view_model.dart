@@ -126,8 +126,6 @@ class UserViewModel extends GetxController {
       return true;
     }
 
-    print(uri.toString());
-
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       "Authorization": token,
@@ -141,11 +139,9 @@ class UserViewModel extends GetxController {
 
     var response = await request.send();
 
-    print(response.statusCode.toString() + " asdfasdf");
-
     if (response.statusCode == 200) {
-      final responseBody = utf8.encode(await response.stream.bytesToString());
-      print(responseBody);
+      await getProfileImage();
+      return true;
     }
 
     return false;
