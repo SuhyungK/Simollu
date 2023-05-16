@@ -58,9 +58,7 @@ class UserViewModel extends GetxController {
   }
 
   // [POST] User 닉네임 수정
-  Future<String> postNickname(String nickname) async {
-    String res = "";
-
+  Future<bool> postNickname(String nickname) async {
     Uri uri = baseUri.resolve("/api/user/user/nickname");
 
     await initialize();
@@ -77,11 +75,10 @@ class UserViewModel extends GetxController {
       final responseBody = utf8.decode(response.bodyBytes);
       final jsonResponse = jsonDecode(responseBody);
       nickname = jsonResponse['userNicknameContent'];
-      print(nickname);
-      res = nickname;
+      this.nickname(nickname);
+      return true;
     }
-
-    return res;
+    return false;
   }
 
   // [GET] User 포크 수 조회

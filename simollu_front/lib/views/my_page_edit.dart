@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/root.dart';
 
 import '../viewmodels/user_view_model.dart';
 
@@ -14,17 +16,19 @@ class MyPageEdit extends StatefulWidget {
 class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController nameController;
 
-  UserViewModel userViewModel = UserViewModel();
+  UserViewModel userViewModel = Get.find();
 
   Future postNickname(String text) async {
-    String res = await userViewModel.postNickname(text);
-    print("mypage screen"+res);
+    bool status = await userViewModel.postNickname(text);
+    if (status) {
+      RootController.to.onWillPop();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.name);
+    nameController = TextEditingController(text: userViewModel.nickname.value);
   }
 
   @override
@@ -47,9 +51,12 @@ class _MyPageEditState extends State<MyPageEdit> {
               child: Center(
                 child: Stack(
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/cat.jpg"),
+                    Obx(
+                      () => CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            NetworkImage(userViewModel.image.value),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -93,7 +100,7 @@ class _MyPageEditState extends State<MyPageEdit> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('내 정보 수정'+ nameController.value.text);
+                  print('내 정보 수정' + nameController.value.text);
                   postNickname(nameController.value.text);
                 },
                 style: ButtonStyle(
