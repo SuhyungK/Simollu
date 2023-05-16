@@ -12,16 +12,18 @@ class SearchResultWidget extends StatefulWidget {
   final int restaurantSeq;
   final String name;
   final String imageUrl;
+  final double distance;
   final String waitingTime;
   final String queueSize;
   final int numberOfPeople;
   final VoidCallback onWait;
 
-  const SearchResultWidget( {
+  const SearchResultWidget({
     Key? key,
     required this.restaurantSeq,
     required this.name,
     required this.imageUrl,
+    required this.distance,
     required this.waitingTime,
     required this.queueSize,
     required this.numberOfPeople,
@@ -33,7 +35,6 @@ class SearchResultWidget extends StatefulWidget {
 }
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
-
   int _numberOfPeople = 1;
 
   void _incrementNumberOfPeople() {
@@ -52,7 +53,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
 
   registWaiting() async {
     WaitingApi waitingApi = WaitingApi();
-    await waitingApi.postWaiting(widget.restaurantSeq, _numberOfPeople, widget.name);
+    await waitingApi.postWaiting(
+        widget.restaurantSeq, _numberOfPeople, widget.name);
   }
 
   @override
@@ -67,9 +69,9 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        RootController.to.setRootPageTitles("가게 이름");
+        RootController.to.setRootPageTitles(widget.name);
         RootController.to.setIsMainPage(false);
-        Get.to(RestaurantDetailpage());
+        Get.to(RestaurantDetailpage(restaurantSeq: widget.restaurantSeq));
         // Navigator.push(context,
         //     MaterialPageRoute(
         //         fullscreenDialog: true,
@@ -101,11 +103,13 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          widget.imageUrl ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                          widget.imageUrl ??
+                              'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                          errorBuilder: (context, error, stackTrace) {
+                            // 이미지 로딩 실패 시 대체 이미지 보여주기
                             return Image.network(
                               'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
                               width: 80,
@@ -133,7 +137,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container( // 가게 이름
+                        Container(
+                          // 가게 이름
                           margin: EdgeInsets.only(left: 10, top: 10),
                           child: SizedBox(
                             child: Text(
@@ -163,10 +168,12 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                 color: Color(0xFFFFD200),
                                 size: 19,
                               ),
-                              Text("기다릴만해요",
+                              Text(
+                                "기다릴만해요",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.amber),),
+                                    color: Colors.amber),
+                              ),
                             ],
                           ),
                         ),
@@ -177,7 +184,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("0.48km"),
+                                  Text(widget.distance.toString() + "km"),
                                 ],
                               ),
                               Expanded(child: Container()),
@@ -272,7 +279,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                 ],
               ),
             ),
-            Row( // 인원 수, 웨이팅하기 버튼
+            Row(
+              // 인원 수, 웨이팅하기 버튼
               children: [
                 Expanded(
                   child: Row(
@@ -304,7 +312,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                           ),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7.5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 7.5),
                         child: Text(
                           '$_numberOfPeople',
                           style: TextStyle(
@@ -348,8 +357,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       ),
                     ),
                     child: Container(
-                      padding: EdgeInsets.only(
-                          top: 10, bottom: 10),
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
                       child: Text(
                         '웨이팅하기',
                         style: TextStyle(

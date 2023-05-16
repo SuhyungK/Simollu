@@ -515,8 +515,10 @@ class _MainPageState extends State<MainPage> {
                                             context,
                                             GetPageRoute(
                                               curve: Curves.fastOutSlowIn,
-                                              page: () =>
-                                                  RestaurantDetailpage(),
+                                              page: () => RestaurantDetailpage(
+                                                  restaurantSeq: mainViewModel
+                                                      .tryHereList[index]
+                                                      .restaurantSeq),
                                             ),
                                           );
                                         },
@@ -670,7 +672,10 @@ class _MainPageState extends State<MainPage> {
                                 context,
                                 GetPageRoute(
                                   curve: Curves.fastOutSlowIn,
-                                  page: () => RestaurantDetailpage(),
+                                  page: () => RestaurantDetailpage(
+                                      restaurantSeq: mainViewModel
+                                          .recentlyHotList[index]
+                                          .restaurantSeq),
                                 ),
                               );
                             },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/reviewModel.dart';
+import 'package:simollu_front/models/writeableModel.dart';
 import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
@@ -11,7 +12,9 @@ import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/writing_review_button.dart';
 
 class WritingReviewPage extends StatefulWidget {
-  const WritingReviewPage({Key? key}) : super(key: key);
+  late final WriteableModel review;
+
+  WritingReviewPage({Key? key, required this.review}) : super(key: key);
 
   @override
   State<WritingReviewPage> createState() => _WritingReviewPageState();
@@ -50,7 +53,7 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
               Container(
                 margin: EdgeInsets.only(top: 19),
                 child: Text(
-                  '동래정 선릉직영점',
+                  widget.review.restaurantName as String,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -136,8 +139,7 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                                 });
                               },
                               isPressed: _selecedRating == index,
-                            ))
-                    ),
+                            ))),
               ),
               Container(
                 height: 200,
@@ -201,31 +203,34 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
           height: 50,
           child: ElevatedButton(
             // 선택된 평가가 있고 리뷰를 한 글자라도 썼을 경우에만 작성 완료 버튼 활성화
-            onPressed: _selecedRating != -1 && _reviewContent != '' ? () async {
-              final reviewModel = ReviewModel(
-                restaurantSeq: 2,
-                reviewContent: _reviewContent,
-                reviewRating: _selecedRating
-              );
-              final json = reviewModel.toJson();
-              final jsonData = jsonEncode(json);
-              print(jsonData);
-              // List<String> preferenceList =
-              //     await preferenceViewModel.getPreference().then((result) => result);
-              // print('$preferenceList');
-              var reviewSeq = await reviewViewModel.postReview(jsonData);
-              debugPrint(reviewSeq);
-              // Get.to(() => ReviewManagementPage());
-              // Future.delayed(Duration.zero, () {
-              //   Navigator.push(
-              //       context,
-              //       GetPageRoute(
-              //         curve: Curves.fastOutSlowIn,
-              //         page: () => ReviewManagementPage(),
-              //       )
-              //   );
-              // });
-            } : null,
+            onPressed: _selecedRating != -1 && _reviewContent != ''
+                ? () async {
+                    final reviewModel = ReviewModel(
+                      restaurantSeq: 2,
+                      reviewContent: _reviewContent,
+                      reviewRating: _selecedRating,
+                      writeableSeq: 123,
+                    );
+                    final json = reviewModel.toJson();
+                    final jsonData = jsonEncode(json);
+                    print(jsonData);
+                    // List<String> preferenceList =
+                    //     await preferenceViewModel.getPreference().then((result) => result);
+                    // print('$preferenceList');
+                    var reviewSeq = await reviewViewModel.postReview(jsonData);
+                    debugPrint(reviewSeq);
+                    // Get.to(() => ReviewManagementPage());
+                    // Future.delayed(Duration.zero, () {
+                    //   Navigator.push(
+                    //       context,
+                    //       GetPageRoute(
+                    //         curve: Curves.fastOutSlowIn,
+                    //         page: () => ReviewManagementPage(),
+                    //       )
+                    //   );
+                    // });
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,
                 // backgroundColor: Colors.yellow

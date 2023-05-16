@@ -36,7 +36,7 @@ class SearchViewModel extends GetxController {
 
   Future<List<SearchModel>> getSearchResult(String value) async {
     await initialize();
-    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${value}&cx=${lat.toString()}&cy=${long.toString()}&size=10');
+    Uri uri = Uri.parse('https://simollu.com/api/restaurant/search/contains?description=${value}&lat=${lat.toString()}&lon=${long.toString()}&size=10');
     List<SearchModel> result = [];
     final response = await http.get(
         headers: {

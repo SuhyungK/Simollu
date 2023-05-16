@@ -13,7 +13,7 @@ class RestaurantViewModel {
   }
 
   // 식당 리뷰들 조회
-  Future<List<Map<String, dynamic>>> fetchReview(int restaurantSeq) async {
+  Future<List<RestaurantReviewModel>> fetchReview(int restaurantSeq) async {
     String token = await getToken();
     var url = createUrl('/restaurant/review/$restaurantSeq');
     final response = await http.get(
@@ -24,16 +24,28 @@ class RestaurantViewModel {
       },
     );
 
-    final testjsonList = json.decode(response.body);
-    List<dynamic> reviewList = testjsonList
-        .map((json) => RestaurantReviewModel.fromJson(json))
-        .toList();
+    List<RestaurantReviewModel> result = [];
 
-    final jsonList = jsonDecode(utf8.decode(response.bodyBytes));
+    print('가게 리뷰 리스트 조회 : ');
+    if(response.statusCode == 200) {
+      List<dynamic> res = json.decode(utf8.decode(response.bodyBytes));
+      for(dynamic r in res) {
+        result.add(RestaurantReviewModel.fromJson(r));
+        print(r);
+      }
+    }
+
+    // final testjsonList = json.decode(response.body);
+    // List<RestaurantReviewModel> reviewList = testjsonList
+    //     .map((json) => RestaurantReviewModel.fromJson(json))
+    //     .toList();
+    //
     // final jsonList = jsonDecode(utf8.decode(response.bodyBytes));
-    List<Map<String, dynamic>> result = jsonList
-        .map<Map<String, dynamic>>((review) => review as Map<String, dynamic>)
-        .toList();
+    // // final jsonList = jsonDecode(utf8.decode(response.bodyBytes));
+    // List<Map<String, dynamic>> result = jsonList
+    //     .map<Map<String, dynamic>>((review) => review as Map<String, dynamic>)
+    //     .toList();
+    //
     return result;
   }
 

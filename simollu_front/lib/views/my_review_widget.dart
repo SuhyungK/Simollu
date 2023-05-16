@@ -6,7 +6,7 @@ import 'package:simollu_front/views/review_management_star_button.dart';
 class MyReview extends StatelessWidget {
   late Future<List<ReviewModel>> myReivews;
   List<Map<dynamic, dynamic>> ratingText = [
-    {'text': '별로예요', Color: Colors.red},
+    {'text': '별로예요', Color: Colors.redAccent},
     {'text': '기다릴만해요', Color: Colors.amber},
   ];
 
@@ -35,10 +35,22 @@ class MyReview extends StatelessWidget {
                           title: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                color: Colors.grey,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  review.restaurantImg ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                                    return Image.network(
+                                      'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
                               ),
                               SizedBox(
                                 width: 20,
@@ -68,7 +80,9 @@ class MyReview extends StatelessWidget {
                 return Text('Error: ${snapshot.error}');
               } else {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.amber,
+                  ),
                 );
               }
             }),
