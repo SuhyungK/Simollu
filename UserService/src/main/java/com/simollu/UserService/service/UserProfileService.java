@@ -27,7 +27,7 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository.findTopByUserSeqOrderByUserProfileRegisterDateDesc(userSeq);
 
         return UserProfileResponseDto.builder()
-                .userProfileUrl(userProfile.getUserProfileUrl())
+                .userProfileUrl(awsS3Repository.getTemporaryUrl(userProfile.getUserProfileUrl()))
                 .build();
     }
 
