@@ -23,12 +23,18 @@ class RestaurantDetailpage extends StatefulWidget {
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   late TabController? _tabController;
-  late RestaurantDetailModel result;
+  RestaurantDetailModel? result;
 
   getRestaurantDetailInfo() async {
     RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
 
     result = await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
+
+    setState(() {
+      if(result != null) {
+        result = result;
+      }
+    });
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -40,6 +46,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     _tabController = TabController(length: 3, vsync: this);
     fetchReviewData();
     getRestaurantDetailInfo();
+
   }
 
   Future<void> fetchReviewData() async {
@@ -56,17 +63,24 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
 
   @override
   Widget build(BuildContext context) {
+    if(result == null) {
+        return Container(
+          color: Colors.white,
+          child: Image.asset("assets/logo.png"),
+        );
+    }
+
     return Scaffold(
       body: CustomTabBar(
           length: 3,
           tabs: ['메뉴', '매장 정보', '리뷰'],
           tabViews: [
-            _menuDetail(result.menuInfoList),
-            _restaurantInfo(result.restaurantInfo.restaurantBusinessHours, result.restaurantInfo.restaurantPhoneNumber),
+            _menuDetail(result!.menuInfoList),
+            _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours, result!.restaurantInfo.restaurantPhoneNumber),
             RestaurantReviewPage(reviewList: reviewList)
           ],
           hasSliverAppBar: true,
-          flexibleImage:result.restaurantInfo.restaurantImg,
+          flexibleImage:result?.restaurantInfo.restaurantImg,
           bottomWidget: Container(
             color: Colors.white,
             // height: 140,
@@ -82,7 +96,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          result.restaurantInfo.restaurantName,
+                          result?.restaurantInfo.restaurantName ?? '',
                           maxLines: 2,
                           style: TextStyle(
                             fontSize: 20,
@@ -91,13 +105,13 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                         ),
                         SizedBox(height: 3),
                         Text(
-                          result.restaurantInfo.restaurantCategory,
+                          result?.restaurantInfo.restaurantCategory ?? '',
                           style: TextStyle(
                               fontSize: 12, color: Colors.black54),
                         ),
                         SizedBox(height: 3),
                         Text(
-                          result.restaurantInfo.restaurantAddress,
+                          result?.restaurantInfo.restaurantAddress ?? '',
                           style: TextStyle(color: Colors.black38),
                         ),
                         SizedBox(
@@ -112,7 +126,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                               size: 18,
                             ),
                             Text(
-                              '기다릴만해요 ${result.restaurantInfo.restaurantRating}%',
+                              '기다릴만해요 ${result?.restaurantInfo.restaurantRating ?? 0}%',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.amber),
@@ -178,6 +192,16 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   }
 
   Widget _menuDetail(List<MenuInfoModel> menuList) {
+
+    if (menuList.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Text(
+          '메뉴 정보가 없습니다.',
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
