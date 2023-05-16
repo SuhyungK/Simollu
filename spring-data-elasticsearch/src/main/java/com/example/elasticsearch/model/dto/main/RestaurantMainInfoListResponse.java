@@ -17,11 +17,11 @@ public class RestaurantMainInfoListResponse {
     private List<RestaurantMainInfoResponse> restaurantNearByList;
     private List<RestaurantMainInfoResponse> restaurantHighRatingList;
     private List<RestaurantMainInfoResponse> restaurantLessWaitingList;
-    private List<RestaurantMainInfoResponse> koreanFoodTopList;
-    private List<RestaurantMainInfoResponse> westernFoodTopList;
-    private List<RestaurantMainInfoResponse> chineseTopList;
-    private List<RestaurantMainInfoResponse> japanesTopList;
-    private List<RestaurantMainInfoResponse> fastFoodTopList;
-    private List<RestaurantMainInfoResponse> cafeTopList;
-    private List<RestaurantMainInfoResponse> bakeryTopList;
+    private List<RestaurantMainThemeInfoResponse> koreanFoodTopList;
+    private List<RestaurantMainThemeInfoResponse> westernFoodTopList;
+    private List<RestaurantMainThemeInfoResponse> chineseTopList;
+    private List<RestaurantMainThemeInfoResponse> japanesTopList;
+    private List<RestaurantMainThemeInfoResponse> fastFoodTopList;
+    private List<RestaurantMainThemeInfoResponse> cafeTopList;
+    private List<RestaurantMainThemeInfoResponse> bakeryTopList;
 }

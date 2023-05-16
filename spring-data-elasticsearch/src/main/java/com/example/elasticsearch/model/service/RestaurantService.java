@@ -2,6 +2,7 @@ package com.example.elasticsearch.model.service;
 
 import com.example.elasticsearch.aws.AwsS3Repository;
 import com.example.elasticsearch.model.dto.main.RestaurantMainInfoListResponse;
+import com.example.elasticsearch.model.dto.main.RestaurantMainThemeInfoResponse;
 import com.example.elasticsearch.model.dto.menu.MenuInfoResponse;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantFavoriteResponse;
 import com.example.elasticsearch.model.dto.restaurant.RestaurantInfoResponse;
@@ -16,6 +17,8 @@ import com.example.elasticsearch.repository.jpa.MenuJpaRepository;
 import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.elkBasic.RestaurantElasticBasicRepository;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -129,16 +132,18 @@ public class RestaurantService {
 
     }
 
-    private List<RestaurantMainInfoResponse> getRestaurantThemeList(Double lat, Double lon, String theme) {
+    private List<RestaurantMainThemeInfoResponse> getRestaurantThemeList(Double lat, Double lon, String theme) {
         List<RestaurantDocument> restaurantDocument = searchElasticAdvanceRepository.findThemeRestaurantsNearby(lat,lon,theme);
-        List<RestaurantMainInfoResponse> restaurantMainInfoList = new ArrayList<>();
+        List<RestaurantMainThemeInfoResponse> restaurantMainInfoList = new ArrayList<>();
         for(RestaurantDocument r : restaurantDocument){
-            RestaurantMainInfoResponse restaurantMainInfoResponse = RestaurantMainInfoResponse.builder()
+            RestaurantMainThemeInfoResponse restaurantMainInfoResponse = RestaurantMainThemeInfoResponse.builder()
                     .restaurantSeq(r.getRestaurantSeq())
                     .restaurantName(r.getRestaurantName())
                     .restaurantImage(awsS3Repository.getTemporaryUrl(r.getRestaurantImg()))
                     .restaurantRating(r.getRestaurantRating())
                     //.restaurantWaitingTime()
+                    .restaurantAddress(slicingAddress(r.getRestaurantAddress()))
+                    .distance(calculateDistance(lat, lon, Double.parseDouble(r.getRestaurantY()), Double.parseDouble(r.getRestaurantX())))
                     .build();
             restaurantMainInfoList.add(restaurantMainInfoResponse);
         }
@@ -218,6 +223,20 @@ public class RestaurantService {
         return slicedAddress.trim();
     }
 
+    public static double calculateDistance(double startLat, double startLng, double endLat, double endLng) {
+        double earthRadiusKm = 6371.0;
+        double dLat = Math.toRadians(endLat - startLat);
+        double dLng = Math.toRadians(endLng - startLng);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(startLat)) * Math.cos(Math.toRadians(endLat)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distanceInKm = earthRadiusKm * c;
+
+        // 반올림하여 소수점 둘째 자리까지 표시
+        BigDecimal bd = new BigDecimal(distanceInKm).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal roundedDistance = bd.add(new BigDecimal(0.2)).setScale(2, RoundingMode.HALF_UP); // 덧셈도 BigDecimal을 사용하여 수행
+
+        return roundedDistance.doubleValue();
+    }
 //    private List<ReviewInfoResponse> getReviewInfo(long restaurantSeq) {
 //        List<ReviewInfoResponse> reviewInfoResponseList = new ArrayList<>();
 //        List<Review> reviews = reviewRepository.findByRestaurantSeq(restaurantSeq);
