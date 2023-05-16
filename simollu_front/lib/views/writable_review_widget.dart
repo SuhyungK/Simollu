@@ -56,6 +56,10 @@ class WritableReview extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16
                                     ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    review.waitingCompleteDate as String
                                   )
                                 ],
                               )

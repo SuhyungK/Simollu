@@ -11,6 +11,8 @@ import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/writing_review_button.dart';
 
+import '../root.dart';
+
 class WritingReviewPage extends StatefulWidget {
   late final WriteableModel review;
 
@@ -206,29 +208,29 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
             onPressed: _selecedRating != -1 && _reviewContent != ''
                 ? () async {
                     final reviewModel = ReviewModel(
-                      restaurantSeq: 2,
+                      restaurantSeq: widget.review.restaurantSeq,
                       reviewContent: _reviewContent,
                       reviewRating: _selecedRating,
-                      writeableSeq: 123,
+                      writeableSeq: widget.review.writeableSeq,
                     );
                     final json = reviewModel.toJson();
                     final jsonData = jsonEncode(json);
-                    print(jsonData);
                     // List<String> preferenceList =
                     //     await preferenceViewModel.getPreference().then((result) => result);
                     // print('$preferenceList');
                     var reviewSeq = await reviewViewModel.postReview(jsonData);
                     debugPrint(reviewSeq);
-                    // Get.to(() => ReviewManagementPage());
-                    // Future.delayed(Duration.zero, () {
-                    //   Navigator.push(
-                    //       context,
-                    //       GetPageRoute(
-                    //         curve: Curves.fastOutSlowIn,
-                    //         page: () => ReviewManagementPage(),
-                    //       )
-                    //   );
-                    // });
+                    Future.delayed(Duration.zero, () {
+                      RootController.to.setRootPageTitles('작성 리뷰');
+                      RootController.to.setIsMainPage(false);
+                      Navigator.push(
+                        context,
+                        GetPageRoute(
+                          curve: Curves.fastOutSlowIn,
+                          page: () => ReviewManagementPage(),
+                        ),
+                      );
+                    });
                   }
                 : null,
             style: ElevatedButton.styleFrom(

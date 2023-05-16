@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:simollu_front/models/waitingRecordModel.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
-class WaitingRecordcard extends StatefulWidget {
+class WaitingRecordcard extends StatelessWidget {
   final bool? isCanclled;
+  final WaitingRecordModel record;
+  final List<String> week = ['월', '화', '수', '목', '금', '토', '일'];
 
-  const WaitingRecordcard({Key? key,
+  bool isDate(String str) {
+    try {
+      DateTime.parse(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  WaitingRecordcard({Key? key,
     this.isCanclled = false,
+    required this.record,
   }) : super(key: key);
 
   @override
-  State<WaitingRecordcard> createState() => _WaitingRecordcardState();
-}
-
-class _WaitingRecordcardState extends State<WaitingRecordcard> {
-  @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.all(15.0),
       margin: EdgeInsets.all(10),
@@ -32,17 +43,18 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
             child: Text(
-              '바스버거 역삼점',
+              record.restaurantName as String,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18
               ),
             ),
           ),
-          _buildPadding("예약일시", "2023/03/18(목) 13:45"),
+          // _buildPadding("예약일시", "2023/03/18(목) 13:45"),
+          _buildPadding("예약일시", record.waitingStatusRegistDate as String),
           _buildPadding("대기번호", "9번"),
           _buildPadding("인원", "2명"),
-          if (widget.isCanclled == false)
+          if (isCanclled == false)
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Center(
@@ -74,6 +86,16 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
   }
 
   Widget _buildPadding(String label, String value) {
+    final String content;
+    if (isDate(value)) {
+      final dateTime = DateTime.parse(value);
+      final formattedDate = DateFormat('yyyy/MM/dd').format(dateTime);
+      final formattedTime = DateFormat('HH:MM').format(dateTime);
+      final weekday = week[dateTime.weekday];
+      content = '$formattedDate($weekday) $formattedTime';
+    } else {
+      content = value;
+    }
 
     return Padding(
           padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -81,7 +103,7 @@ class _WaitingRecordcardState extends State<WaitingRecordcard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(label),
-              Text(value)
+              Text(content)
             ],
           ),
         );
