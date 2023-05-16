@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:simollu_front/root.dart';
@@ -55,11 +57,21 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   UserViewModel userViewModel = Get.find();
   MainViewModel mainViewModel = Get.find();
+  MapViewModel mapViewModel = Get.find();
 
-  void getData() {
-    userViewModel.getNickname();
-    mainViewModel.getMainInfo();
-    // mainViewModel.getDong(location);
+  void getData() async {
+    await userViewModel.getNickname();
+    await mapViewModel.getLocationPermission();
+
+    if (mapViewModel.locationPermission.value == LocationPermission.denied ||
+        mapViewModel.locationPermission.value ==
+            LocationPermission.deniedForever) {
+      mainViewModel.getMainInfo(LatLng(37.5013068, 127.0396597));
+    } else {
+      mainViewModel.getMainInfo(LatLng(
+          mapViewModel.currentPosition.value!.latitude,
+          mapViewModel.currentPosition.value!.longitude));
+    }
   }
 
   @override
@@ -156,8 +168,6 @@ class _MainPageState extends State<MainPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    UserViewModel userViewModel = Get.find();
-
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

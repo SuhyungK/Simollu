@@ -42,7 +42,6 @@ class RootController extends GetxController {
     } else if (index == 2 && isMainPages[2].value) {
       UserViewModel userViewModel = Get.find();
       userViewModel.getNickname();
-      print("teststset");
     }
   }
 
@@ -71,10 +70,10 @@ class RootController extends GetxController {
 
 class Root extends GetView<RootController> {
   Root({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     MapViewModel mapViewModel = Get.find();
-    mapViewModel.getLocationPermission();
     return WillPopScope(
       onWillPop: () async {
         return controller.onWillPop();

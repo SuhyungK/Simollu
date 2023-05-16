@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/main_info_model.dart';
 import 'package:simollu_front/models/restaurant_model.dart';
@@ -11,11 +12,10 @@ class MainApi {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
-  Future<MainInfoModel> getRestaurantList() async {
+  Future<MainInfoModel> getRestaurantList(LatLng currentPosition) async {
     await initialize();
     Uri uri = Uri.parse(
-        'https://simollu.com/api/restaurant/main/37.5013068/127.0396597');
-    List<RestaurantModel> restaurantNearByList = [];
+        'https://simollu.com/api/restaurant/main/${currentPosition.latitude}/${currentPosition.longitude}');
 
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",

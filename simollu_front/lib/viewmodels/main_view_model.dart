@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:simollu_front/models/main_info_model.dart';
 import 'package:simollu_front/models/restaurant_model.dart';
 import 'package:simollu_front/services/main_api.dart';
@@ -84,8 +85,8 @@ class MainViewModel extends GetxController {
     }
   }
 
-  void getMainInfo() async {
-    mainInfo.value = await MainApi().getRestaurantList();
+  void getMainInfo(LatLng currentPosition) async {
+    mainInfo.value = await MainApi().getRestaurantList(currentPosition);
 
     recentlyHotList.value = mainInfo.value.koreanFoodTopList;
     tryHereList.value = mainInfo.value.restaurantNearByList;
