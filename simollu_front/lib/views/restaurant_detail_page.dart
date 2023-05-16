@@ -29,10 +29,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
 
     result = await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
-    print('가게 상세 정보 조회 api 연결 후 결과 :');
-    print(result.menuInfoList);
-    print(result.restaurantInfo);
-    print(result.waitingTimeList);
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -66,14 +62,14 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
           tabs: ['메뉴', '매장 정보', '리뷰'],
           tabViews: [
             _menuDetail(result.menuInfoList),
-            _restaurantInfo(),
+            _restaurantInfo(result.restaurantInfo.restaurantBusinessHours, result.restaurantInfo.restaurantPhoneNumber),
             RestaurantReviewPage(reviewList: reviewList)
           ],
           hasSliverAppBar: true,
           flexibleImage:result.restaurantInfo.restaurantImg,
           bottomWidget: Container(
             color: Colors.white,
-            height: 140,
+            // height: 140,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Row(
@@ -85,24 +81,19 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text(
-                              result.restaurantInfo.restaurantName,
-                              style: TextStyle(
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 3),
-                            Text(
-                              result.restaurantInfo.restaurantCategory,
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black54),
-                            ),
-                          ],
+                        Text(
+                          result.restaurantInfo.restaurantName,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 3),
+                        Text(
+                          result.restaurantInfo.restaurantCategory,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.black54),
                         ),
                         SizedBox(height: 3),
                         Text(
@@ -110,7 +101,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                           style: TextStyle(color: Colors.black38),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,7 +112,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                               size: 18,
                             ),
                             Text(
-                              '기다릴만해요 87%',
+                              '기다릴만해요 ${result.restaurantInfo.restaurantRating}%',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.amber),
@@ -186,52 +177,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     );
   }
 
-  // DefaultTabController buildDefaultTabController() {
-  // return
-  // return DefaultTabController(
-  //   length: 3,
-  //   child: NestedScrollView(
-  //     headerSliverBuilder:
-  //         (BuildContext context, bool innerBoxIsScrolled) {
-  //     return <Widget>[
-  //       // SliverAppBar(
-  //       //   pinned: false,
-  //       //   expandedHeight: 200,
-  //       //   automaticallyImplyLeading: false,
-  //       //   backgroundColor: Colors.white,
-  //       //   // flexibleSpace: FlexibleSpaceBar(
-  //       //   //   background: Image.asset(
-  //       //   //     'assets/Rectangle 42.png',
-  //       //   //     fit: BoxFit.cover,
-  //       //   //   ),
-  //       //   // ),
-  //       //
-  //       // ),
-  //       SliverPersistentHeader(
-  //         pinned: true,
-  //         delegate:MyTabBarDelegate(
-  //           tabBar: TabBar(
-  //             controller: _tabController,
-  //             tabs: [
-  //               Tab(icon: Icon(Icons.favorite, color: Colors.black12,)),
-  //               Tab(icon: Icon(Icons.favorite)),
-  //               Tab(icon: Icon(Icons.favorite)),
-  //             ],
-  //           ),
-  //         )
-  //       )
-  //     ];
-  //   },
-  //     body: TabBarView(
-  //       children: [
-  //         Icon(Icons.favorite),
-  //         Icon(Icons.favorite),
-  //         Icon(Icons.favorite),
-  //       ],
-  //     ),
-  //   )
-  // );
-  // }
   Widget _menuDetail(List<MenuInfoModel> menuList) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -259,7 +204,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                       },
                     ),
                     Column(
-                      children: [Text(menu.menuName), Text(menu.menuPrice)],
+                      children: [Text(menu.menuName ?? ''), Text(menu.menuPrice ?? '')],
                     )
                   ],
                 ),
@@ -270,7 +215,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     );
   }
 
-  Widget _restaurantInfo() {
+  Widget _restaurantInfo(String restaurantBusinessHours, String restaurantPhoneNumber) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -283,14 +228,14 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
         ),
         Row(
           children: [
-            Expanded(flex: 3, child: Text('운영 ')),
-            Expanded(flex: 7, child: Text('월 ~ 금 10:00')),
+            Expanded(flex: 3, child: Text('운영시간')),
+            Expanded(flex: 7, child: Text(restaurantBusinessHours ?? '')),
           ],
         ),
         Row(
           children: [
             Expanded(flex: 3, child: Text('전화 번호 ')),
-            Expanded(flex: 7, child: Text('월 ~ 금 10:00')),
+            Expanded(flex: 7, child: Text(restaurantPhoneNumber ?? '')),
           ],
         ),
       ],
