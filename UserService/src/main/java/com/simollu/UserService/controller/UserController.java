@@ -1,6 +1,8 @@
 package com.simollu.UserService.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.simollu.UserService.dto.userfirebasetoken.FirebaseTokenRequestDto;
 import com.simollu.UserService.dto.userfork.*;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListRequestDto;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListResponseDto;
@@ -39,6 +41,8 @@ public class UserController {
     private final UserStatusService userStatusService;
     private final UserPreferenceService userPreferenceService;
     private final UserProfileService userProfileService;
+
+    private final RedisService redisService;
 
 
 
@@ -182,7 +186,33 @@ public class UserController {
     }
 
 
+    // 회원 token 저장
+    @Operation(summary = "회원 firebase token 저장",
+            description = "현재 회원의 firebase token을 저장합니다.")
+    @PostMapping("firebase-token")
+    public ResponseEntity<?> saveUserFirebaseToken(@RequestHeader("userSeq") String userSeq
+            , @RequestBody FirebaseTokenRequestDto requestDto) {
+//        System.out.println("++++++++++++++++++++++++++++++");
+        requestDto.setUserSeq(userSeq);
+        try {
+            redisService.saveUserFirebaseToken(userSeq, requestDto.getFcmToken());
+        }catch (JsonProcessingException e) {
+            return ResponseEntity.ok("실패");
+        }
 
+        return ResponseEntity.ok(requestDto.getFcmToken());
+    }
+
+    // 회원 token 조회
+    @Operation(summary = "회원 firebase token 조회",
+            description = "현재 회원의 firebase token을 조회합니다.")
+    @GetMapping("firebase-token")
+    public ResponseEntity<?> getUserFirebaseToken(@RequestHeader("userSeq") String userSeq) {
+        String token = redisService.getFirebaseToken(userSeq);
+        if (token.equals("null")) return ResponseEntity.status(204).build();
+
+        return ResponseEntity.ok(token);
+    }
 
 
 }
