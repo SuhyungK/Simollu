@@ -43,11 +43,19 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'assets/dongraejeong.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                    child: Image.network(
+                      widget.review.restaurantImg ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                        return Image.network(
+                          'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
                   ),
                 ),

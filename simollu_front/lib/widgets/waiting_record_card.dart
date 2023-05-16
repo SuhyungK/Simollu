@@ -71,7 +71,7 @@ class WaitingRecordcard extends StatelessWidget {
                       //     context,
                       //     MaterialPageRoute(builder: (context) =>
                       //         WritingReviewPage(
-                      //           writeableSeq: 2,
+                      //           record: record,
                       //         )
                       //     ),
                       // );
