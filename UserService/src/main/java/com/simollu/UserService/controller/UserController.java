@@ -194,7 +194,7 @@ public class UserController {
     }
 
     // 회원 리스트 이미지, 닉네임 조회
-    @GetMapping("info-list")
+    @PostMapping("info-list")
     public ResponseEntity<?> getUserInfoList(@RequestBody GetUserInfoListRequestDto requestDto) {
         List<GetUserInfoListResponseDto> responseDtoList = userService.getUserInfoList(requestDto);
         return ResponseEntity.ok(responseDtoList);
