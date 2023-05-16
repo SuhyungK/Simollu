@@ -36,16 +36,16 @@ class _MyWebViewState extends State<MyWebView> {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token!);
           await prefs.setBool('initial', initial);
-          var fcmToken = await fcmSetting();
-          await http.post(url2,
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              "Authorization": token
-            },
-            body: jsonEncode({
-              "fcmToken": fcmToken
-            })
-          );
+          // var fcmToken = await fcmSetting();
+          // await http.post(url2,
+          //   headers: {
+          //     "Content-Type": "application/json; charset=utf-8",
+          //     "Authorization": token
+          //   },
+          //   body: jsonEncode({
+          //     "fcmToken": fcmToken
+          //   })
+          // );
           if (initial == true) {
             Get.offAll(() => LikingThings());
           } else {
