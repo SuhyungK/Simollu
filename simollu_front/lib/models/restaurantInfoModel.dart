@@ -18,6 +18,17 @@ class RestaurantInfoModel {
   late String restaurantImg;
   late int restaurantRating;
 
+  RestaurantInfoModel({
+    required this.restaurantSeq,
+    required this.restaurantName,
+    required this.restaurantCategory,
+    required this.restaurantBusinessHours,
+    required this.restaurantPhoneNumber,
+    required this.restaurantAddress,
+    required this.restaurantImg,
+    required this.restaurantRating,
+});
+
 
   RestaurantInfoModel.fromJSON(Map<String, dynamic> json)
       : restaurantSeq = json['restaurantSeq'],

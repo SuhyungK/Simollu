@@ -7,12 +7,12 @@ import 'package:simollu_front/models/waitingTimeModel.dart';
 import 'menuInfoModel.dart';
 
 class RestaurantDetailModel {
-  late List<RestaurantInfoModel> restaurantInfoList;
+  late RestaurantInfoModel restaurantInfo;
   late List<MenuInfoModel> menuInfoList;
   late List<WaitingTimeModel> waitingTimeList;
 
   RestaurantDetailModel({
-    required this.restaurantInfoList,
+    required this.restaurantInfo,
     required this.menuInfoList,
     required this.waitingTimeList,
   });

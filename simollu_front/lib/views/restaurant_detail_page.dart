@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
+import 'package:simollu_front/services/restaurant_detail_api.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/views/restaurant_review_page.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
@@ -19,6 +20,13 @@ class RestaurantDetailpage extends StatefulWidget {
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   late TabController? _tabController;
+
+  getRestaurantDetailInfo() async {
+    RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
+
+    await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
+  }
+
   final List<List<String>> _menuList = [
     ['burger.jpg', '햄버거', '15,000'],
     ['potato.jpg', '감자튀김', '13,000'],
@@ -38,6 +46,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     fetchReviewData();
+    getRestaurantDetailInfo();
   }
 
   Future<void> fetchReviewData() async {
@@ -62,54 +71,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
             _menuDetail(_menuList),
             _restaurantInfo(),
             RestaurantReviewPage(reviewList: reviewList)
-            // Column(
-            //   children: [
-            //     Container(
-            //       decoration: BoxDecoration(
-            //           border: Border(
-            //               bottom: BorderSide(
-            //                   color: Colors.black12
-            //               )
-            //           )
-            //       ),
-            //       child: ListTile(
-            //           leading: Icon(Icons.circle, size: 50),
-            //           title: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Text('작성자', style: TextStyle(
-            //                   fontWeight: FontWeight.bold,
-            //                   fontSize: 22
-            //               )),
-            //               Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
-            //             ],
-            //           )
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //           border: Border(
-            //               bottom: BorderSide(
-            //                   color: Colors.black12
-            //               )
-            //           )
-            //       ),
-            //       child: ListTile(
-            //           leading: Icon(Icons.circle, size: 50),
-            //           title: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Text('작성자', style: TextStyle(
-            //                 fontWeight: FontWeight.bold,
-            //                 fontSize: 22
-            //               )),
-            //               Text('직원분들 유쾌하고 활기 넘치고 음식도 맛있어요 교대점이랑은 극과극')
-            //             ],
-            //           )
-            //       ),
-            //     ),
-            //   ],
-            // )
           ],
           hasSliverAppBar: true,
           flexibleImage: 'assets/Rectangle 42.png',
