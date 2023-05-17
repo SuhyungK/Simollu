@@ -22,7 +22,7 @@ public class AlertController {
     private final AlertService alertService;
 
     /* 알림 생성 */
-    @PostMapping
+    @PostMapping("alert")
     public ResponseEntity<?> sendNotificationByToken(
             @RequestBody NotificationRequestDto requestDto) {
 
