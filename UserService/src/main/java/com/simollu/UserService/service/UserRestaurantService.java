@@ -68,7 +68,7 @@ public class UserRestaurantService {
 
         List<RestaurantFavoriteResponse> restaurantList = new ArrayList<>();
         for (UserRestaurant data : userRestaurantList) {
-            RestaurantFavoriteResponse restaurant = restaurantServiceClient.getRestaurant(data.getRestaurantSeq());
+            RestaurantFavoriteResponse restaurant = restaurantServiceClient.getRestaurant(userSeq, data.getRestaurantSeq());
             restaurantList.add(restaurant);
         }
 
