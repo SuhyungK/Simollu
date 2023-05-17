@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -562,8 +563,8 @@ class _MainPageState extends State<MainPage> {
                                               SizedBox(
                                                 width: double.infinity,
                                                 height: 120,
-                                                child: Image.network(
-                                                  mainViewModel
+                                                child: CachedNetworkImage(
+                                                  imageUrl: mainViewModel
                                                       .tryHereList[index]
                                                       .restaurantImage,
                                                   fit: BoxFit.cover,
@@ -728,8 +729,9 @@ class _MainPageState extends State<MainPage> {
                                   SizedBox(
                                     width: 100,
                                     height: 100,
-                                    child: Image.network(
-                                      mainViewModel.recentlyHotList[index]
+                                    child: CachedNetworkImage(
+                                      imageUrl: mainViewModel
+                                          .recentlyHotList[index]
                                           .restaurantImage,
                                     ),
                                   ),

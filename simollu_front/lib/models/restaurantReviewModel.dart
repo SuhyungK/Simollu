@@ -27,7 +27,7 @@ class RestaurantReviewModel {
     reviewContent = json['reviewContent'];
     reviewRegistDate = json['reviewRegistDate'];
     userImg = json['userImg'];
-    userNickname = json['userNickname'];
+    userNickname = json['userNickName'];
   }
 
   Map<String, dynamic> toJson() {

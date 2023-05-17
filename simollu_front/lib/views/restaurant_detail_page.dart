@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/menuInfoModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
@@ -28,10 +29,11 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   getRestaurantDetailInfo() async {
     RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
 
-    result = await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
+    result =
+        await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
 
     setState(() {
-      if(result != null) {
+      if (result != null) {
         result = result;
       }
     });
@@ -46,7 +48,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     _tabController = TabController(length: 3, vsync: this);
     fetchReviewData();
     getRestaurantDetailInfo();
-
   }
 
   Future<void> fetchReviewData() async {
@@ -63,11 +64,11 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
 
   @override
   Widget build(BuildContext context) {
-    if(result == null) {
-        return Container(
-          color: Colors.white,
-          child: Image.asset("assets/logo.png"),
-        );
+    if (result == null) {
+      return Container(
+        color: Colors.white,
+        child: Image.asset("assets/logo.png"),
+      );
     }
 
     return Scaffold(
@@ -76,11 +77,12 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
           tabs: ['메뉴', '매장 정보', '리뷰'],
           tabViews: [
             _menuDetail(result!.menuInfoList),
-            _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours, result!.restaurantInfo.restaurantPhoneNumber),
+            _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours,
+                result!.restaurantInfo.restaurantPhoneNumber),
             RestaurantReviewPage(reviewList: reviewList)
           ],
           hasSliverAppBar: true,
-          flexibleImage:result?.restaurantInfo.restaurantImg,
+          flexibleImage: result?.restaurantInfo.restaurantImg,
           bottomWidget: Container(
             color: Colors.white,
             // height: 140,
@@ -106,8 +108,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                         SizedBox(height: 3),
                         Text(
                           result?.restaurantInfo.restaurantCategory ?? '',
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.black54),
+                          style: TextStyle(fontSize: 12, color: Colors.black54),
                         ),
                         SizedBox(height: 3),
                         Text(
@@ -192,7 +193,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   }
 
   Widget _menuDetail(List<MenuInfoModel> menuList) {
-
     if (menuList.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(20.0),
@@ -211,24 +211,24 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Row(
                   children: [
-                    Image.network(
-                      menu.menuImage ??
+                    CachedNetworkImage(
+                      imageUrl: menu.menuImage ??
                           'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                       width: 80,
                       // height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // 이미지 로딩 실패 시 대체 이미지 보여주기
-                        return Image.network(
-                          'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                      errorWidget: (context, url, error) => CachedNetworkImage(
+                        imageUrl:
+                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                        width: 80,
+                        height: 80,
+                      ),
                     ),
                     Column(
-                      children: [Text(menu.menuName ?? ''), Text(menu.menuPrice ?? '')],
+                      children: [
+                        Text(menu.menuName ?? ''),
+                        Text(menu.menuPrice ?? '')
+                      ],
                     )
                   ],
                 ),
@@ -239,7 +239,8 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     );
   }
 
-  Widget _restaurantInfo(String restaurantBusinessHours, String restaurantPhoneNumber) {
+  Widget _restaurantInfo(
+      String restaurantBusinessHours, String restaurantPhoneNumber) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
