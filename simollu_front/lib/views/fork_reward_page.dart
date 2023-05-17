@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:simollu_front/models/forkModel.dart';
+import 'package:simollu_front/models/fork_model.dart';
 import 'package:simollu_front/views/fork_history_widget.dart';
 
 import '../viewmodels/user_view_model.dart';
 
-class ForkRewardPage extends StatelessWidget {
-  UserViewModel userViewModel = Get.find();
-  late List<ForkModel> forkList = [];
+class ForkRewardPage extends StatefulWidget {
+  const ForkRewardPage({Key? key}) : super(key: key);
 
-  initForkList() async {
-    forkList = await userViewModel.getForkList();
-    print("for_reward_page : ");
+  @override
+  State<ForkRewardPage> createState() => _ForkRewardPageState();
+}
+
+class _ForkRewardPageState extends State<ForkRewardPage> {
+  UserViewModel userViewModel = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+
+    userViewModel.getForkList();
   }
 
   @override
@@ -57,7 +65,7 @@ class ForkRewardPage extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                                text: userViewModel.fork.value.toString(),
+                                text: userViewModel.fork.toString(),
                                 style: TextStyle(
                                     color: Colors.amber, fontSize: 20)),
                             TextSpan(text: "개", style: TextStyle(fontSize: 18))
@@ -75,9 +83,9 @@ class ForkRewardPage extends StatelessWidget {
               color: Colors.white,
               width: double.infinity,
               child: ListView.builder(
-                itemCount: forkList.length,
+                itemCount: userViewModel.forkList.value.length,
                 itemBuilder: (context, index) {
-                  final list = forkList[index];
+                  final list = userViewModel.forkList.value[index];
                   return ForkHistoryWidget(
                     rewardAmount: list.userForkAmount,
                     rewardDate: list.userForkRegisterDate,

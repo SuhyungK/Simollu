@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-import 'package:simollu_front/models/forkModel.dart';
+import 'package:simollu_front/models/fork_model.dart';
 import 'package:simollu_front/services/user_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
@@ -16,6 +16,7 @@ class UserViewModel extends GetxController {
   RxString nickname = "".obs;
   RxString image = "".obs;
   RxInt fork = (-1).obs;
+  RxList<ForkModel> forkList = <ForkModel>[].obs;
   // Rx<File?> profileImage = Rx<File?>(null);
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
@@ -148,7 +149,7 @@ class UserViewModel extends GetxController {
   }
 
   // [GET] User 포크 내역 리스트 조회
-  Future<List<ForkModel>> getForkList() async {
+  Future<void> getForkList() async {
     Uri uri = baseUri.resolve("/api/user/user/fork-list");
 
     await initialize();
@@ -167,11 +168,8 @@ class UserViewModel extends GetxController {
 
       for (dynamic r in res) {
         forkList.add(ForkModel.fromJson(r));
-        print(r);
       }
-      print(forkList);
+      this.forkList.value = forkList;
     }
-
-    return forkList;
   }
 }
