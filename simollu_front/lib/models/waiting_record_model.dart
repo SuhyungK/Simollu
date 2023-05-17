@@ -31,7 +31,7 @@ class WaitingRecordModel {
         waitingNo = json['waitingNo'] ?? 0,
         waitingTime = json['waitingTime'] ?? 0,
         waitingCurRank = json['waitingCurRank'] ?? 0,
-        restaurantName = json['restaurantName'] ?? 0,
+        restaurantName = json['restaurantName'] ?? "",
         waitingStatusRegistDate = json['waitingStatusRegistDate'] ?? "",
         waitingStatusContent = json['waitingStatusContent'] ?? -1;
 

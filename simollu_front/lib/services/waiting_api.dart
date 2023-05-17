@@ -11,7 +11,7 @@ class WaitingApi {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
-  Future<void> postWaiting(
+  Future<WaitingRecordModel?> postWaiting(
       int restaurantSeq, int waitingPersonCnt, String restaurantName) async {
     // 식당 일련번호, 웨이팅 인원, 식당 이름
     await initialize();
@@ -38,9 +38,11 @@ class WaitingApi {
 
       print("웨이팅 등록 api 통신결과 :");
       print(res);
+
+      return WaitingRecordModel.fromJson(res);
       // print("result :" + jsonDecode(response.body)["result"]);
       // return true;
     }
-    // return null;
+    return null;
   }
 }

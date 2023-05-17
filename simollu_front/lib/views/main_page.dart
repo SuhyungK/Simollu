@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simollu_front/services/main_api.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 import 'package:simollu_front/widgets/shadow_button.dart';
@@ -58,6 +59,7 @@ class _MainPageState extends State<MainPage> {
   UserViewModel userViewModel = Get.find();
   MainViewModel mainViewModel = Get.find();
   MapViewModel mapViewModel = Get.find();
+  WaitingViewModel waitingViewModel = Get.find();
 
   void getData() async {
     await userViewModel.getNickname();
@@ -169,24 +171,26 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            RootController.to.setRootPageTitles("");
-            RootController.to.setIsMainPage(false);
-            Navigator.push(
-              context,
-              GetPageRoute(
-                curve: Curves.fastOutSlowIn,
-                page: () => MapPage(),
-              ),
-            );
-          },
-          backgroundColor: Colors.amber,
-          icon: Icon(Icons.location_on),
-          label: Text(
-            '경로 보기',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )),
+      floatingActionButton: waitingViewModel.waitingSeq.value == 0
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                RootController.to.setRootPageTitles("");
+                RootController.to.setIsMainPage(false);
+                Navigator.push(
+                  context,
+                  GetPageRoute(
+                    curve: Curves.fastOutSlowIn,
+                    page: () => MapPage(),
+                  ),
+                );
+              },
+              backgroundColor: Colors.amber,
+              icon: Icon(Icons.location_on),
+              label: Text(
+                '경로 보기',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -258,190 +262,203 @@ class _MainPageState extends State<MainPage> {
                 child: Center(
                   child: Column(
                     children: [
-                      Container(
-                        child: waitingInfo == null
-                            ? null
-                            : Container(
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 5,
-                                      offset: Offset(0, 3),
-                                      color: Colors.grey.withOpacity(0.4),
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10),
-                                                  child: Text(
-                                                    "${waitingInfo?.restaurant}",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "예상 대기 시간",
-                                                      style: TextStyle(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      "${waitingInfo!.expectedWatingTime ~/ 60}시간 ${waitingInfo!.expectedWatingTime % 60}분",
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "대기 순서",
-                                                      style: TextStyle(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      "${waitingInfo!.waitingCount}",
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text("현재 대기 번호"),
-                                              Text(
-                                                "${waitingInfo?.waitingNumber}",
-                                                style: TextStyle(
-                                                  color: Color(0xFFFFD200),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 32,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  print("순서 바꾸기");
-                                                },
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 5,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xFFFFD200),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        offset: Offset(0, 3),
-                                                        blurRadius: 6,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.4),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Text(
-                                                    "순서 바꾸기",
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  print("예약 취소");
-                                                },
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 5,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xFFCCCCCC),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        offset: Offset(0, 6),
-                                                        blurRadius: 3,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.4),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Text(
-                                                    "예약 취소",
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                      Obx(
+                        () => Container(
+                          child: waitingViewModel.waitingSeq.value == 0
+                              ? null
+                              : Container(
+                                  margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3),
+                                        color: Colors.grey.withOpacity(0.4),
                                       ),
                                     ],
                                   ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 10),
+                                                    child: Text(
+                                                      "${waitingViewModel.restaurantName.value}",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "예상 대기 시간",
+                                                        style: TextStyle(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.8),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        waitingViewModel
+                                                                    .waitingTime
+                                                                    .value >=
+                                                                60
+                                                            ? "${waitingViewModel.waitingTime.value ~/ 60}시간"
+                                                            : "",
+                                                      ),
+                                                      Text(
+                                                        " ${waitingViewModel.waitingTime.value % 60}분",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "대기 순서",
+                                                        style: TextStyle(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.8),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        "${waitingInfo!.waitingCount}",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text("현재 대기 번호"),
+                                                Text(
+                                                  "${waitingViewModel.waitingNo.value}",
+                                                  style: TextStyle(
+                                                    color: Color(0xFFFFD200),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 32,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    print("순서 바꾸기");
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 5,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFFFFD200),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          offset: Offset(0, 3),
+                                                          blurRadius: 6,
+                                                          color: Colors.grey
+                                                              .withOpacity(0.4),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Text(
+                                                      "순서 바꾸기",
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    print("예약 취소");
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 5,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFFCCCCCC),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          offset: Offset(0, 6),
+                                                          blurRadius: 3,
+                                                          color: Colors.grey
+                                                              .withOpacity(0.4),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Text(
+                                                      "예약 취소",
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
