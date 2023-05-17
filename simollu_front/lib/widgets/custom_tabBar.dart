@@ -47,9 +47,18 @@ class _CustomTabBarState extends State<CustomTabBar>
                     automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Image.asset(
+                      background: Image.network(
                         widget.flexibleImage!,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // 이미지 로딩 실패 시 대체 이미지 보여주기
+                          return Image.network(
+                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),

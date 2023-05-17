@@ -12,6 +12,8 @@ class SearchModel {
   late String restaurantImg;
   late double restaurantX;
   late double restaurantY;
+  late int restaurantWaitingTime;
+  late int restaurantWaitingTeam;
   late double distance;
   // "restaurantSeq": 7,
   // "restaurantName": "코애식당",
@@ -28,6 +30,8 @@ class SearchModel {
     required this.restaurantImg,
     required this.restaurantX,
     required this.restaurantY,
+    required this.restaurantWaitingTime,
+    required this.restaurantWaitingTeam,
     required this.distance
   });
 
@@ -45,8 +49,10 @@ class SearchModel {
       : restaurantSeq = json['restaurantSeq'],
         restaurantName = json['restaurantName'] ?? '',
         restaurantRating = json['restaurantRating'],
-        restaurantImg = json['restaurantImg'],
+        restaurantImg = json['restaurantImg'] ?? '',
         restaurantX = double.parse(json['restaurantX']),
         restaurantY = double.parse(json['restaurantY']),
+        restaurantWaitingTime = json['restaurantWaitingTime'] ?? 0,
+        restaurantWaitingTeam = json['restaurantWaitingTeam'] ?? 0,
         distance = json['distance'];
 }
