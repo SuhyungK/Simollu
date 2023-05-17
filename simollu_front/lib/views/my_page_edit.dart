@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/root.dart';
 
 import '../viewmodels/user_view_model.dart';
 
@@ -14,22 +17,26 @@ class MyPageEdit extends StatefulWidget {
 class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController nameController;
 
-  UserViewModel userViewModel = UserViewModel();
+  UserViewModel userViewModel = Get.find();
 
   Future postNickname(String text) async {
-    String res = await userViewModel.postNickname(text);
-    print("mypage screen"+res);
+    bool nicknameStatus = await userViewModel.postNickname(text);
+    bool profileImageStatus = await userViewModel.updateProfileImage();
+    if (nicknameStatus && profileImageStatus) {
+      RootController.to.onWillPop();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.name);
+    nameController = TextEditingController(text: userViewModel.nickname.value);
   }
 
   @override
   void dispose() {
     nameController.dispose();
+    userViewModel.updatedProfileImage.value = null;
     super.dispose();
   }
 
@@ -47,16 +54,24 @@ class _MyPageEditState extends State<MyPageEdit> {
               child: Center(
                 child: Stack(
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/cat.jpg"),
+                    Obx(
+                      () => CircleAvatar(
+                        radius: 50,
+                        backgroundImage: userViewModel.image.value == ""
+                            ? AssetImage("assets/logo.png")
+                            : (userViewModel.updatedProfileImage.value == null
+                                ? CachedNetworkImageProvider(
+                                    userViewModel.image.value) as ImageProvider
+                                : FileImage(
+                                    userViewModel.updatedProfileImage.value!)),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       child: InkWell(
                         onTap: () {
-                          print("프로필 사진 변경");
+                          userViewModel.onChangeProfileImage();
                         },
                         child: Icon(
                           Icons.camera_alt,
@@ -64,7 +79,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           size: 30,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -93,7 +108,7 @@ class _MyPageEditState extends State<MyPageEdit> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('내 정보 수정'+ nameController.value.text);
+                  print('내 정보 수정' + nameController.value.text);
                   postNickname(nameController.value.text);
                 },
                 style: ButtonStyle(

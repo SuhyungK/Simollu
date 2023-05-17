@@ -42,6 +42,7 @@ class RootController extends GetxController {
     } else if (index == 2 && isMainPages[2].value) {
       UserViewModel userViewModel = Get.find();
       userViewModel.getNickname();
+      userViewModel.getProfileImage();
     }
   }
 

@@ -752,7 +752,7 @@ class _MainPageState extends State<MainPage> {
                                             ],
                                           ),
                                           Text(
-                                            "동네 거리km 오후에 수정",
+                                            "${mainViewModel.recentlyHotList[index].restaurantAddress} ${mainViewModel.recentlyHotList[index].distance}km",
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),

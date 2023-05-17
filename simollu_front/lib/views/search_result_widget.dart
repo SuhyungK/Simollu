@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:simollu_front/services/waiting_api.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import '../root.dart';
@@ -37,6 +38,7 @@ class SearchResultWidget extends StatefulWidget {
 }
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
+  WaitingViewModel waitingViewModel = Get.find();
   int _numberOfPeople = 1;
 
   void _incrementNumberOfPeople() {
@@ -55,8 +57,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
 
   registWaiting() async {
     WaitingApi waitingApi = WaitingApi();
-    await waitingApi.postWaiting(
-        widget.restaurantSeq, _numberOfPeople, widget.name);
   }
 
   @override
