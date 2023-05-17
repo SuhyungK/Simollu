@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         http
                 .csrf().disable()
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 
 
                 .oauth2Login()
