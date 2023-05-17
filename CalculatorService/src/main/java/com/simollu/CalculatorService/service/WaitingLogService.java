@@ -81,7 +81,7 @@ public class WaitingLogService {
 //    }
 
 
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "0 30 5 * * ?")
     public Map<Long, Map<String, Double>> getAverageWaitingTime() throws JsonProcessingException {
 
         System.out.println("평균 예상 시간 계산 함수 실행");
@@ -159,8 +159,12 @@ public class WaitingLogService {
     // 시간별 순위가 오름에 따라 오르는 비율
     // 일주일, 이주일 전 데이터 사용
     // 대기시간 / 순위 의 비율을 구한 뒤 전체 순위에 또 평균값을 내서 구함
-    @Scheduled(cron = "0 0 4 * * ?")
+    @Scheduled(cron = "0 40 5 * * ?")
     public Map<Long, Map<String, Double>> getAverageWaitingTimePerRank() {
+
+        System.out.println("평균 예상 시간 계산 함수 실행");
+        logger.info("Method 실행 시간: {}", LocalDateTime.now());
+
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusWeeks(1);
         LocalDate twoWeeksAgo = today.minusWeeks(2);

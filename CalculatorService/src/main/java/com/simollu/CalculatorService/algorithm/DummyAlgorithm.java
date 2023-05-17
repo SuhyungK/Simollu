@@ -242,25 +242,48 @@ public class DummyAlgorithm {
 
     // 평일
     public void weekdayMake() {
+
+        // 점심 시간
+        entrance.put(LocalTime.of(11,00), new boundary(0, 0));
+        entrance.put(LocalTime.of(11,30), new boundary(2, 4));
+        entrance.put(LocalTime.of(12,00), new boundary(6, 12));
+        entrance.put(LocalTime.of(12,30), new boundary(6, 12));
+        entrance.put(LocalTime.of(13,00), new boundary(6, 12));
+        entrance.put(LocalTime.of(13,30), new boundary(2, 3));
+        entrance.put(LocalTime.of(14,00), new boundary(0, 0));
+
+
+
         entrance.put(LocalTime.of(16,00), new boundary(0, 0));
         entrance.put(LocalTime.of(16,30), new boundary(0, 0));
         entrance.put(LocalTime.of(17,00), new boundary(0, 0));
         entrance.put(LocalTime.of(17,30), new boundary(3, 5));
-        entrance.put(LocalTime.of(18,00), new boundary(24, 25));
-        entrance.put(LocalTime.of(18,30), new boundary(8, 12));
+        entrance.put(LocalTime.of(18,00), new boundary(24, 30));
+        entrance.put(LocalTime.of(18,30), new boundary(8, 14));
         entrance.put(LocalTime.of(19,00), new boundary(6, 10));
-        entrance.put(LocalTime.of(19,30), new boundary(4, 8));
-        entrance.put(LocalTime.of(20,00), new boundary(2, 4));
-        entrance.put(LocalTime.of(20,30), new boundary(1, 2));
+        entrance.put(LocalTime.of(19,30), new boundary(3, 6));
+        entrance.put(LocalTime.of(20,00), new boundary(1, 3));
+        entrance.put(LocalTime.of(20,30), new boundary(0, 0));
         entrance.put(LocalTime.of(21,00), new boundary(0, 0));
         entrance.put(LocalTime.of(21,30), new boundary(0, 0));
         entrance.put(LocalTime.of(22,00), new boundary(0, 0));
+
+
+
+        // 점심
+        leaver.put(LocalTime.of(11,00), new boundary(0, 0));
+        leaver.put(LocalTime.of(11,30), new boundary(4, 4));
+        leaver.put(LocalTime.of(12,00), new boundary(4, 7));
+        leaver.put(LocalTime.of(12,30), new boundary(6, 10));
+        leaver.put(LocalTime.of(13,00), new boundary(6, 12));
+        leaver.put(LocalTime.of(13,30), new boundary(6, 12));
+        leaver.put(LocalTime.of(14,00), new boundary(6, 12));
 
         leaver.put(LocalTime.of(16,00), new boundary(0, 0));
         leaver.put(LocalTime.of(16,30), new boundary(0, 0));
         leaver.put(LocalTime.of(17,00), new boundary(0, 0));
         leaver.put(LocalTime.of(17,30), new boundary(15, 18));
-        leaver.put(LocalTime.of(18,00), new boundary(8, 10));
+        leaver.put(LocalTime.of(18,00), new boundary(10, 12));
         leaver.put(LocalTime.of(18,30), new boundary(6, 8));
         leaver.put(LocalTime.of(19,00), new boundary(8, 10));
         leaver.put(LocalTime.of(19,30), new boundary(10, 12));
