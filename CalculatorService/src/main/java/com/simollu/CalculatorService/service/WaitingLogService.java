@@ -74,11 +74,11 @@ public class WaitingLogService {
 //        logger.info("Method 실행 시간: {}", LocalDateTime.now());
 //    }
 
-//    @Scheduled(cron = "0 * * * * ?")
-//    public void test1() {
-//        System.out.println("안녕 나는 테스트야2");
-//        logger.info("Method 실행 시간: {}", LocalDateTime.now());
-//    }
+    @Scheduled(cron = "0 * * * * ?")
+    public void test1() {
+        System.out.println("안녕 나는 테스트야2");
+        logger.info("Method 실행 시간: {}", LocalDateTime.now());
+    }
 
 
     @Scheduled(cron = "0 3 22 * * ?")
