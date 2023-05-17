@@ -52,7 +52,7 @@ public class RedisCacheService {
 
         // 만약 과거 데이터가 없는 식당이라면 대표 자료를 가져다가 사용한다.
         if (redisData == null) {
-            key = "averageWaitingRatioTime:50000";
+            key = "averageWaitingRatioTime:50001";
             redisData = redisTemplate.opsForHash().entries(key);
         }
 

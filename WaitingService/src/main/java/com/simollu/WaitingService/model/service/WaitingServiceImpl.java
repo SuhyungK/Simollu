@@ -47,8 +47,8 @@ public class WaitingServiceImpl implements WaitingService {
         Waiting waiting = waitingHistoryDto.toEntity();
 
         Integer waitingSeq = waitingRepository.save(waiting).getWaitingSeq();
-        WaitingStatusDto statusDto = new WaitingStatusDto(waitingSeq, STATUS_WAITING
-                , redisService.getWaitingCnt(waitingHistoryDto.getRestaurantSeq())+1 , DateTimeUtils.nowFromZone());
+        WaitingStatusDto statusDto = new WaitingStatusDto(waitingSeq, STATUS_WAITING,
+                redisService.getWaitingCnt(waitingHistoryDto.getRestaurantSeq())+1, DateTimeUtils.nowFromZone());
         waitingHistoryDto.setWaitingSeq(waitingSeq);
         waitingHistoryDto.setWaitingStatusRegistDate(statusDto.getWaitingStatusRegistDate()); // 대기일시
         updateStatus(statusDto, waitingHistoryDto);
