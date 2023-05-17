@@ -1,5 +1,6 @@
 package com.simollu.ApigatewayService.config;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping;
@@ -16,25 +17,19 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 public class CorsGlobalConfiguration implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
-        corsRegistry.addMapping("/**")
-                .allowedOriginPatterns("http://*", "https://*")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
+        corsRegistry.addMapping("/*")
+                .allowedOrigins("")
+                .allowedMethods("*")
                 .maxAge(3600);
     }
 
-//    @Bean
-//    public CorsConfiguration corsConfiguration(
-//            RoutePredicateHandlerMapping routePredicateHandlerMapping) {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowCredentials(false);
-//        corsConfiguration.addAllowedOriginPattern("*");
-//        corsConfiguration.addAllowedHeader("*");
-//        Arrays.asList(HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.GET, HttpMethod.DELETE, HttpMethod.POST) .forEach(m -> corsConfiguration.addAllowedMethod(m));
-//
-//        routePredicateHandlerMapping.setCorsConfigurations(new HashMap<String, CorsConfiguration>() {{ put("/**", corsConfiguration); }});
-//        return corsConfiguration;
-//    }
+    @Bean
+    public CorsConfiguration corsConfiguration(
+            RoutePredicateHandlerMapping routePredicateHandlerMapping) {
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        Arrays.asList(HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.GET, HttpMethod.DELETE, HttpMethod.POST) .forEach(m -> corsConfiguration.addAllowedMethod(m));
+        corsConfiguration.addAllowedOrigin("*");
+        routePredicateHandlerMapping.setCorsConfigurations(new HashMap<String, CorsConfiguration>() {{ put("/**", corsConfiguration); }});
+        return corsConfiguration;
+    }
 }
-
