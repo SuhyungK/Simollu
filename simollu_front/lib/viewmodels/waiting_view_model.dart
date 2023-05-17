@@ -1,18 +1,20 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 import '../utils/token.dart';
 import 'package:simollu_front/models/waitingRecordModel.dart';
 import 'package:http/http.dart' as http;
 
-class WaitingViewModel {
-
+class WaitingViewModel extends GetxController {
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
   }
 
   // 웨이팅 내역 조회(완료)
-  static Future<List<WaitingRecordModel>> fetchWaitingRecord(int waitingStatusContent) async {
+  static Future<List<WaitingRecordModel>> fetchWaitingRecord(
+      int waitingStatusContent) async {
     List<WaitingRecordModel> result = [];
     String token = await getToken();
     var url = createUrl('/waiting/user/status/$waitingStatusContent');
@@ -26,9 +28,9 @@ class WaitingViewModel {
 
     if (response.statusCode == 200) {
       final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
-      result = (decodedList as List).map((item) =>
-        WaitingRecordModel.fromJson(item)
-      ).toList();
+      result = (decodedList as List)
+          .map((item) => WaitingRecordModel.fromJson(item))
+          .toList();
     } else {
       throw Error();
     }
