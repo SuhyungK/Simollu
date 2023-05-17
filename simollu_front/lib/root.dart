@@ -45,6 +45,7 @@ class RootController extends GetxController {
       UserViewModel userViewModel = Get.find();
       userViewModel.getNickname();
       userViewModel.getProfileImage();
+      userViewModel.getForkNumber();
     }
   }
 

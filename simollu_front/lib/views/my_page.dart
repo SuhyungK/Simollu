@@ -163,7 +163,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                   context,
                                   GetPageRoute(
                                     curve: Curves.fastOutSlowIn,
-                                    page: () => ForkRewardPage(fork: 0),
+                                    page: () => ForkRewardPage(),
                                   ),
                                 );
                               },
@@ -178,7 +178,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   Text(
-                                    0.toString(),
+                                    userViewModel.fork.value.toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
