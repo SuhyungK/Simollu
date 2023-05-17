@@ -16,7 +16,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 public class CorsGlobalConfiguration implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
-        corsRegistry.addMapping("/*")
+        corsRegistry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("*")
                 .maxAge(3600);
@@ -26,7 +26,7 @@ public class CorsGlobalConfiguration implements WebFluxConfigurer {
     public CorsConfiguration corsConfiguration(
             RoutePredicateHandlerMapping routePredicateHandlerMapping) {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowCredentials(false);
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedHeader("*");
         Arrays.asList(HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.GET, HttpMethod.DELETE, HttpMethod.POST) .forEach(m -> corsConfiguration.addAllowedMethod(m));
