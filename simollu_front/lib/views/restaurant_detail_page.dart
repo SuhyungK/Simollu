@@ -28,20 +28,10 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   RestaurantViewModel restaurantViewModel = Get.find();
   late TabController? _tabController;
-  RestaurantDetailModel? result;
   bool toggleChart = false;
 
   getRestaurantDetailInfo() async {
-    RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
-
-    result =
-        await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
-
-    setState(() {
-      if (result != null) {
-        result = result;
-      }
-    });
+    await restaurantViewModel.fetchRestaurantDetail(widget.restaurantSeq);
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -58,146 +48,160 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   Future<void> fetchReviewData() async {
     await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
-
-    print(result);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (result == null) {
-      return Container(
-        color: Colors.white,
-        child: Image.asset("assets/logo.png"),
-      );
-    }
-
-    return Scaffold(
-      body: CustomTabBar(
-          length: 3,
-          tabs: ['메뉴', '매장 정보', '리뷰'],
-          tabViews: [
-            _menuDetail(result!.menuInfoList),
-            _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours,
-                result!.restaurantInfo.restaurantPhoneNumber),
-            Obx(() => RestaurantReviewPage(
-                reviewList: restaurantViewModel.reviews.value)),
-          ],
-          hasSliverAppBar: true,
-          flexibleImage: result?.restaurantInfo.restaurantImg,
-          bottomWidget: Container(
-            color: Colors.white,
-            // height: 140,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          result?.restaurantInfo.restaurantName ?? '',
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          result?.restaurantInfo.restaurantCategory ?? '',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          result?.restaurantInfo.restaurantAddress ?? '',
-                          style: TextStyle(color: Colors.black38),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.timer_outlined,
-                              color: Colors.amber,
-                              size: 18,
-                            ),
-                            Text(
-                              '기다릴만해요 ${result?.restaurantInfo.restaurantRating ?? 0}%',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          child: toggleChart ? Text("Test") : null,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Obx(
+      () => restaurantViewModel.restaurant.value == null
+          ? Container(
+              color: Colors.white,
+              child: Image.asset("assets/logo.png"),
+            )
+          : Scaffold(
+              body: CustomTabBar(
+                  length: 3,
+                  tabs: ['메뉴', '매장 정보', '리뷰'],
+                  tabViews: [
+                    _menuDetail(
+                        restaurantViewModel.restaurant.value!.menuInfoList),
+                    _restaurantInfo(
+                        restaurantViewModel.restaurant.value!.restaurantInfo
+                            .restaurantBusinessHours,
+                        restaurantViewModel.restaurant.value!.restaurantInfo
+                            .restaurantPhoneNumber),
+                    RestaurantReviewPage(
+                        reviewList: restaurantViewModel.reviews.value),
+                  ],
+                  hasSliverAppBar: true,
+                  flexibleImage: restaurantViewModel
+                      .restaurant.value!.restaurantInfo.restaurantImg,
+                  bottomWidget: Container(
+                    color: Colors.white,
+                    // height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _isLike
-                              ? IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isLike = false;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    color: Colors.pink,
-                                  ))
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isLike = true;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.pink,
-                                  )),
-                          ButtonTheme(
-                            child: OutlinedButton(
-                              onPressed: () {
-                                setState(() {
-                                  toggleChart = !toggleChart;
-                                });
-                              },
-                              style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  side: BorderSide(
-                                    color: Colors.black12,
+                          Flexible(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  restaurantViewModel.restaurant.value!
+                                          .restaurantInfo.restaurantName ??
+                                      '',
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  fixedSize: Size(
-                                      MediaQuery.of(context).size.width * 0.3,
-                                      40),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(20.0))),
-                              child: Text(
-                                '예상대기시간',
-                                maxLines: 1,
-                              ),
+                                ),
+                                SizedBox(height: 3),
+                                Text(
+                                  restaurantViewModel.restaurant.value!
+                                          .restaurantInfo.restaurantCategory ??
+                                      '',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                                SizedBox(height: 3),
+                                Text(
+                                  restaurantViewModel.restaurant.value!
+                                          .restaurantInfo.restaurantAddress ??
+                                      '',
+                                  style: TextStyle(color: Colors.black38),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.timer_outlined,
+                                      color: Colors.amber,
+                                      size: 18,
+                                    ),
+                                    Text(
+                                      '기다릴만해요 ${restaurantViewModel.restaurant.value!.restaurantInfo.restaurantRating ?? 0}%',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.amber),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  child: toggleChart ? Text("Test") : null,
+                                ),
+                              ],
                             ),
-                          )
+                          ),
+                          Flexible(
+                              flex: 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  _isLike
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isLike = false;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.favorite,
+                                            color: Colors.pink,
+                                          ))
+                                      : IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isLike = true;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.pink,
+                                          )),
+                                  ButtonTheme(
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          toggleChart = !toggleChart;
+                                        });
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          side: BorderSide(
+                                            color: Colors.black12,
+                                          ),
+                                          fixedSize: Size(
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3,
+                                              40),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0))),
+                                      child: Text(
+                                        '예상대기시간',
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ))
                         ],
-                      ))
-                ],
-              ),
+                      ),
+                    ),
+                  )),
             ),
-          )),
     );
   }
 

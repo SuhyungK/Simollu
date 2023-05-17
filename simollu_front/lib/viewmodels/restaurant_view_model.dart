@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/restaurantDetailModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
+import 'package:simollu_front/services/restaurant_detail_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class RestaurantViewModel extends GetxController {
@@ -17,6 +18,16 @@ class RestaurantViewModel extends GetxController {
   }
 
   // 식당 상세정보 조회
+  Future<void> fetchRestaurantDetail(int restaurantSeq) async {
+    String token = await getToken();
+    RestaurantDetailModel? res =
+        await RestaurantDetailApi().getRestaurantDetailInfo(restaurantSeq);
+    if (res != null) {
+      restaurant.value = res;
+    } else {
+      restaurant.value = null;
+    }
+  }
 
   // 식당 리뷰들 조회
   Future<void> fetchReview(int restaurantSeq) async {
