@@ -4,20 +4,22 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+String? jwtToken = '';
+
 class TokenStamp {
-  var logger = Logger();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<void> tokenStamp() async{
     final SharedPreferences prefs = await _prefs;
-    String? jwtToken = prefs.getString('token');
-    getFcmToken().then((value) => {
-      setFcmToken(jwtToken, value)
-    });
+    jwtToken = prefs.getString('token') ?? '';
+    if (jwtToken != '') {
+      getFcmToken().then((value) => {
+        setFcmToken(jwtToken, value)
+      });
+    }
   }
 
   Future<String?> getFcmToken() async {
@@ -48,13 +50,13 @@ class TokenStamp {
   void setFcmToken(String? jwt, String? fcm) async {
     Uri url = Uri.parse('https://simollu.com/api/user/user/firebase-token');
     await http.post(url,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "Authorization": jwt!
-      },
-      body: jsonEncode({
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Authorization": jwt!
+        },
+        body: jsonEncode({
           'fcmToken': fcm
-      })
+        })
     );
   }
 }

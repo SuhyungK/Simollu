@@ -92,8 +92,8 @@ Future<void> fcmSetting() async {
   );
 
   InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndriod,
-    iOS: initializationSettingsIOS
+      android: initializationSettingsAndriod,
+      iOS: initializationSettingsIOS
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);

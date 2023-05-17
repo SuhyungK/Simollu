@@ -87,6 +87,16 @@ Future<void> setupFlutterNotifications() async {
     sound: true,
   );
   isFlutterLocalNotificationsInitialized = true;
+
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 }
 
 void showFlutterNotification(RemoteMessage message) {

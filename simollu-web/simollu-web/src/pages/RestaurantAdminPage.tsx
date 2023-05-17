@@ -212,8 +212,9 @@ export default function RestaurantAdminPage() {
                 <button
                   onClick={() => isClickedComeIn(item.userSeq)}
                   style={{
-                    color: "black",
-                    border: "1px solid grey",
+                    backgroundColor: "#F6D000",
+                    color: "white",
+                    border: "none",
                     borderRadius: "5px",
                     padding: "5px 20px",
                     marginRight: "20px",

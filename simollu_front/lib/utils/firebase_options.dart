@@ -67,4 +67,3 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.simolluFront',
   );
 }
-
