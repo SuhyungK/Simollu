@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.simollu'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -54,6 +54,10 @@ dependencies {
 
 	// Feign Client - 서비스간 연결
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// spring cloud config
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 }
 
 
