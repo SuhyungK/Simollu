@@ -81,10 +81,10 @@ public class WaitingLogService {
     }
 
 
-    @Scheduled(cron = "0 3 22 * * ?")
+    @Scheduled(cron = "0 0 4 * * ?")
     public Map<Long, Map<String, Double>> getAverageWaitingTime() throws JsonProcessingException {
 
-        System.out.println("안녕 나는 설정메소드야");
+        System.out.println("평균 예상 시간 계산 함수 실행");
         logger.info("Method 실행 시간: {}", LocalDateTime.now());
 
 
