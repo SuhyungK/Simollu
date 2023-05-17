@@ -11,5 +11,6 @@ public class NotificationRequestDto {
     private String targetUserSeq;
     private String title;
     private String body;
+    private String code;
 
 }

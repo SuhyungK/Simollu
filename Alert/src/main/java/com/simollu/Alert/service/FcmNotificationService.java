@@ -36,6 +36,7 @@ public class FcmNotificationService {
         Message message = Message.builder()
                 .setToken(token)
                 .setNotification(notification)
+                .putData("code", requestDto.getCode())
                 .build();
 
         try {
