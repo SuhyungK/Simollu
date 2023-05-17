@@ -56,7 +56,7 @@ class RestaurantDetailApi {
           print(i);
           waitingTimeList.add(WaitingTimeModel.fromJSON({
             "timeZone": "${i}",
-            "expectedWaitingTIme": 0,
+            "expectedWaitingTime": 0,
           }));
         }
       } else {
@@ -64,14 +64,17 @@ class RestaurantDetailApi {
           WaitingTimeModel curr = WaitingTimeModel.fromJSON(res3[idx]);
           int hour = int.parse(curr.timeZone.split(":")[0]);
           if (hour == i) {
-            waitingTimeList.add(curr);
+            waitingTimeList.add(WaitingTimeModel.fromJSON({
+              "timeZone": "${i}",
+              "expectedWaitingTime": curr.expectedWaitingTime,
+            }));
             if (idx < res3.length - 1) {
               idx++;
             }
           } else {
             waitingTimeList.add(WaitingTimeModel.fromJSON({
               "timeZone": "${i}",
-              "expectedWaitingTIme": 0,
+              "expectedWaitingTime": 0,
             }));
           }
         }
