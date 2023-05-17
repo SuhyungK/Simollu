@@ -46,6 +46,7 @@ class RootController extends GetxController {
       userViewModel.getNickname();
       userViewModel.getProfileImage();
       userViewModel.getForkNumber();
+      userViewModel.getInterestRestaurant();
     }
   }
 

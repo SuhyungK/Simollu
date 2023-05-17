@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/restaurant_model.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class UserAPI {
@@ -11,9 +12,9 @@ class UserAPI {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
-  Future<int> getInterestRestaurants() async {
+  Future<List<RestaurantModel>> getInterestRestaurants() async {
     await initialize();
-    Uri url = baseUrl.resolve("/api/user/user/fork");
+    Uri url = baseUrl.resolve("/api/user/user/restaurant-list");
 
     final response = await http.get(
       headers: {
@@ -24,12 +25,18 @@ class UserAPI {
     );
 
     if (response.statusCode == 200) {
-      final res = json.decode(utf8.decode(response.bodyBytes));
+      List<dynamic> responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      return res['userFork'];
+      List<RestaurantModel> restaurantList = [];
+
+      for (dynamic r in responseBody) {
+        restaurantList.add(RestaurantModel.fromJSON(r));
+      }
+
+      return restaurantList;
     }
 
-    return -1;
+    return [];
   }
 
   Future<bool> postInterestRestaurant(int restaurantSeq) async {

@@ -50,7 +50,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   }
 
   late List<RestaurantReviewModel> reviewList = [];
-  late bool _isLike;
+  bool _isLike = false;
 
   @override
   void initState() {

@@ -213,7 +213,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "관심 식당",
                                     style: TextStyle(
@@ -221,12 +221,16 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    "2,000",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  Obx(
+                                    () => Text(
+                                      userViewModel
+                                          .interestRestaurantList.value.length
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],

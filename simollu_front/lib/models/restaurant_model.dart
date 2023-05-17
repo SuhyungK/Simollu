@@ -6,6 +6,8 @@ class RestaurantModel {
   final String restaurantImage;
   final String restaurantAddress;
   final double distance;
+  final String restaurantCategory;
+  // 좋아요 필요할듯 - 관심식당 페이지
 
   RestaurantModel({
     required this.restaurantSeq,
@@ -15,6 +17,7 @@ class RestaurantModel {
     required this.restaurantImage,
     required this.restaurantAddress,
     required this.distance,
+    required this.restaurantCategory,
   });
 
   RestaurantModel.fromJSON(Map<String, dynamic> json)
@@ -24,5 +27,6 @@ class RestaurantModel {
         restaurantWaitingTime = json['restaurantWaitingTime'] ?? 0,
         restaurantImage = json['restaurantImage'] ?? '',
         restaurantAddress = json['restaurantAddress'] ?? '',
-        distance = json['distance'] ?? 0;
+        distance = json['distance'] ?? 0,
+        restaurantCategory = json['restaurantCategory'] ?? '';
 }

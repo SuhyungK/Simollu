@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import 'package:simollu_front/models/fork_model.dart';
+import 'package:simollu_front/models/restaurant_model.dart';
 import 'package:simollu_front/services/user_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
@@ -17,6 +18,7 @@ class UserViewModel extends GetxController {
   RxString image = "".obs;
   RxInt fork = (-1).obs;
   RxList<ForkModel> forkList = <ForkModel>[].obs;
+  RxList<RestaurantModel> interestRestaurantList = <RestaurantModel>[].obs;
   // Rx<File?> profileImage = Rx<File?>(null);
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
@@ -28,6 +30,10 @@ class UserViewModel extends GetxController {
     bool response = await UserAPI().postInterestRestaurant(restaurantSeq);
 
     return response;
+  }
+
+  Future<void> getInterestRestaurant() async {
+    interestRestaurantList.value = await UserAPI().getInterestRestaurants();
   }
 
   // [GET] User 프로필 이미지 조회
