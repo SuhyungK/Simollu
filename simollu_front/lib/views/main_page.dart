@@ -171,7 +171,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: waitingViewModel.waitingSeq.value == 0
+      floatingActionButton: waitingViewModel.waitingSeq.value == -1
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
@@ -264,7 +264,7 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       Obx(
                         () => Container(
-                          child: waitingViewModel.waitingSeq.value == 0
+                          child: waitingViewModel.waitingSeq.value == -1
                               ? null
                               : Container(
                                   margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
@@ -284,6 +284,19 @@ class _MainPageState extends State<MainPage> {
                                         horizontal: 20, vertical: 10),
                                     child: Column(
                                       children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                waitingViewModel
+                                                    .getWaitingInfo();
+                                              },
+                                              child: Icon(Icons.refresh),
+                                            ),
+                                          ],
+                                        ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

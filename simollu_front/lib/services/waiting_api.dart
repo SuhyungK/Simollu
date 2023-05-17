@@ -11,6 +11,29 @@ class WaitingApi {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
+  Future<WaitingRecordModel?> getWaitingInfo(int waitingSeq) async {
+    await initialize();
+
+    Uri url = baseUrl.resolve('/api/waiting/user/${waitingSeq}');
+
+    final response = await http.get(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+    );
+
+    if (response.statusCode == 200) {
+      final res = json.decode(utf8.decode(response.bodyBytes));
+
+      print(res);
+
+      return WaitingRecordModel.fromJson(res);
+    }
+    return null;
+  }
+
   Future<WaitingRecordModel?> postWaiting(
       int restaurantSeq, int waitingPersonCnt, String restaurantName) async {
     // 식당 일련번호, 웨이팅 인원, 식당 이름

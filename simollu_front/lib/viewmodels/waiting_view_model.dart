@@ -8,10 +8,14 @@ import 'package:simollu_front/models/waiting_record_model.dart';
 import 'package:http/http.dart' as http;
 
 class WaitingViewModel extends GetxController {
-  RxInt waitingSeq = 0.obs;
-  RxInt waitingNo = 0.obs;
-  RxInt waitingTime = 0.obs;
+  RxInt waitingSeq = (-1).obs;
+  RxInt waitingNo = (-1).obs;
+  RxInt waitingTime = (-1).obs;
   RxString restaurantName = "".obs;
+  RxInt restaurantSeq = (-1).obs;
+  RxInt waitingPersonCnt = (-1).obs;
+  RxString waitingStatusRegistDate = "".obs;
+  RxInt waitingStatusContent = (-1).obs;
 
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
@@ -26,10 +30,25 @@ class WaitingViewModel extends GetxController {
       return false;
     }
     waitingSeq.value = res.waitingSeq;
-    waitingNo.value = res.waitingNo;
-    waitingTime.value = res.waitingTime;
-    this.restaurantName.value = res.restaurantName;
+    // waitingNo.value = res.waitingNo;
+    // waitingTime.value = res.waitingTime;
+    // this.restaurantName.value = res.restaurantName;
+    await getWaitingInfo();
     return true;
+  }
+
+  Future<void> getWaitingInfo() async {
+    WaitingRecordModel? res =
+        await WaitingApi().getWaitingInfo(waitingSeq.value);
+    if (res != null) {
+      restaurantSeq.value = res.restaurantSeq;
+      waitingPersonCnt.value = res.waitingPersonCnt;
+      waitingNo.value = res.waitingNo;
+      waitingTime.value = res.waitingTime;
+      restaurantName.value = res.restaurantName;
+      waitingStatusRegistDate.value = res.waitingStatusRegistDate;
+      waitingStatusContent.value = res.waitingStatusContent;
+    }
   }
 
   // 웨이팅 내역 조회(완료)
