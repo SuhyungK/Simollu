@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 public class WaitingRegistDto {
 
-    private int waitingNo; // 대기 번호(변하지 않는 대기번호)
 
+    private int waitingSeq; // 대기 일련번호
+    private int waitingNo; // 대기 번호(변하지 않는 대기번호)
     private int waitingTime; // 예상 대기시간
 
 

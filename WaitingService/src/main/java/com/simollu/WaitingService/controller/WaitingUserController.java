@@ -30,7 +30,7 @@ public class WaitingUserController {
     public ResponseEntity<?> registWaiting(@RequestHeader("userSeq") String userSeq, @RequestBody WaitingHistoryDto waitingHistoryDto) {
         waitingHistoryDto.setUserSeq(userSeq);
         WaitingDetailDto waitingDetailDto = waitingService.registWaiting(waitingHistoryDto);
-        WaitingRegistDto waitingRegistDto = new WaitingRegistDto(waitingDetailDto.getWaitingNo(), waitingDetailDto.getWaitingTime());
+        WaitingRegistDto waitingRegistDto = new WaitingRegistDto(waitingDetailDto.getWaitingSeq() ,waitingDetailDto.getWaitingNo(), waitingDetailDto.getWaitingTime());
 
         return ResponseEntity.ok().body(waitingRegistDto);
     }//registWaiting
