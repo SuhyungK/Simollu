@@ -431,7 +431,8 @@ class _MainPageState extends State<MainPage> {
                                                 padding: EdgeInsets.all(10),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    print("예약 취소");
+                                                    waitingViewModel
+                                                        .cancelWaiting();
                                                   },
                                                   child: Container(
                                                     alignment: Alignment.center,

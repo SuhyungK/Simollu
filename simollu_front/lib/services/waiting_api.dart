@@ -11,6 +11,26 @@ class WaitingApi {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
+  Future<bool> cancelWaiting(int waitingSeq) async {
+    await initialize();
+    Uri url = baseUrl.resolve('/api/waiting/user/cancel');
+    final response = await http.post(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+      body: json.encode({
+        "waitingSeq": waitingSeq,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   Future<WaitingRecordModel?> getWaitingInfo(int waitingSeq) async {
     await initialize();
 
