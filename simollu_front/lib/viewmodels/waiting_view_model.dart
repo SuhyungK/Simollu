@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:simollu_front/services/waiting_api.dart';
 
 import '../utils/token.dart';
 import 'package:simollu_front/models/waitingRecordModel.dart';
@@ -10,6 +11,13 @@ class WaitingViewModel extends GetxController {
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
+  }
+
+  Future<bool> postWaiting(
+      int restaurantSeq, int waitingPersonCnt, String restaurantName) async {
+    await WaitingApi()
+        .postWaiting(restaurantSeq, waitingPersonCnt, restaurantName);
+    return false;
   }
 
   // 웨이팅 내역 조회(완료)

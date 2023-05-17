@@ -56,7 +56,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   }
 
   registWaiting() async {
-    WaitingApi waitingApi = WaitingApi();
+    waitingViewModel.postWaiting(
+        widget.restaurantSeq, widget.queueSize, widget.name);
   }
 
   @override

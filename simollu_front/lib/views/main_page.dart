@@ -81,13 +81,13 @@ class _MainPageState extends State<MainPage> {
     getData();
   }
 
-  WaitingInfo? waitingInfo;
-  // WaitingInfo? waitingInfo = WaitingInfo(
-  //   expectedWatingTime: 160,
-  //   restaurant: "바스버거ssssssssssssssssssssssssssssssssssssss",
-  //   waitingCount: 15,
-  //   waitingNumber: 2,
-  // );
+  // WaitingInfo? waitingInfo;
+  WaitingInfo? waitingInfo = WaitingInfo(
+    expectedWatingTime: 160,
+    restaurant: "바스버거ssssssssssssssssssssssssssssssssssssss",
+    waitingCount: 15,
+    waitingNumber: 2,
+  );
   List<Map<String, Object>> foodTypeIcons = [
     {
       "imagePath": "assets/icons/korean.png",
