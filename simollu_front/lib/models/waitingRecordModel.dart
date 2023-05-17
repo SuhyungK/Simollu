@@ -24,16 +24,16 @@ class WaitingRecordModel {
   });
 
   WaitingRecordModel.fromJson(Map<String, dynamic> json)
-      : waitingSeq = json['waitingSeq'],
-        userSeq = json['userSeq'],
-        restaurantSeq = json['restaurantSeq'],
-        waitingPersonCnt = json['waitingPersonCnt'],
-        waitingNo = json['waitingNo'],
-        waitingTime = json['waitingTime'],
-        waitingCurRank = json['waitingCurRank'],
-        restaurantName = json['restaurantName'],
-        waitingStatusRegistDate = json['waitingStatusRegistDate'],
-        waitingStatusContent = json['waitingStatusContent'];
+      : waitingSeq = json['waitingSeq'] ?? 0,
+        userSeq = json['userSeq'] ?? "",
+        restaurantSeq = json['restaurantSeq'] ?? 0,
+        waitingPersonCnt = json['waitingPersonCnt'] ?? 0,
+        waitingNo = json['waitingNo'] ?? 0,
+        waitingTime = json['waitingTime'] ?? 0,
+        waitingCurRank = json['waitingCurRank'] ?? 0,
+        restaurantName = json['restaurantName'] ?? 0,
+        waitingStatusRegistDate = json['waitingStatusRegistDate'] ?? "",
+        waitingStatusContent = json['waitingStatusContent'] ?? -1;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
