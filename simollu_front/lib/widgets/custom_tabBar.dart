@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatefulWidget {
@@ -35,7 +36,7 @@ class _CustomTabBarState extends State<CustomTabBar>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: widget.length ,
+        length: widget.length,
         child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -47,9 +48,17 @@ class _CustomTabBarState extends State<CustomTabBar>
                     automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Image.asset(
-                        widget.flexibleImage!,
+                      background: CachedNetworkImage(
+                        imageUrl: widget.flexibleImage!,
                         fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            CachedNetworkImage(
+                          imageUrl:
+                              'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -58,28 +67,26 @@ class _CustomTabBarState extends State<CustomTabBar>
                 ),
                 SliverPersistentHeader(
                     pinned: true,
-                    delegate:MyTabBarDelegate(
+                    delegate: MyTabBarDelegate(
                       tabBar: TabBar(
                         controller: _tabController,
                         tabs: List<Widget>.generate(widget.length, (index) {
                           return Tab(
                               child: Text(
-                                widget.tabs[index],
-                                style: TextStyle(color: Colors.black, fontSize: 17),
-                              ));
+                            widget.tabs[index],
+                            style: TextStyle(color: Colors.black, fontSize: 17),
+                          ));
                         }),
                         indicatorColor: Colors.black,
                         labelPadding: EdgeInsets.all(5.0),
                         labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+                        unselectedLabelStyle:
+                            TextStyle(fontWeight: FontWeight.normal),
                       ),
-                    )
-                )
+                    ))
               ];
             },
-            body: _buildTabBarView()
-        )
-    );
+            body: _buildTabBarView()));
     // return Column(
     //   children: [
     //     _buildTabBar(),
@@ -130,19 +137,16 @@ class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
   MyTabBarDelegate({required this.tabBar});
 
   @override
-  Widget build(BuildContext context, double shrinkOffest,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffest, bool overlapsContent) {
     return Container(
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
-                color: Colors.black12,
-                width: 0.5,
-              )
-          ),
-          color: Colors.white
-      ),
-
+            color: Colors.black12,
+            width: 0.5,
+          )),
+          color: Colors.white),
       child: tabBar,
     );
   }

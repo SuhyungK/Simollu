@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,9 +67,14 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child:
                         // 프사
-                        CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/cat.jpg"),
+                        Obx(
+                      () => CircleAvatar(
+                        radius: 50,
+                        backgroundImage: userViewModel.image.value == ""
+                            ? AssetImage("assets/logo.png")
+                            : CachedNetworkImageProvider(
+                                userViewModel.image.value) as ImageProvider,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -157,7 +163,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                   context,
                                   GetPageRoute(
                                     curve: Curves.fastOutSlowIn,
-                                    page: () => ForkRewardPage(fork: 0),
+                                    page: () => ForkRewardPage(),
                                   ),
                                 );
                               },
@@ -172,7 +178,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   Text(
-                                    0.toString(),
+                                    userViewModel.fork.value.toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,

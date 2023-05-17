@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:simollu_front/services/waiting_api.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import '../root.dart';
@@ -13,8 +14,9 @@ class SearchResultWidget extends StatefulWidget {
   final String name;
   final String imageUrl;
   final double distance;
-  final String waitingTime;
-  final String queueSize;
+  final int waitingTime;
+  final int queueSize;
+  final int restaurantRating;
   final int numberOfPeople;
   final VoidCallback onWait;
 
@@ -26,6 +28,7 @@ class SearchResultWidget extends StatefulWidget {
     required this.distance,
     required this.waitingTime,
     required this.queueSize,
+    required this.restaurantRating,
     required this.numberOfPeople,
     required this.onWait,
   }) : super(key: key);
@@ -35,6 +38,7 @@ class SearchResultWidget extends StatefulWidget {
 }
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
+  WaitingViewModel waitingViewModel = Get.find();
   int _numberOfPeople = 1;
 
   void _incrementNumberOfPeople() {
@@ -52,9 +56,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   }
 
   registWaiting() async {
-    WaitingApi waitingApi = WaitingApi();
-    await waitingApi.postWaiting(
-        widget.restaurantSeq, _numberOfPeople, widget.name);
+    waitingViewModel.postWaiting(
+        widget.restaurantSeq, widget.queueSize, widget.name);
   }
 
   @override
@@ -69,8 +72,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        RootController.to.setRootPageTitles(widget.name);
-        RootController.to.setIsMainPage(false);
+        // RootController.to.setRootPageTitles(widget.name);
+        // RootController.to.setIsMainPage(false);
         Get.to(RestaurantDetailpage(restaurantSeq: widget.restaurantSeq));
         // Navigator.push(context,
         //     MaterialPageRoute(
@@ -169,7 +172,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                 size: 19,
                               ),
                               Text(
-                                "기다릴만해요",
+                                "기다릴만해요 ${widget.restaurantRating}%",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.amber),
@@ -197,7 +200,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                     size: 21,
                                   ),
                                   Text(
-                                    '1시간 30분 웨이팅',
+                                    '${widget.waitingTime}분 웨이팅',
                                     maxLines: 2,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -254,7 +257,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                   size: 21,
                                 ),
                                 Text(
-                                  '현재 3팀 대기 중',
+                                  '현재 ${widget.queueSize}팀 대기 중',
                                   maxLines: 2,
                                   style: TextStyle(
                                     color: Colors.black,

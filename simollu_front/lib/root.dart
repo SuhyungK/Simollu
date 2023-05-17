@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 
 import 'package:simollu_front/views/main_page.dart';
 import 'package:simollu_front/views/more_page.dart';
@@ -42,7 +44,22 @@ class RootController extends GetxController {
     } else if (index == 2 && isMainPages[2].value) {
       UserViewModel userViewModel = Get.find();
       userViewModel.getNickname();
+      userViewModel.getProfileImage();
+      userViewModel.getForkNumber();
     }
+  }
+
+  void getWaitingInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    WaitingViewModel waitingViewModel = Get.find();
+    waitingViewModel.waitingSeq.value = prefs.getInt('waitingSeq') ?? -1;
+    waitingViewModel.getWaitingInfo();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    getWaitingInfo();
   }
 
   Future<bool> onWillPop() async {

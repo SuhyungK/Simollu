@@ -1,3 +1,11 @@
+// "reviewSeq": 28,
+// "userSeq": "9030f201-c3a3-4ff9-a411-2359392b65e0",
+// "restaurantSeq": 124,
+// "reviewRating": true,
+// "reviewContent": "good",
+// "reviewRegistDate": "2023-05-16T10:54:12.763435",
+// "userNickName": "김수형",
+// "userImg": "profile/KakaoTalk_20230410_100241747.jpg",
 
 class RestaurantReviewModel {
   late int reviewSeq;
@@ -10,15 +18,15 @@ class RestaurantReviewModel {
   late String userNickname;
 
   RestaurantReviewModel({
-        required this.reviewSeq,
-        required this.userSeq,
-        required this.restaurantSeq,
-        required this.reviewRating,
-        required this.reviewContent,
-        required this.reviewRegistDate,
-        required this.userImg,
-        required this.userNickname,
-      });
+    required this.reviewSeq,
+    required this.userSeq,
+    required this.restaurantSeq,
+    required this.reviewRating,
+    required this.reviewContent,
+    required this.reviewRegistDate,
+    required this.userImg,
+    required this.userNickname,
+  });
 
   RestaurantReviewModel.fromJson(Map<String, dynamic> json) {
     reviewSeq = json['reviewSeq'];
@@ -27,8 +35,8 @@ class RestaurantReviewModel {
     reviewRating = json['reviewRating'];
     reviewContent = json['reviewContent'];
     reviewRegistDate = json['reviewRegistDate'];
-    userImg = json[userImg];
-    userNickname = json[userNickname];
+    userImg = json['userImg'];
+    userNickname = json['userNickName'];
   }
 
   Map<String, dynamic> toJson() {

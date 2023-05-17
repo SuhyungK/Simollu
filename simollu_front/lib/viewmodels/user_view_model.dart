@@ -1,18 +1,46 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:simollu_front/models/forkModel.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:simollu_front/models/fork_model.dart';
+import 'package:simollu_front/services/user_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class UserViewModel extends GetxController {
-  Uri uri = Uri.parse('https://simollu.com/api/user/user/nickname');
+  Uri baseUri = Uri.parse('https://simollu.com');
   String token = ""; // 'late' 키워드를 사용하여 초기화를 뒤로 미룸
   RxString nickname = "".obs;
+  RxString image = "".obs;
+  RxInt fork = (-1).obs;
+  RxList<ForkModel> forkList = <ForkModel>[].obs;
+  // Rx<File?> profileImage = Rx<File?>(null);
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
 
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
+  }
+
+  // [GET] User 프로필 이미지 조회
+  Future<void> getProfileImage() async {
+    await initialize();
+
+    String newImage = "";
+
+    Uri uri = baseUri.resolve("/api/user/user/profile-image");
+    final response = await http.get(headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Authorization": token
+    }, uri);
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.decode(response.bodyBytes);
+      newImage = jsonDecode(responseBody)['userProfileUrl'];
+      image(newImage);
+    }
   }
 
   // [GET] User 닉네임 조회
@@ -21,24 +49,22 @@ class UserViewModel extends GetxController {
 
     String newNickname = "";
 
+    Uri uri = baseUri.resolve("/api/user/user/nickname");
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
     }, uri);
-
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       newNickname = jsonDecode(responseBody)['userNicknameContent'];
 
-      // nickname = jsonDecode(response.body)['userNicknameContent'];
-      // print(nickname);
       nickname(newNickname);
     }
   }
 
   // [POST] User 닉네임 수정
-  Future<String> postNickname(String nickname) async {
-    String res = "";
+  Future<bool> postNickname(String nickname) async {
+    Uri uri = baseUri.resolve("/api/user/user/nickname");
 
     await initialize();
 
@@ -54,16 +80,15 @@ class UserViewModel extends GetxController {
       final responseBody = utf8.decode(response.bodyBytes);
       final jsonResponse = jsonDecode(responseBody);
       nickname = jsonResponse['userNicknameContent'];
-      print(nickname);
-      res = nickname;
+      this.nickname(nickname);
+      return true;
     }
-
-    return res;
+    return false;
   }
 
   // [GET] User 포크 수 조회
-  Future<int> getForkNumber() async {
-    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork");
+  Future<void> getForkNumber() async {
+    Uri uri = baseUri.resolve("/api/user/user/fork");
 
     await initialize();
 
@@ -72,21 +97,60 @@ class UserViewModel extends GetxController {
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
-    }, uri2);
-    print("---------@@@@@" + response.body);
+    }, uri);
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       fork = jsonDecode(responseBody)['userFork'];
+      this.fork.value = fork;
       print(fork);
     }
+  }
 
-    return fork;
+  // 프로필 이미지 변경
+  Future<void> onChangeProfileImage() async {
+    await initialize();
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      updatedProfileImage.value = File(pickedImage.path);
+    }
+  }
+
+  // [POST] User 프로필 이미지 변경
+  Future<bool> updateProfileImage() async {
+    Uri uri = baseUri.resolve("/api/user/user/profileImage");
+
+    if (updatedProfileImage.value == null) {
+      return true;
+    }
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      "Authorization": token,
+    });
+
+    // 파일 첨부
+    request.files.add(
+      await http.MultipartFile.fromPath(
+          'file', updatedProfileImage.value!.path),
+    );
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      await getProfileImage();
+      updatedProfileImage.value = null;
+      return true;
+    }
+
+    return false;
   }
 
   // [GET] User 포크 내역 리스트 조회
-  Future<List<ForkModel>> getForkList() async {
-    Uri uri2 = Uri.parse("https://simollu.com/api/user/user/fork-list");
+  Future<void> getForkList() async {
+    Uri uri = baseUri.resolve("/api/user/user/fork-list");
 
     await initialize();
 
@@ -95,7 +159,7 @@ class UserViewModel extends GetxController {
     final response = await http.get(headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Authorization": token
-    }, uri2);
+    }, uri);
     print("---------@@@@@" + response.body);
 
     if (response.statusCode == 200) {
@@ -104,11 +168,8 @@ class UserViewModel extends GetxController {
 
       for (dynamic r in res) {
         forkList.add(ForkModel.fromJson(r));
-        print(r);
       }
-      print(forkList);
+      this.forkList.value = forkList;
     }
-
-    return forkList;
   }
 }
