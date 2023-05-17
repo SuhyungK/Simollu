@@ -45,8 +45,21 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
                     Container(
                       width: 50,
                       height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.grey, shape: BoxShape.circle),
+                      child: Image.network(
+                        review.userImg!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // 이미지 로딩 실패 시 대체 이미지 보여주기
+                          return Image.network(
+                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
+                      // decoration: BoxDecoration(
+                      //     color: Colors.grey, shape: BoxShape.circle),
                     ),
                     SizedBox(
                       width: 20,
@@ -56,7 +69,7 @@ class _RestaurantReviewPageState extends State<RestaurantReviewPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '김싸피',
+                            review.userNickname,
                             // review['userSeq'],
                             softWrap: true,
                             style: TextStyle(
