@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/restaurantDetailModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class RestaurantViewModel extends GetxController {
+  Rx<RestaurantDetailModel?> restaurant = Rx<RestaurantDetailModel?>(null);
+  RxList<RestaurantReviewModel> reviews = <RestaurantReviewModel>[].obs;
   late String token;
 
   Uri createUrl(String apiUrl) {
@@ -16,7 +19,7 @@ class RestaurantViewModel extends GetxController {
   // 식당 상세정보 조회
 
   // 식당 리뷰들 조회
-  Future<List<RestaurantReviewModel>> fetchReview(int restaurantSeq) async {
+  Future<void> fetchReview(int restaurantSeq) async {
     String token = await getToken();
     Uri uri =
         Uri.parse('https://simollu.com/api/restaurant/review/${restaurantSeq}');
@@ -28,7 +31,6 @@ class RestaurantViewModel extends GetxController {
         "Authorization": token
       },
     );
-    print(response.body);
     List<RestaurantReviewModel> result = [];
 
     print('가게 리뷰 리스트 조회 : ');
@@ -38,6 +40,7 @@ class RestaurantViewModel extends GetxController {
         result.add(RestaurantReviewModel.fromJson(r));
         print(r);
       }
+      reviews.value = result;
     }
 
     // final testjsonList = json.decode(response.body);
@@ -51,7 +54,6 @@ class RestaurantViewModel extends GetxController {
     //     .map<Map<String, dynamic>>((review) => review as Map<String, dynamic>)
     //     .toList();
     //
-    return result;
   }
 
   // 개별 리뷰 조회

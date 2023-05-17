@@ -56,14 +56,10 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   }
 
   Future<void> fetchReviewData() async {
-    List<RestaurantReviewModel> result =
-        await restaurantViewModel.fetchReview(widget.restaurantSeq);
+    await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
 
     print(result);
-    setState(() {
-      reviewList = result;
-    });
   }
 
   @override
@@ -83,7 +79,8 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
             _menuDetail(result!.menuInfoList),
             _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours,
                 result!.restaurantInfo.restaurantPhoneNumber),
-            RestaurantReviewPage(reviewList: reviewList)
+            Obx(() => RestaurantReviewPage(
+                reviewList: restaurantViewModel.reviews.value)),
           ],
           hasSliverAppBar: true,
           flexibleImage: result?.restaurantInfo.restaurantImg,
