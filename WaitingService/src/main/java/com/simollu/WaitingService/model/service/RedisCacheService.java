@@ -47,11 +47,15 @@ public class RedisCacheService {
 
     public Double getAverageWaitingTime(Integer restaurantSeq, LocalTime inputTime) {
         String key = "averageWaitingRatioTime:" + restaurantSeq;
+
+
+
+        // averageWaitingRatioTime:50001
         Map<Object, Object> redisData = redisTemplate.opsForHash().entries(key);
 
 
         // 만약 과거 데이터가 없는 식당이라면 대표 자료를 가져다가 사용한다.
-        if (redisData == null) {
+        if (redisData.isEmpty()) {
             key = "averageWaitingRatioTime:50001";
             redisData = redisTemplate.opsForHash().entries(key);
         }
