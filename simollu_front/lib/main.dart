@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/utils/fcm_setting.dart';
 import 'package:simollu_front/utils/firebase_message.dart';
 import 'package:simollu_front/utils/firebase_options.dart';
+import 'package:simollu_front/utils/token_stamp.dart';
 
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
@@ -36,7 +37,8 @@ void main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
-
+  final getToken = TokenStamp();
+  getToken.tokenStamp();
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
   var logger = Logger();
@@ -51,6 +53,7 @@ void main() async {
   // await Firebase.initializeApp(
   //     options: DefaultFirebaseOptions.currentPlatform
   // );
+
   await dotenv.load(fileName: ".env"); // 추가
   runApp(
     MyApp(),
