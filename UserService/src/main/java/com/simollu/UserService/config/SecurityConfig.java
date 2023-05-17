@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CorsFilter corsFilter;
+    // private final CorsFilter corsFilter;
     private final CustomUserOAuth2Service customUserOAuth2Service;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final GPTOAuth2AuthenticationSuccessHandler gptoAuth2AuthenticationSuccessHandler;
