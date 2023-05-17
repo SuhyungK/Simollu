@@ -1,7 +1,12 @@
 package com.simollu.WaitingService.model.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.simollu.WaitingService.client.AlertServiceClient;
+import com.simollu.WaitingService.client.RestaurantServiceClient;
 import com.simollu.WaitingService.model.dto.*;
+import com.simollu.WaitingService.model.dto.alert.AlertMessage;
+import com.simollu.WaitingService.model.dto.alert.NotificationRequestDto;
+import com.simollu.WaitingService.model.dto.review.WriteableReviewDto;
 import com.simollu.WaitingService.model.entity.Waiting;
 import com.simollu.WaitingService.repository.WaitingRepository;
 import com.simollu.WaitingService.repository.WaitingStatusRepository;
@@ -29,6 +34,8 @@ public class WaitingServiceImpl implements WaitingService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisService redisService;
     private final RedisCacheService redisCacheService; // 추가
+    private final AlertServiceClient alertServiceClient; // 알림 서버 통신
+    private final RestaurantServiceClient restaurantServiceClient; // 레스토랑 서버 통신
 
     private static final String RESTAURANT_KEY = "restaurant_no:";
     private static final int STATUS_WAITING = 0; // 웨이팅
@@ -68,6 +75,10 @@ public class WaitingServiceImpl implements WaitingService {
 
         waitingDetailDto.setWaitingCurRank(redisService.getIndex(waitingDetailDto.getRestaurantSeq(), waitingSeq));
         waitingDetailDto.setWaitingTime(getWaitingTime(waitingDetailDto.getRestaurantSeq(), waitingSeq));
+
+        // 웨이팅 등록 완료 알림
+        AlertMessage alertMessage = AlertMessage.valueOf("WAITING_REGIST_ALERT");
+        sendMessage(alertMessage, waitingDetailDto.getUserSeq());
         return waitingDetailDto;
     }
 
@@ -180,15 +191,38 @@ public class WaitingServiceImpl implements WaitingService {
                 redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq()
                         , waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
             if(waitingStatusDto.getWaitingStatusContent() == STATUS_COMPLETE){
-                // 완료되었습니다 알림
+                // 완료되었습니다 알림 (2시간 뒤 리뷰 작성해주세요 알림)
+
                 // 작성가능후기 DB 추가
+//                restaurantServiceClient.addWriteableReview(
+//                        WriteableReviewDto.builder()
+//                                .restaurantSeq(waitingHistoryDto.getRestaurantSeq())
+//                                .userSeq(waitingHistoryDto.getUserSeq())
+//                                .waitingCompleteDate(waitingStatusDto.getWaitingStatusRegistDate())
+//                                .build()
+//                );
             }else{
                 // 취소되었습니다 알림
+                // 웨이팅 취소 완료 알림
+                AlertMessage alertMessage = AlertMessage.valueOf("WAITING_CANCEL_ALERT");
+                sendMessage(alertMessage, waitingHistoryDto.getUserSeq());
+
             }
         }
         waitingStatusRepository.save(waitingStatusDto.toEntity());
 
         return true;
+    }
+
+    private void sendMessage(AlertMessage alertMessage, String userSeq) {
+        alertServiceClient.sendNotificationByToken(
+                NotificationRequestDto.builder()
+                        .targetUserSeq(userSeq)
+                        .title(alertMessage.getTitle())
+                        .body(alertMessage.getMessage())
+                        .code(alertMessage.getCode())
+                        .build()
+        );
     }
 
     /* 웨이팅 순서 변경 (미루기) */
@@ -225,7 +259,9 @@ public class WaitingServiceImpl implements WaitingService {
 
         // 상태 저장
         waitingStatusRepository.save(statusDto.toEntity());
-
+        // 웨이팅 미루기 완료 알림
+        AlertMessage alertMessage = AlertMessage.valueOf("WAITING_CHANGE_ALERT");
+        sendMessage(alertMessage, waitingDto.getUserSeq());
         return getWaiting(waitingDto.getUserSeq());
     }
 
