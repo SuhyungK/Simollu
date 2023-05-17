@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
-class RestaurantViewModel {
+class RestaurantViewModel extends GetxController {
   late String token;
 
   Uri createUrl(String apiUrl) {
@@ -14,11 +15,11 @@ class RestaurantViewModel {
 
   // 식당 상세정보 조회
 
-
   // 식당 리뷰들 조회
   Future<List<RestaurantReviewModel>> fetchReview(int restaurantSeq) async {
     String token = await getToken();
-    Uri uri = Uri.parse('https://simollu.com/api/restaurant/review/${restaurantSeq}');
+    Uri uri =
+        Uri.parse('https://simollu.com/api/restaurant/review/${restaurantSeq}');
 
     final response = await http.get(
       uri,
@@ -31,9 +32,9 @@ class RestaurantViewModel {
     List<RestaurantReviewModel> result = [];
 
     print('가게 리뷰 리스트 조회 : ');
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       List<dynamic> res = json.decode(utf8.decode(response.bodyBytes));
-      for(dynamic r in res) {
+      for (dynamic r in res) {
         result.add(RestaurantReviewModel.fromJson(r));
         print(r);
       }

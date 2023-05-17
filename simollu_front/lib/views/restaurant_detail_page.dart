@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:simollu_front/models/menuInfoModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/services/restaurant_detail_api.dart';
@@ -23,8 +26,10 @@ class RestaurantDetailpage extends StatefulWidget {
 
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
+  RestaurantViewModel restaurantViewModel = Get.find();
   late TabController? _tabController;
   RestaurantDetailModel? result;
+  bool toggleChart = false;
 
   getRestaurantDetailInfo() async {
     RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
@@ -51,7 +56,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
   }
 
   Future<void> fetchReviewData() async {
-    RestaurantViewModel restaurantViewModel = RestaurantViewModel();
     List<RestaurantReviewModel> result =
         await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
@@ -134,6 +138,9 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                             ),
                           ],
                         ),
+                        Container(
+                          child: toggleChart ? Text("Test") : null,
+                        ),
                       ],
                     ),
                   ),
@@ -166,22 +173,27 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                                   )),
                           ButtonTheme(
                             child: OutlinedButton(
-                                onPressed: () {},
-                                style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    side: BorderSide(
-                                      color: Colors.black12,
-                                    ),
-                                    fixedSize: Size(
-                                        MediaQuery.of(context).size.width * 0.3,
-                                        40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0))),
-                                child: Text(
-                                  '예상대기시간',
-                                  maxLines: 1,
-                                )),
+                              onPressed: () {
+                                setState(() {
+                                  toggleChart = !toggleChart;
+                                });
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  side: BorderSide(
+                                    color: Colors.black12,
+                                  ),
+                                  fixedSize: Size(
+                                      MediaQuery.of(context).size.width * 0.3,
+                                      40),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0))),
+                              child: Text(
+                                '예상대기시간',
+                                maxLines: 1,
+                              ),
+                            ),
                           )
                         ],
                       ))

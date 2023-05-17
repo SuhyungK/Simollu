@@ -6,6 +6,7 @@ import 'package:simollu_front/services/waiting_api.dart';
 import 'package:simollu_front/utils/fcmSetting.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           Get.put(SearchViewModel());
           Get.put(MainViewModel());
           Get.put(WaitingViewModel());
+          Get.put(RestaurantViewModel());
         },
       ),
       // home: Root(),
