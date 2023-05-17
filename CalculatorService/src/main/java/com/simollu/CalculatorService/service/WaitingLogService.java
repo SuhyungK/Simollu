@@ -8,8 +8,12 @@ import com.simollu.CalculatorService.dto.GetEstimatedWaitingTimeDto;
 import com.simollu.CalculatorService.entity.WaitingLog;
 import com.simollu.CalculatorService.repository.WaitingLogRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,13 +24,18 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+
+
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class WaitingLogService {
 
 
     private final WaitingLogRepository waitingLogRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(WaitingLogService.class);
 
 
     private final RedisTemplate<String, Object> redisTemplate;
@@ -50,10 +59,35 @@ public class WaitingLogService {
     }
 
 
+    // ------------------------------------------------------------------------------------------------
 
-    // 시간대별 예상 시간
+    // 시간대별 예상 시간 계산 후 Redis에 cache로 저장
     // 1주전과 2주전의 데이터를 활용
+
+    // 새벽 3시에 실행하는 스케줄링
+    // @Scheduled(cron = "0 0 3 * * ?")
+
+
+//    @Scheduled(cron = "0 01 22 * * ?")
+//    public void test() {
+//        System.out.println("안녕 나는 테스트야");
+//        logger.info("Method 실행 시간: {}", LocalDateTime.now());
+//    }
+
+//    @Scheduled(cron = "0 * * * * ?")
+//    public void test1() {
+//        System.out.println("안녕 나는 테스트야2");
+//        logger.info("Method 실행 시간: {}", LocalDateTime.now());
+//    }
+
+
+    @Scheduled(cron = "0 3 22 * * ?")
     public Map<Long, Map<String, Double>> getAverageWaitingTime() throws JsonProcessingException {
+
+        System.out.println("안녕 나는 설정메소드야");
+        logger.info("Method 실행 시간: {}", LocalDateTime.now());
+
+
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusWeeks(1);
         LocalDate twoWeeksAgo = today.minusWeeks(2);

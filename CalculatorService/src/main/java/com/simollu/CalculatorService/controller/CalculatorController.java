@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/")
-@CrossOrigin
 @Slf4j
 public class CalculatorController {
 

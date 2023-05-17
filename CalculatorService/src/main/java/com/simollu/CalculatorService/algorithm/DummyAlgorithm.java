@@ -121,9 +121,6 @@ public class DummyAlgorithm {
 
             for (timeDot data : timeList) {
 
-
-
-
                 // waiting 신청인 경우
                 if(data.type == 1) {
                     int rank = waitingQue.size() + 1;
