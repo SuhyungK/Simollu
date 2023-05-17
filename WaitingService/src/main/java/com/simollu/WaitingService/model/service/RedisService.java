@@ -109,16 +109,18 @@ public class RedisService {
         redisTemplate.opsForList().remove(key, 1, obj);
 
         // redis 에서 개인 웨이팅정보도 삭제
-        WaitingDetailDto detailDto = getWaiting(waitingSeq);
+        WaitingDetailDto detailDto = getWaiting(waiting.getUserSeq());
         if(status == STATUS_CHANGE) {
             detailDto.setWaitingStatusContent(STATUS_CHANGE);
             try {
-                saveUserWaitingToRedis(detailDto.getWaitingSeq(), detailDto);
+                saveUserWaitingToRedis(waiting.getUserSeq(), detailDto);
             }catch (JsonProcessingException e) {
                 log.error("미루기 데이터 갱신 error");
             }
         }else {
-            redisTemplate.opsForHash().delete(USER_KEY, String.valueOf(detailDto.getWaitingSeq()));
+            if(redisTemplate.opsForHash().get(USER_KEY, detailDto.getUserSeq()) != null){
+                redisTemplate.opsForHash().delete(USER_KEY, detailDto.getUserSeq());
+            }
         }
 
         return waiting;
@@ -138,26 +140,23 @@ public class RedisService {
         // Redis HashOperations를 사용하여 Map 데이터를 Redis에 저장합니다.
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         Map<String, String> map = new HashMap<>();
-        map.put("key1", "value1");
-        map.put("key2", "value2");
-        map.put("key3", "value3");
         hashOps.putAll("u_waiting", map);
         Map<Object, Object> m = hashOps.entries(key);
     }
 
-    public void saveUserWaitingToRedis(Integer key, Object classType) throws JsonProcessingException  {
+    public void saveUserWaitingToRedis(String key, Object classType) throws JsonProcessingException  {
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         Map<Object, Object> map = hashOps.entries(USER_KEY);
-        map.put(key.toString(), objectMapper.writeValueAsString(classType));
+        map.put(key, objectMapper.writeValueAsString(classType));
         hashOps.putAll(USER_KEY, map);
     }
 
     // 순서 미루기 사용 여부 확인
-    public int getStatus(Integer key) {
+    public int getStatus(String key) {
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         int status = -1;
         try {
-            WaitingDetailDto dto = WaitingDetailDto.JsonToDto((String) hashOps.get(USER_KEY, key.toString()));
+            WaitingDetailDto dto = WaitingDetailDto.JsonToDto((String) hashOps.get(USER_KEY, key));
             status =  dto.getWaitingStatusContent();
         }catch (IOException e){
 
@@ -167,11 +166,11 @@ public class RedisService {
     }
 
     // 웨이팅 조회
-    public WaitingDetailDto getWaiting(Integer key) {
+    public WaitingDetailDto getWaiting(String key) {
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         WaitingDetailDto dto = null;
         try {
-            dto = WaitingDetailDto.JsonToDto((String)hashOps.get(USER_KEY, key.toString()));
+            dto = WaitingDetailDto.JsonToDto((String)hashOps.get(USER_KEY, key));
         }catch (IOException e){
             log.error("웨이팅 조회");
             log.error(e.getMessage());

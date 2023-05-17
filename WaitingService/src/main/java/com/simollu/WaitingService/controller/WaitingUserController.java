@@ -27,8 +27,15 @@ public class WaitingUserController {
      * 웨이팅 등록
      * */
     @PostMapping
-    public ResponseEntity<?> registWaiting(@RequestHeader("userSeq") String userSeq, @RequestBody WaitingHistoryDto waitingHistoryDto) {
+    public ResponseEntity<?> registWaiting(@RequestHeader("userSeq") String userSeq
+            , @RequestBody WaitingHistoryDto waitingHistoryDto) {
         waitingHistoryDto.setUserSeq(userSeq);
+        if(waitingService.isWaiting(userSeq)) {
+            WaitingRegistDto waitingRegistDto = WaitingRegistDto.builder()
+                                                .waitingSeq(-1)
+                                                .build();
+            return ResponseEntity.ok().body(waitingRegistDto);
+        }
         WaitingDetailDto waitingDetailDto = waitingService.registWaiting(waitingHistoryDto);
         WaitingRegistDto waitingRegistDto = new WaitingRegistDto(waitingDetailDto.getWaitingSeq() ,waitingDetailDto.getWaitingNo(), waitingDetailDto.getWaitingTime());
 
@@ -39,8 +46,9 @@ public class WaitingUserController {
      * 웨이팅 취소
      * */
     @PostMapping("/cancel")
-    public ResponseEntity<?> updateStatusCancel(@RequestBody WaitingStatusDto waitingStatusDto){
-        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
+    public ResponseEntity<?> updateStatusCancel(@RequestHeader("userSeq") String userSeq
+                                                , @RequestBody WaitingStatusDto waitingStatusDto){
+        WaitingHistoryDto waitingDto = waitingService.getWaiting(userSeq).toHistoryDto();
         waitingDto.setWaitingStatusContent(STATUS_CANCEL);
         waitingStatusDto.setWaitingStatusContent(STATUS_CANCEL);
 
@@ -56,8 +64,9 @@ public class WaitingUserController {
      * 동언 - waitinglog에 insert 처야함
      * */
     @PostMapping("/complete")
-    public ResponseEntity<?> updateStatusComplete(@RequestBody WaitingStatusDto waitingStatusDto){
-        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
+    public ResponseEntity<?> updateStatusComplete(@RequestHeader("userSeq") String userSeq
+                                                , @RequestBody WaitingStatusDto waitingStatusDto){
+        WaitingHistoryDto waitingDto = waitingService.getWaiting(userSeq).toHistoryDto();
         waitingDto.setWaitingStatusContent(STATUS_COMPLETE);
         waitingStatusDto.setWaitingStatusContent(STATUS_COMPLETE);
 
@@ -81,8 +90,9 @@ public class WaitingUserController {
      * 웨이팅 상세정보 조회
      * */
     @GetMapping("{waitingSeq}")
-    public ResponseEntity<?> getWaitingInfo(@PathVariable("waitingSeq") Integer waitingSeq) {
-        WaitingDetailDto waitingDetailDto = waitingService.getWaiting(waitingSeq);
+    public ResponseEntity<?> getWaitingInfo(@RequestHeader("userSeq") String userSeq
+                                            , @PathVariable("waitingSeq") Integer waitingSeq) {
+        WaitingDetailDto waitingDetailDto = waitingService.getWaiting(userSeq);
         if(waitingDetailDto == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(waitingDetailDto);
     }//getWaitingInfo
@@ -93,9 +103,9 @@ public class WaitingUserController {
     @PutMapping
     public ResponseEntity<?> changeWaiting(@RequestHeader("userSeq") String userSeq, @RequestBody WaitingDto waitingDto) {
         waitingDto.setUserSeq(userSeq);
-        Integer waitingSeq = waitingService.changeWaiting(waitingDto);
-        if(waitingSeq == -1) return ResponseEntity.status(202).build();
-        return ResponseEntity.ok(waitingSeq);
+        WaitingDetailDto detailDto = waitingService.changeWaiting(waitingDto);
+        if(detailDto.getWaitingSeq() == -1) return ResponseEntity.status(202).build();
+        return ResponseEntity.ok(detailDto);
     }//changeWaiting
 
     /* 웨이팅 예상시간 조회 */

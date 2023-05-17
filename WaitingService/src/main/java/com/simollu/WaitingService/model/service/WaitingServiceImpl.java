@@ -61,7 +61,7 @@ public class WaitingServiceImpl implements WaitingService {
         try{
             waiting.setWaitingSeq(waitingSeq);
             redisService.putRedisList(waitingHistoryDto.getRestaurantSeq(), waitingHistoryDto);
-            redisService.saveUserWaitingToRedis(waitingDetailDto.getWaitingSeq(), waitingDetailDto);
+            redisService.saveUserWaitingToRedis(waitingDetailDto.getUserSeq(), waitingDetailDto);
         }catch (JsonProcessingException e){
             log.error("registWaiting error!!!!");
         }
@@ -177,7 +177,8 @@ public class WaitingServiceImpl implements WaitingService {
         // 취소/완료면 레디스에서 제거
         if(waitingStatusDto.getWaitingStatusContent() != 0) {
             waitingStatusDto.setWaitingStatusRegistDate(DateTimeUtils.nowFromZone()); // 현재 시간 설정
-            redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq(), waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
+                redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq()
+                        , waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
             if(waitingStatusDto.getWaitingStatusContent() == STATUS_COMPLETE){
                 // 완료되었습니다 알림
                 // 작성가능후기 DB 추가
@@ -192,14 +193,16 @@ public class WaitingServiceImpl implements WaitingService {
 
     /* 웨이팅 순서 변경 (미루기) */
     @Override
-    public Integer changeWaiting(WaitingDto waitingDto) {
+    public WaitingDetailDto changeWaiting(WaitingDto waitingDto) {
 //        WaitingStatus waitingStatus = waitingStatusRepository.findByWaitingSeqAndWaitingStatusContent(
 //                waitingDto.getWaitingSeq(), STATUS_CHANGE).orElse(null);
 //        if (waitingStatus != null){
 //            return -1;
 //        }
 
-        if(redisService.getStatus(waitingDto.getWaitingSeq()) != STATUS_WAITING) return -1;
+        if(redisService.getStatus(waitingDto.getUserSeq()) != STATUS_WAITING) {
+            return WaitingDetailDto.builder().waitingSeq(-1).build();
+        }
 
         Integer waitingNo = getLastWaitingNo(waitingDto.getRestaurantSeq()) + 1;
         // 대기리스트에서 삭제
@@ -223,18 +226,18 @@ public class WaitingServiceImpl implements WaitingService {
         // 상태 저장
         waitingStatusRepository.save(statusDto.toEntity());
 
-        return waitingDto.getWaitingSeq();
+        return getWaiting(waitingDto.getUserSeq());
     }
 
     /* 웨이팅 상세정보 조회 */
     @Override
-    public WaitingDetailDto getWaiting(Integer waitingSeq) {
+    public WaitingDetailDto getWaiting(String userSeq) {
 //        Waiting waiting = waitingRepository.findById(waitingSeq).orElse(null);
 
-        WaitingDetailDto dto = redisService.getWaiting(waitingSeq);
+        WaitingDetailDto dto = redisService.getWaiting(userSeq);
         if(dto == null) return null;
-        dto.setWaitingTime(getWaitingTime(dto.getRestaurantSeq(), waitingSeq));
-        dto.setWaitingCurRank(getCurrentWaitingRank(dto.getRestaurantSeq(), waitingSeq));
+        dto.setWaitingTime(getWaitingTime(dto.getRestaurantSeq(), dto.getWaitingSeq()));
+        dto.setWaitingCurRank(getCurrentWaitingRank(dto.getRestaurantSeq(), dto.getWaitingSeq()));
 
         return dto;
     }
@@ -345,6 +348,13 @@ public class WaitingServiceImpl implements WaitingService {
                 .waitingTime(waitingTime)
                 .build();
 
+    }
+
+    /* 현재 웨이팅 여부 확인 */
+    @Override
+    public boolean isWaiting(String userSeq) {
+
+        return (redisService.getWaiting(userSeq) != null);
     }
 
 

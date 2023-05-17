@@ -16,11 +16,11 @@ public interface WaitingService {
     boolean updateStatus(WaitingStatusDto waitingStatusDto, WaitingHistoryDto waitingHistoryDto);
 
     /* 웨이팅 상세정보 조회 */
-    WaitingDetailDto getWaiting(Integer waitingSeq);
-//    WaitingDetailDto getWaiting(String userSeq);
+//    WaitingDetailDto getWaiting(Integer waitingSeq);
+    WaitingDetailDto getWaiting(String userSeq);
 
-    /* 순서 변경 */
-    Integer changeWaiting(WaitingDto waitingDto);
+    /* 순서 미루기 */
+    WaitingDetailDto changeWaiting(WaitingDto waitingDto);
 
     /* 웨이팅 리스트 조회(식당) */
     List<WaitingHistoryDto> getWaitingList(Integer restaurantSeq);
@@ -45,5 +45,8 @@ public interface WaitingService {
 
 
     public WaitingOneResponseDto getOneRestaurantWaitingStatus(Long restaurantSeq);
+
+    /* 현재 웨이팅 여부 확인 */
+    boolean isWaiting(String userSeq);
 
 }//WaitingService

@@ -29,13 +29,13 @@ public class WaitingRestaurantController {
     /*
      * 웨이팅 입장
      * */
-    @PostMapping("complete")
-    public ResponseEntity<?> updateStatus(@RequestBody WaitingStatusDto waitingStatusDto){
-        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getWaitingSeq()).toHistoryDto();
-
-        // 알림 보내는 로직
-
-        return null;
-    }//updateStatus
+//    @PostMapping("complete")
+//    public ResponseEntity<?> updateStatus(@RequestBody WaitingStatusDto waitingStatusDto){
+//        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingStatusDto.getUserSeq()).toHistoryDto();
+//
+//        // 알림 보내는 로직
+//
+//        return null;
+//    }//updateStatus
 
 }

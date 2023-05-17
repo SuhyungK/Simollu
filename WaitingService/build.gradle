@@ -67,6 +67,8 @@ dependencies {
 	// spring cloud config 등록
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	// Feign Client - 서비스간 연결
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 }
 
