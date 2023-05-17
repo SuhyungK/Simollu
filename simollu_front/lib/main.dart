@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +17,7 @@ import 'package:simollu_front/utils/firebase_options.dart';
 import 'package:simollu_front/utils/token_stamp.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/notification_view_model.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
@@ -44,6 +47,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
 
+  await NotificationViewModel.fetchAlerts();
   runApp(
     MyApp(),
   );
