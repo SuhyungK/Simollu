@@ -244,13 +244,13 @@ public class DummyAlgorithm {
     public void weekdayMake() {
 
         // 점심 시간
-        entrance.put(LocalTime.of(11,00), new boundary(0, 0));
-        entrance.put(LocalTime.of(11,30), new boundary(2, 4));
-        entrance.put(LocalTime.of(12,00), new boundary(6, 12));
-        entrance.put(LocalTime.of(12,30), new boundary(6, 12));
-        entrance.put(LocalTime.of(13,00), new boundary(6, 12));
-        entrance.put(LocalTime.of(13,30), new boundary(2, 3));
-        entrance.put(LocalTime.of(14,00), new boundary(0, 0));
+//        entrance.put(LocalTime.of(11,00), new boundary(0, 0));
+//        entrance.put(LocalTime.of(11,30), new boundary(2, 4));
+//        entrance.put(LocalTime.of(12,00), new boundary(6, 12));
+//        entrance.put(LocalTime.of(12,30), new boundary(6, 12));
+//        entrance.put(LocalTime.of(13,00), new boundary(6, 12));
+//        entrance.put(LocalTime.of(13,30), new boundary(2, 3));
+//        entrance.put(LocalTime.of(14,00), new boundary(0, 0));
 
 
 
@@ -271,13 +271,13 @@ public class DummyAlgorithm {
 
 
         // 점심
-        leaver.put(LocalTime.of(11,00), new boundary(0, 0));
-        leaver.put(LocalTime.of(11,30), new boundary(4, 4));
-        leaver.put(LocalTime.of(12,00), new boundary(4, 7));
-        leaver.put(LocalTime.of(12,30), new boundary(6, 10));
-        leaver.put(LocalTime.of(13,00), new boundary(6, 12));
-        leaver.put(LocalTime.of(13,30), new boundary(6, 12));
-        leaver.put(LocalTime.of(14,00), new boundary(6, 12));
+//        leaver.put(LocalTime.of(11,00), new boundary(0, 0));
+//        leaver.put(LocalTime.of(11,30), new boundary(4, 4));
+//        leaver.put(LocalTime.of(12,00), new boundary(4, 7));
+//        leaver.put(LocalTime.of(12,30), new boundary(6, 10));
+//        leaver.put(LocalTime.of(13,00), new boundary(6, 12));
+//        leaver.put(LocalTime.of(13,30), new boundary(6, 12));
+//        leaver.put(LocalTime.of(14,00), new boundary(6, 12));
 
         leaver.put(LocalTime.of(16,00), new boundary(0, 0));
         leaver.put(LocalTime.of(16,30), new boundary(0, 0));
