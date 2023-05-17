@@ -4,8 +4,7 @@ class WaitingTimeModel {
   late String timeZone;
   late int expectedWaitingTime;
 
-  WaitingTimeModel.fromJSON(Map<String,dynamic> json)
-  :     timeZone = json['timeZone'] ?? '',
-        expectedWaitingTime = json['expectedWaitingTime'];
-
+  WaitingTimeModel.fromJSON(Map<String, dynamic> json)
+      : timeZone = json['timeZone'] ?? '',
+        expectedWaitingTime = json['expectedWaitingTime'] ?? 0;
 }

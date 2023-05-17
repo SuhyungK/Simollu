@@ -17,6 +17,7 @@ class RestaurantDetailApi {
   Future<RestaurantDetailModel?> getRestaurantDetailInfo(
       int restaurantSeq) async {
     await initialize();
+    print(restaurantSeq);
     Uri uri = Uri.parse('https://simollu.com/api/restaurant/${restaurantSeq}');
     List<MenuInfoModel> menuList = [];
     List<WaitingTimeModel> waitingTimeList = [];
@@ -48,9 +49,32 @@ class RestaurantDetailApi {
       }
       List<dynamic> res3 =
           json.decode(utf8.decode(response.bodyBytes))["waitingTimeList"];
-      for (dynamic r in res3) {
-        waitingTimeList.add(WaitingTimeModel.fromJSON(r));
-        print(r);
+      int idx = 0;
+      print(res3.length.toString() + " asdasdasd");
+      if (res3.length == 0) {
+        for (int i = 0; i < 24; i++) {
+          print(i);
+          waitingTimeList.add(WaitingTimeModel.fromJSON({
+            "timeZone": "${i}",
+            "expectedWaitingTIme": 0,
+          }));
+        }
+      } else {
+        for (int i = 0; i < 24; i++) {
+          WaitingTimeModel curr = WaitingTimeModel.fromJSON(res3[idx]);
+          int hour = int.parse(curr.timeZone.split(":")[0]);
+          if (hour == i) {
+            waitingTimeList.add(curr);
+            if (idx < res3.length - 1) {
+              idx++;
+            }
+          } else {
+            waitingTimeList.add(WaitingTimeModel.fromJSON({
+              "timeZone": "${i}",
+              "expectedWaitingTIme": 0,
+            }));
+          }
+        }
       }
 
       result = RestaurantDetailModel(

@@ -2,13 +2,20 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/menuInfoModel.dart';
 import 'package:simollu_front/models/restaurantDetailModel.dart';
+import 'package:simollu_front/models/restaurantInfoModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
+import 'package:simollu_front/models/waitingTimeModel.dart';
+import 'package:simollu_front/models/waiting_info_model.dart';
 import 'package:simollu_front/services/restaurant_detail_api.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class RestaurantViewModel extends GetxController {
   Rx<RestaurantDetailModel?> restaurant = Rx<RestaurantDetailModel?>(null);
+  Rx<RestaurantInfoModel?> restaurantInfo = Rx<RestaurantInfoModel?>(null);
+  RxList<MenuInfoModel> menuInfoList = <MenuInfoModel>[].obs;
+  RxList<WaitingTimeModel> waitingTimeList = <WaitingTimeModel>[].obs;
   RxList<RestaurantReviewModel> reviews = <RestaurantReviewModel>[].obs;
   late String token;
 
@@ -19,13 +26,16 @@ class RestaurantViewModel extends GetxController {
 
   // 식당 상세정보 조회
   Future<void> fetchRestaurantDetail(int restaurantSeq) async {
-    String token = await getToken();
     RestaurantDetailModel? res =
         await RestaurantDetailApi().getRestaurantDetailInfo(restaurantSeq);
     if (res != null) {
-      restaurant.value = res;
+      restaurantInfo.value = res.restaurantInfo;
+      menuInfoList.value = res.menuInfoList;
+      waitingTimeList.value = res.waitingTimeList;
     } else {
-      restaurant.value = null;
+      restaurantInfo.value = null;
+      menuInfoList.value = [];
+      waitingTimeList.value = [];
     }
   }
 
