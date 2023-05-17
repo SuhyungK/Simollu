@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:simollu_front/models/waitingRecordModel.dart';
+import 'package:simollu_front/models/waiting_record_model.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
 class WaitingRecordcard extends StatelessWidget {
@@ -18,14 +18,14 @@ class WaitingRecordcard extends StatelessWidget {
     }
   }
 
-  WaitingRecordcard({Key? key,
+  WaitingRecordcard({
+    Key? key,
     this.isCanclled = false,
     required this.record,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: EdgeInsets.all(15.0),
       margin: EdgeInsets.all(10),
@@ -35,8 +35,7 @@ class WaitingRecordcard extends StatelessWidget {
           border: Border.all(
             color: Colors.black12,
           ),
-          borderRadius: BorderRadius.circular(3)
-      ),
+          borderRadius: BorderRadius.circular(3)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,10 +43,7 @@ class WaitingRecordcard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
             child: Text(
               record.restaurantName as String,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           // _buildPadding("예약일시", "2023/03/18(목) 13:45"),
@@ -61,10 +57,8 @@ class WaitingRecordcard extends StatelessWidget {
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.black,
-                      fixedSize: Size(
-                        MediaQuery.of(context).size.width * 0.95,
-                        40
-                      ),
+                      fixedSize:
+                          Size(MediaQuery.of(context).size.width * 0.95, 40),
                     ),
                     onPressed: () {
                       // Navigator.push(
@@ -76,8 +70,7 @@ class WaitingRecordcard extends StatelessWidget {
                       //     ),
                       // );
                     },
-                    child: Text('리뷰 작성 하기')
-                ),
+                    child: Text('리뷰 작성 하기')),
               ),
             )
         ],
@@ -98,15 +91,11 @@ class WaitingRecordcard extends StatelessWidget {
     }
 
     return Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(content)
-            ],
-          ),
-        );
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(label), Text(content)],
+      ),
+    );
   }
 }
-

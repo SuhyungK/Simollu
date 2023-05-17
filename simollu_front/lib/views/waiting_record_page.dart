@@ -3,7 +3,7 @@ import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/widgets/waiting_record_card.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 
-import '../models/waitingRecordModel.dart';
+import '../models/waiting_record_model.dart';
 
 class WaitingRecordPage extends StatefulWidget {
   const WaitingRecordPage({Key? key}) : super(key: key);

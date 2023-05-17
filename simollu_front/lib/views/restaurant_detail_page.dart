@@ -1,4 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/models/waitingTimeModel.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:simollu_front/models/menuInfoModel.dart';
 import 'package:simollu_front/models/restaurantReviewModel.dart';
 import 'package:simollu_front/services/restaurant_detail_api.dart';
@@ -22,19 +27,12 @@ class RestaurantDetailpage extends StatefulWidget {
 
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
+  RestaurantViewModel restaurantViewModel = Get.find();
   late TabController? _tabController;
-  RestaurantDetailModel? result;
+  bool toggleChart = false;
 
   getRestaurantDetailInfo() async {
-    RestaurantDetailApi restaurantDetailApi = RestaurantDetailApi();
-
-    result = await restaurantDetailApi.getRestaurantDetailInfo(widget.restaurantSeq);
-
-    setState(() {
-      if(result != null) {
-        result = result;
-      }
-    });
+    await restaurantViewModel.fetchRestaurantDetail(widget.restaurantSeq);
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -46,153 +44,198 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     _tabController = TabController(length: 3, vsync: this);
     fetchReviewData();
     getRestaurantDetailInfo();
-
   }
 
   Future<void> fetchReviewData() async {
-    RestaurantViewModel restaurantViewModel = RestaurantViewModel();
-    List<RestaurantReviewModel> result =
-        await restaurantViewModel.fetchReview(widget.restaurantSeq);
+    await restaurantViewModel.fetchReview(widget.restaurantSeq);
     // result.sort((a, b) => (b['reviewSeq'].compareTo(a['reviewSeq'])));
-
-    print(result);
-    setState(() {
-      reviewList = result;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(result == null) {
-        return Container(
-          color: Colors.white,
-          child: Image.asset("assets/logo.png"),
-        );
-    }
-
-    return Scaffold(
-      body: CustomTabBar(
-          length: 3,
-          tabs: ['메뉴', '매장 정보', '리뷰'],
-          tabViews: [
-            _menuDetail(result!.menuInfoList),
-            _restaurantInfo(result!.restaurantInfo.restaurantBusinessHours, result!.restaurantInfo.restaurantPhoneNumber),
-            RestaurantReviewPage(reviewList: reviewList)
-          ],
-          hasSliverAppBar: true,
-          flexibleImage:result?.restaurantInfo.restaurantImg,
-          bottomWidget: Container(
-            color: Colors.white,
-            // height: 140,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          result?.restaurantInfo.restaurantName ?? '',
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          result?.restaurantInfo.restaurantCategory ?? '',
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.black54),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          result?.restaurantInfo.restaurantAddress ?? '',
-                          style: TextStyle(color: Colors.black38),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.timer_outlined,
-                              color: Colors.amber,
-                              size: 18,
-                            ),
-                            Text(
-                              '기다릴만해요 ${result?.restaurantInfo.restaurantRating ?? 0}%',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                      flex: 2,
+    return Obx(
+      () => restaurantViewModel.restaurantInfo.value == null
+          ? Container(
+              color: Colors.white,
+              child: Image.asset("assets/logo.png"),
+            )
+          : Scaffold(
+              body: CustomTabBar(
+                  length: 3,
+                  tabs: ['메뉴', '매장 정보', '리뷰'],
+                  tabViews: [
+                    _menuDetail(restaurantViewModel.menuInfoList.value),
+                    _restaurantInfo(
+                        restaurantViewModel
+                            .restaurantInfo.value!.restaurantBusinessHours,
+                        restaurantViewModel
+                            .restaurantInfo.value!.restaurantPhoneNumber),
+                    RestaurantReviewPage(
+                        reviewList: restaurantViewModel.reviews.value),
+                  ],
+                  hasSliverAppBar: true,
+                  flexibleImage:
+                      restaurantViewModel.restaurantInfo.value!.restaurantImg,
+                  bottomWidget: Container(
+                    color: Colors.white,
+                    // height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _isLike
-                              ? IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isLike = false;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    color: Colors.pink,
-                                  ))
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isLike = true;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.pink,
-                                  )),
-                          ButtonTheme(
-                            child: OutlinedButton(
-                                onPressed: () {},
-                                style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    side: BorderSide(
-                                      color: Colors.black12,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: 3,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Text(
+                                      restaurantViewModel.restaurantInfo.value!
+                                              .restaurantName ??
+                                          '',
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    fixedSize: Size(
-                                        MediaQuery.of(context).size.width * 0.3,
-                                        40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0))),
-                                child: Text(
-                                  '예상대기시간',
-                                  maxLines: 1,
-                                )),
-                          )
+                                    SizedBox(height: 3),
+                                    Text(
+                                      restaurantViewModel.restaurantInfo.value!
+                                              .restaurantCategory ??
+                                          '',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black54),
+                                    ),
+                                    SizedBox(height: 3),
+                                    Text(
+                                      restaurantViewModel.restaurantInfo.value!
+                                              .restaurantAddress ??
+                                          '',
+                                      style: TextStyle(color: Colors.black38),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.timer_outlined,
+                                          color: Colors.amber,
+                                          size: 18,
+                                        ),
+                                        Text(
+                                          '기다릴만해요 ${restaurantViewModel.restaurantInfo.value!.restaurantRating ?? 0}%',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.amber),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    _isLike
+                                        ? IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _isLike = false;
+                                              });
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite,
+                                              color: Colors.pink,
+                                            ))
+                                        : IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _isLike = true;
+                                              });
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.pink,
+                                            )),
+                                    ButtonTheme(
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            toggleChart = !toggleChart;
+                                          });
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                            foregroundColor: Colors.black,
+                                            side: BorderSide(
+                                              color: Colors.black12,
+                                            ),
+                                            fixedSize: Size(
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.3,
+                                                40),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0))),
+                                        child: Text(
+                                          '예상대기시간',
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            child: toggleChart
+                                ? Container(
+                                    child: SfCartesianChart(
+                                        primaryXAxis: CategoryAxis(),
+                                        series: <LineSeries<WaitingTimeModel,
+                                            String>>[
+                                        LineSeries<WaitingTimeModel, String>(
+                                            dataSource: restaurantViewModel
+                                                .waitingTimeList,
+                                            xValueMapper:
+                                                (WaitingTimeModel waitingTime,
+                                                        _) =>
+                                                    waitingTime.timeZone,
+                                            yValueMapper: (WaitingTimeModel
+                                                        waitingTime,
+                                                    _) =>
+                                                waitingTime.expectedWaitingTime,
+                                            // Enable data label
+                                            dataLabelSettings:
+                                                DataLabelSettings(
+                                                    isVisible: false))
+                                      ]))
+                                : null,
+                          ),
                         ],
-                      ))
-                ],
-              ),
+                      ),
+                    ),
+                  )),
             ),
-          )),
     );
   }
 
   Widget _menuDetail(List<MenuInfoModel> menuList) {
-
     if (menuList.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(20.0),
@@ -211,24 +254,24 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Row(
                   children: [
-                    Image.network(
-                      menu.menuImage ??
+                    CachedNetworkImage(
+                      imageUrl: menu.menuImage ??
                           'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                       width: 80,
                       // height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // 이미지 로딩 실패 시 대체 이미지 보여주기
-                        return Image.network(
-                          'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                      errorWidget: (context, url, error) => CachedNetworkImage(
+                        imageUrl:
+                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                        width: 80,
+                        height: 80,
+                      ),
                     ),
                     Column(
-                      children: [Text(menu.menuName ?? ''), Text(menu.menuPrice ?? '')],
+                      children: [
+                        Text(menu.menuName ?? ''),
+                        Text(menu.menuPrice ?? '')
+                      ],
                     )
                   ],
                 ),
@@ -239,7 +282,8 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     );
   }
 
-  Widget _restaurantInfo(String restaurantBusinessHours, String restaurantPhoneNumber) {
+  Widget _restaurantInfo(
+      String restaurantBusinessHours, String restaurantPhoneNumber) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -290,4 +334,10 @@ class MyTabBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+  final String year;
+  final double sales;
 }
