@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/services/waiting_api.dart';
 
 import '../utils/token.dart';
@@ -30,6 +31,8 @@ class WaitingViewModel extends GetxController {
       return false;
     }
     waitingSeq.value = res.waitingSeq;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("waitingSeq", waitingSeq.value);
     // waitingNo.value = res.waitingNo;
     // waitingTime.value = res.waitingTime;
     // this.restaurantName.value = res.restaurantName;
