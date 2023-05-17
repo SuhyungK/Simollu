@@ -51,7 +51,7 @@ public class UserSeqHeaderFilter extends AbstractGatewayFilterFactory<UserSeqHea
             }
 
             ServerHttpRequest modifiedRequest = request.mutate()
-                    .header("userSeq", userSeq)
+                    .headers(headers -> headers.add("userSeq", userSeq))
                     .build();
 
             return chain.filter(exchange.mutate().request(modifiedRequest).build());
