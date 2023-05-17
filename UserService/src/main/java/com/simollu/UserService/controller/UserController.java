@@ -38,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-@CrossOrigin
 @Slf4j
 @Api(tags = "User Controller")
 public class UserController {
