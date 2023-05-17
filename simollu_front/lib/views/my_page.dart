@@ -177,12 +177,14 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    userViewModel.fork.value.toString(),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+                                  Obx(
+                                    () => Text(
+                                      userViewModel.fork.value.toString(),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
