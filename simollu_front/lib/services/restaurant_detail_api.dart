@@ -29,7 +29,8 @@ class RestaurantDetailApi {
         restaurantPhoneNumber: '',
         restaurantCategory: '',
         restaurantImg: '',
-        restaurantRating: 0);
+        restaurantRating: 0,
+        restaurantLike: false);
     RestaurantDetailModel result = RestaurantDetailModel(
         restaurantInfo: r, waitingTimeList: [], menuInfoList: []);
 
@@ -39,6 +40,7 @@ class RestaurantDetailApi {
     }, uri);
 
     if (response.statusCode == 200) {
+      print(utf8.decode(response.bodyBytes));
       RestaurantInfoModel res1 = RestaurantInfoModel.fromJSON(
           json.decode(utf8.decode(response.bodyBytes))["restaurantInfo"]);
       List<dynamic> res2 =

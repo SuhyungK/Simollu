@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/models/waitingTimeModel.dart';
+import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:simollu_front/models/menuInfoModel.dart';
@@ -28,11 +29,21 @@ class RestaurantDetailpage extends StatefulWidget {
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   RestaurantViewModel restaurantViewModel = Get.find();
+  UserViewModel userViewModel = Get.find();
   late TabController? _tabController;
   bool toggleChart = false;
 
   getRestaurantDetailInfo() async {
     await restaurantViewModel.fetchRestaurantDetail(widget.restaurantSeq);
+  }
+
+  postInterestRestaurant() async {
+    bool response = await userViewModel.postInterestRestaurant(
+        restaurantViewModel.restaurantInfo.value!.restaurantSeq);
+
+    if (response) {
+      _isLike = _isLike;
+    }
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -148,27 +159,30 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    _isLike
-                                        ? IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isLike = false;
-                                              });
-                                            },
-                                            icon: Icon(
-                                              Icons.favorite,
-                                              color: Colors.pink,
-                                            ))
-                                        : IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isLike = true;
-                                              });
-                                            },
-                                            icon: Icon(
-                                              Icons.favorite_border,
-                                              color: Colors.pink,
-                                            )),
+                                    Obx(
+                                      () => restaurantViewModel.restaurantInfo
+                                              .value!.restaurantLike
+                                          ? IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  postInterestRestaurant();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.favorite,
+                                                color: Colors.pink,
+                                              ))
+                                          : IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  postInterestRestaurant();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.favorite_border,
+                                                color: Colors.pink,
+                                              )),
+                                    ),
                                     ButtonTheme(
                                       child: OutlinedButton(
                                         onPressed: () {

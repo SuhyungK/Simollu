@@ -24,6 +24,12 @@ class UserViewModel extends GetxController {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
+  Future<bool> postInterestRestaurant(restaurantSeq) async {
+    bool response = await UserAPI().postInterestRestaurant(restaurantSeq);
+
+    return response;
+  }
+
   // [GET] User 프로필 이미지 조회
   Future<void> getProfileImage() async {
     await initialize();

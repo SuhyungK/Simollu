@@ -11,14 +11,17 @@ class UserAPI {
     token = await getToken(); // getToken() 함수의 반환값을 대입
   }
 
-  Future<int> getFork() async {
+  Future<int> getInterestRestaurants() async {
     await initialize();
     Uri url = baseUrl.resolve("/api/user/user/fork");
 
-    final response = await http.get(headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Authorization": token
-    }, url);
+    final response = await http.get(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+    );
 
     if (response.statusCode == 200) {
       final res = json.decode(utf8.decode(response.bodyBytes));
@@ -27,5 +30,26 @@ class UserAPI {
     }
 
     return -1;
+  }
+
+  Future<bool> postInterestRestaurant(int restaurantSeq) async {
+    await initialize();
+    Uri url = baseUrl.resolve('/api/user/user/restaurant');
+
+    final response = await http.post(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+      body: json.encode({
+        'restaurantSeq': restaurantSeq,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 }
