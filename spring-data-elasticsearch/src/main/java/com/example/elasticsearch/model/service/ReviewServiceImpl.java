@@ -2,10 +2,7 @@ package com.example.elasticsearch.model.service;
 
 
 import com.example.elasticsearch.client.UserServiceClient;
-import com.example.elasticsearch.model.dto.review.ModifyReviewDto;
-import com.example.elasticsearch.model.dto.review.MyReviewDto;
-import com.example.elasticsearch.model.dto.review.RestaurantReviewDto;
-import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
+import com.example.elasticsearch.model.dto.review.*;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListRequestDto;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListResponseDto;
 import com.example.elasticsearch.model.entity.Review;
@@ -76,14 +73,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     /* 후기 리스트 조회 */
 
-    public List<RestaurantReviewDto> getReviewList(Long restaurantSeq) {
+    public List<RestaurantReviewResponseDto> getReviewList(Long restaurantSeq) {
         List<Review> reviewList = reviewRepository.findByRestaurantSeq(restaurantSeq);
-        List<RestaurantReviewDto> reviewDtoList = new ArrayList<>();
+        List<RestaurantReviewResponseDto> reviewDtoList = new ArrayList<>();
         List<String> userSeqList = new ArrayList<>();
 
         // 식당 후기 리스트
         for(Review review : reviewList){
-            RestaurantReviewDto dto = RestaurantReviewDto.builder()
+            RestaurantReviewResponseDto dto = RestaurantReviewResponseDto.builder()
                     .reviewSeq(review.getReviewSeq())
                     .userSeq(review.getUserSeq())
                     .restaurantSeq(review.getRestaurantSeq())
@@ -116,7 +113,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
         // 합치기
-        RestaurantReviewDto dto;
+        RestaurantReviewResponseDto dto;
         GetUserInfoListResponseDto userInfo;
         for(int i=0, size=reviewDtoList.size(); i<size; i++){
             dto = reviewDtoList.get(i);

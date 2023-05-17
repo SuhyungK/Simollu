@@ -2,11 +2,8 @@ package com.example.elasticsearch.model.service;
 
 
 
-import com.example.elasticsearch.model.dto.review.ModifyReviewDto;
-import com.example.elasticsearch.model.dto.review.MyReviewDto;
-import com.example.elasticsearch.model.dto.review.RestaurantReviewDto;
+import com.example.elasticsearch.model.dto.review.*;
 
-import com.example.elasticsearch.model.dto.review.WriteableReviewDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
@@ -16,7 +13,7 @@ public interface ReviewService {
     Long writeReview(String userSeq, RestaurantReviewDto reviewDto);
 
     /* 후기 리스트 조회 */
-    List<RestaurantReviewDto> getReviewList(Long restaurantSeq);
+    List<RestaurantReviewResponseDto> getReviewList(Long restaurantSeq);
 
     /* 후기 상세 조회 */
     RestaurantReviewDto getReview(Long reviewSeq);
