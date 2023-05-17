@@ -35,6 +35,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
 
   getRestaurantDetailInfo() async {
     await restaurantViewModel.fetchRestaurantDetail(widget.restaurantSeq);
+    _isLike = restaurantViewModel.restaurantInfo.value!.restaurantLike;
   }
 
   postInterestRestaurant() async {
@@ -42,12 +43,14 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
         restaurantViewModel.restaurantInfo.value!.restaurantSeq);
 
     if (response) {
-      _isLike = _isLike;
+      setState(() {
+        _isLike = !_isLike;
+      });
     }
   }
 
   late List<RestaurantReviewModel> reviewList = [];
-  bool _isLike = false;
+  late bool _isLike;
 
   @override
   void initState() {
@@ -159,30 +162,27 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Obx(
-                                      () => restaurantViewModel.restaurantInfo
-                                              .value!.restaurantLike
-                                          ? IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  postInterestRestaurant();
-                                                });
-                                              },
-                                              icon: Icon(
-                                                Icons.favorite,
-                                                color: Colors.pink,
-                                              ))
-                                          : IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  postInterestRestaurant();
-                                                });
-                                              },
-                                              icon: Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.pink,
-                                              )),
-                                    ),
+                                    _isLike
+                                        ? IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                postInterestRestaurant();
+                                              });
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite,
+                                              color: Colors.pink,
+                                            ))
+                                        : IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                postInterestRestaurant();
+                                              });
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.pink,
+                                            )),
                                     ButtonTheme(
                                       child: OutlinedButton(
                                         onPressed: () {
