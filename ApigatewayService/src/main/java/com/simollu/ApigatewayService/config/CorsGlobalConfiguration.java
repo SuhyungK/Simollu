@@ -28,9 +28,11 @@ public class CorsGlobalConfiguration implements WebFluxConfigurer {
     @Bean
     public CorsConfiguration corsConfiguration(
             RoutePredicateHandlerMapping routePredicateHandlerMapping) {
-        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://simollu.com"));
         Arrays.asList(HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.GET, HttpMethod.DELETE, HttpMethod.POST).forEach(m -> corsConfiguration.addAllowedMethod(m));
-        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
         routePredicateHandlerMapping.setCorsConfigurations(new HashMap<String, CorsConfiguration>() {{
             put("/**", corsConfiguration);
         }});
