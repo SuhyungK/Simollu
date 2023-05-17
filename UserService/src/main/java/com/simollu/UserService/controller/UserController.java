@@ -229,11 +229,11 @@ public class UserController {
     @Operation(summary = "회원 firebase token 조회",
             description = "현재 회원의 firebase token을 조회합니다.")
     @GetMapping("firebase-token")
-    public ResponseEntity<?> getUserFirebaseToken(@RequestHeader("userSeq") String userSeq) {
+    public String getUserFirebaseToken(@RequestHeader("userSeq") String userSeq) {
         String token = redisService.getFirebaseToken(userSeq);
-        if (token == null || token.equals("null")) return ResponseEntity.status(204).build();
+        if (token == null || token.equals("null")) return "null";
 
-        return ResponseEntity.ok(token);
+        return token;
     }
 
 
@@ -266,6 +266,10 @@ public class UserController {
         List<RestaurantFavoriteResponse> responseDto = userRestaurantService.getUserRestaurantList(userSeq);
         return ResponseEntity.ok(responseDto);
     }
+
+
+
+    // -----------------------------
 
 
 }

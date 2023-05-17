@@ -1,9 +1,11 @@
 package com.simollu.UserService.service;
 
 
+import com.simollu.UserService.aws.AwsS3Repository;
 import com.simollu.UserService.dto.user.RegisterUserRequestDto;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListRequestDto;
 import com.simollu.UserService.dto.userinfo.GetUserInfoListResponseDto;
+import com.simollu.UserService.dto.userprofile.UserProfileResponseDto;
 import com.simollu.UserService.entity.*;
 import com.simollu.UserService.jwt.TokenProvider;
 import com.simollu.UserService.repository.*;
@@ -27,6 +29,10 @@ public class UserService {
     private final UserStatusRepository userStatusRepository;
 
     private final TokenProvider tokenProvider;
+
+    private final AwsS3Repository awsS3Repository;
+
+    private final UserProfileService userProfileService;
 
 
     // 회원가입
@@ -97,12 +103,19 @@ public class UserService {
     // 회원 닉네임, 이미지 리스트로 조회
     public List<GetUserInfoListResponseDto> getUserInfoList(GetUserInfoListRequestDto requestDto) {
 
+        System.out.println("------ 작동 ------");
+
         List<GetUserInfoListResponseDto> responseDtoList = new ArrayList<>();
 
         for (String userSeq : requestDto.getUserSeqList()) {
             GetUserInfoListResponseDto responseDto = new GetUserInfoListResponseDto();
             String userNicknameContent = userNicknameRepository.findTopByUserSeqOrderByUserNicknameRegisterDateDesc(userSeq).getUserNicknameContent();
-            String userProfileUrl = userProfileRepository.findTopByUserSeqOrderByUserProfileRegisterDateDesc(userSeq).getUserProfileUrl();
+
+
+            // profile 경로 넣는 곳
+            String userProfileUrl = userProfileService.getUserProfileImage(userSeq).getUserProfileUrl();
+
+
             responseDto.setUserSeq(userSeq);
             responseDto.setUserNicknameContent(userNicknameContent);
             responseDto.setUserProfileUrl(userProfileUrl);
