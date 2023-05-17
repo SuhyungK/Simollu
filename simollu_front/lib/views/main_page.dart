@@ -393,7 +393,8 @@ class _MainPageState extends State<MainPage> {
                                                 padding: EdgeInsets.all(10),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    print("순서 바꾸기");
+                                                    waitingViewModel
+                                                        .delayOrder();
                                                   },
                                                   child: Container(
                                                     alignment: Alignment.center,
@@ -417,7 +418,7 @@ class _MainPageState extends State<MainPage> {
                                                       ],
                                                     ),
                                                     child: Text(
-                                                      "순서 바꾸기",
+                                                      "순서 미루기",
                                                       style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.white,

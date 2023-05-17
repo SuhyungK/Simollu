@@ -23,6 +23,22 @@ class WaitingViewModel extends GetxController {
     return url;
   }
 
+  Future<void> delayOrder() async {
+    WaitingRecordModel? res =
+        await WaitingApi().delayOrder(waitingSeq.value, restaurantSeq.value);
+    if (res != null) {
+      print("TestTest");
+      waitingSeq.value = res.waitingSeq;
+      waitingNo.value = res.waitingNo;
+      waitingTime.value = res.waitingTime;
+      restaurantName.value = res.restaurantName;
+      restaurantSeq.value = res.restaurantSeq;
+      waitingPersonCnt.value = res.waitingPersonCnt;
+      waitingStatusRegistDate.value = res.waitingStatusRegistDate;
+      waitingStatusContent.value = res.waitingStatusContent;
+    }
+  }
+
   Future<void> cancelWaiting() async {
     bool res = await WaitingApi().cancelWaiting(waitingSeq.value);
 
