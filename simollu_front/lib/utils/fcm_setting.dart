@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,10 +9,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+  }
 }
 
-Future<String?> fcmSetting1() async {
+Future<void> fcmSetting() async {
   // firebase core 기능 사용을 위한 필수 initializing
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -34,13 +37,16 @@ Future<String?> fcmSetting1() async {
     sound: true,
   );
 
-  print('User granted permission: ${settings.authorizationStatus}');
+  if (kDebugMode) {
+    print('User granted permission: ${settings.authorizationStatus}');
+  }
 
   // foreground에서의 푸시 알림 표시를 위한 알림 중요도 설정 (안드로이드)
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'somain_notification',
-      'somain_notification',
-      description: '소마인 알림입니다.',
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+      'This channel is used for important notifications.',
       importance: Importance.max
   );
 
@@ -54,7 +60,8 @@ Future<String?> fcmSetting1() async {
     AndroidNotification? android = message.notification?.android;
 
     print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+    print('Message data: ${notification?.title}');
+    print('Message data: ${notification?.body}');
 
     if (message.notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
@@ -66,18 +73,36 @@ Future<String?> fcmSetting1() async {
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              icon: android.smallIcon,
+              // icon: android.smallIcon,
             ),
           ));
 
-      print('Message also contained a notification: ${message.notification}');
+      if (kDebugMode) {
+        print('Message also contained a notification: ${message.notification}');
+      }
     }
   });
 
+  AndroidInitializationSettings initializationSettingsAndriod = const AndroidInitializationSettings('mipmap/ic_launcher');
+
+  DarwinInitializationSettings initializationSettingsIOS = const DarwinInitializationSettings(
+    requestAlertPermission: false,
+    requestBadgePermission: false,
+    requestSoundPermission: false,
+  );
+
+  InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndriod,
+      iOS: initializationSettingsIOS
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   // firebase token 발급
   String? firebaseToken = await messaging.getToken();
 
-  print("firebaseToken : $firebaseToken");
+  if (kDebugMode) {
+    print("firebaseToken : $firebaseToken");
+  }
 
-  return firebaseToken;
 }
+
