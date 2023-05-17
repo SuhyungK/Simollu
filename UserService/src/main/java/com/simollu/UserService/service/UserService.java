@@ -80,7 +80,7 @@ public class UserService {
                 .userSeq(userSeq)
                 .userForkAmount(10)
                 .userForkBalance(10)
-                .userForkType("사용")
+                .userForkType("적립")
                 .userForkContent("회원 가입")
                 .build();
         userForkLogRepository.save(userForkLog);
