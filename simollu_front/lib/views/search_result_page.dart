@@ -3,17 +3,16 @@ import 'package:simollu_front/models/searchModel.dart';
 import 'package:simollu_front/views/search_result_widget.dart';
 
 class SearchResultPage extends StatefulWidget {
-
   final List<SearchModel> searchResults;
 
   List<SearchModel> get result => searchResults;
 
-  SearchResultPage({Key? key, required List<SearchModel> searchResults}) :
-        this.searchResults = searchResults,
+  SearchResultPage({Key? key, required List<SearchModel> searchResults})
+      : this.searchResults = searchResults,
         super(key: key);
 
-  SearchResultPage.withResult({Key? key, required List<SearchModel> result}) :
-        this.searchResults = result,
+  SearchResultPage.withResult({Key? key, required List<SearchModel> result})
+      : this.searchResults = result,
         super(key: key);
 
   @override
@@ -21,7 +20,6 @@ class SearchResultPage extends StatefulWidget {
 }
 
 class _SearchResultPageState extends State<SearchResultPage> {
-
   @override
   void initState() {
     super.initState();
@@ -62,8 +60,19 @@ class _SearchResultPageState extends State<SearchResultPage> {
               itemCount: widget.result.length,
               itemBuilder: (context, index) {
                 final searchResult = widget.result[index];
-                return SearchResultWidget(name: searchResult.restaurantName, imageUrl: searchResult.restaurantImg, waitingTime: searchResult.restaurantWaitingTime, queueSize: searchResult.restaurantWaitingTeam, numberOfPeople: 1, onWait: () {  },
-                    restaurantSeq: searchResult.restaurantSeq, distance: searchResult.distance, restaurantRating: searchResult.restaurantRating,
+
+                return SearchResultWidget(
+                  name: searchResult.restaurantName,
+                  imageUrl: searchResult.restaurantImg,
+                  waitingTime: searchResult.restaurantWaitingTime,
+                  queueSize: searchResult.restaurantWaitingTeam,
+                  numberOfPeople: 1,
+                  onWait: () {},
+                  restaurantSeq: searchResult.restaurantSeq,
+                  distance: searchResult.distance,
+                  restaurantRating: searchResult.restaurantRating,
+                  latitude: searchResult.restaurantY,
+                  longitude: searchResult.restaurantX,
                 );
               },
             ),

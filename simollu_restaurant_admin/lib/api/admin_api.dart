@@ -57,8 +57,8 @@ class AdminApi {
   }
 
   // [POST] user 입장 완료 처리
-  Future<bool> postWaitingComplete(int waitingSeq) async{
-    Uri uri = Uri.parse('https://simollu.com/api/waiting/user/complete');
+  Future<bool> postWaitingComplete(int waitingSeq, String userSeq) async{
+    Uri uri = Uri.parse('https://simollu.com/api/waiting/restaurant/complete');
 
     final response = await http.post(
         headers: {
@@ -67,6 +67,7 @@ class AdminApi {
         },
         body: json.encode({
           "waitingSeq" : waitingSeq,
+          "userSeq": userSeq
         }), uri);
 
     print(response.statusCode);

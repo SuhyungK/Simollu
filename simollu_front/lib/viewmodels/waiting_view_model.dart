@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/models/delay_info_model.dart';
 import 'package:simollu_front/services/waiting_api.dart';
 
 import '../utils/token.dart';
@@ -17,10 +19,35 @@ class WaitingViewModel extends GetxController {
   RxInt waitingPersonCnt = (-1).obs;
   RxString waitingStatusRegistDate = "".obs;
   RxInt waitingStatusContent = (-1).obs;
+  RxInt waitingCurRank = (-1).obs;
+  Rx<DelayInfoModel?> delayInfo = Rx<DelayInfoModel?>(null);
 
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
+  }
+
+  Future<void> getDelayInfo() async {
+    delayInfo.value = await WaitingApi().getDelayInfo(restaurantSeq.value);
+    print(delayInfo.value!.waitingTime.toString() + "adsfsdfsdf");
+  }
+
+  Future<bool> delayOrder() async {
+    WaitingRecordModel? res = await WaitingApi().delayOrder(
+        waitingSeq.value, restaurantSeq.value, restaurantName.value);
+    if (res != null) {
+      waitingSeq.value = res.waitingSeq;
+      waitingNo.value = res.waitingNo;
+      waitingTime.value = res.waitingTime;
+      restaurantName.value = res.restaurantName;
+      restaurantSeq.value = res.restaurantSeq;
+      waitingPersonCnt.value = res.waitingPersonCnt;
+      waitingStatusRegistDate.value = res.waitingStatusRegistDate;
+      waitingStatusContent.value = res.waitingStatusContent;
+      waitingCurRank.value = res.waitingCurRank;
+      return true;
+    }
+    return false;
   }
 
   Future<void> cancelWaiting() async {
@@ -36,21 +63,19 @@ class WaitingViewModel extends GetxController {
       waitingStatusRegistDate.value = "";
       waitingStatusContent.value = -1;
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('waitingSeq');
+      waitingCurRank.value = -1;
     }
   }
 
   Future<bool> postWaiting(
       int restaurantSeq, int waitingPersonCnt, String restaurantName) async {
+    print(waitingPersonCnt.toString() + "웨이팅 사람 수");
     WaitingRecordModel? res = await WaitingApi()
         .postWaiting(restaurantSeq, waitingPersonCnt, restaurantName);
     if (res == null) {
       return false;
     }
     waitingSeq.value = res.waitingSeq;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("waitingSeq", waitingSeq.value);
     // waitingNo.value = res.waitingNo;
     // waitingTime.value = res.waitingTime;
     // this.restaurantName.value = res.restaurantName;
@@ -62,6 +87,7 @@ class WaitingViewModel extends GetxController {
     WaitingRecordModel? res =
         await WaitingApi().getWaitingInfo(waitingSeq.value);
     if (res != null) {
+      waitingSeq.value = res.waitingSeq;
       restaurantSeq.value = res.restaurantSeq;
       waitingPersonCnt.value = res.waitingPersonCnt;
       waitingNo.value = res.waitingNo;
@@ -69,6 +95,19 @@ class WaitingViewModel extends GetxController {
       restaurantName.value = res.restaurantName;
       waitingStatusRegistDate.value = res.waitingStatusRegistDate;
       waitingStatusContent.value = res.waitingStatusContent;
+
+      waitingCurRank.value = res.waitingCurRank;
+    } else {
+      waitingSeq.value = -1;
+      waitingNo.value = -1;
+      waitingTime.value = -1;
+      restaurantName.value = "";
+      restaurantSeq.value = -1;
+      waitingPersonCnt.value = -1;
+      waitingStatusRegistDate.value = "";
+      waitingStatusContent.value = -1;
+
+      waitingCurRank.value = -1;
     }
   }
 

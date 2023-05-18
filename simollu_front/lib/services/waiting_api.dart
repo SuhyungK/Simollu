@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:simollu_front/models/delay_info_model.dart';
 import 'package:simollu_front/models/waiting_record_model.dart';
 import 'package:simollu_front/utils/token.dart';
 
@@ -9,6 +10,26 @@ class WaitingApi {
 
   Future<void> initialize() async {
     token = await getToken(); // getToken() 함수의 반환값을 대입
+  }
+
+  Future<DelayInfoModel?> getDelayInfo(int restaurantSeq) async {
+    await initialize();
+    Uri url =
+        baseUrl.resolve('/api/waiting/user/restaurant-status/${restaurantSeq}');
+    final response = await http.get(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+    );
+
+    if (response.statusCode == 200) {
+      dynamic responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return DelayInfoModel.fromJSON(responseBody);
+    }
+    return null;
   }
 
   Future<bool> cancelWaiting(int waitingSeq) async {
@@ -29,6 +50,33 @@ class WaitingApi {
       return true;
     }
     return false;
+  }
+
+  Future<WaitingRecordModel?> delayOrder(
+      int waitingSeq, int restaurantSeq, String restaurantName) async {
+    await initialize();
+
+    Uri url = baseUrl.resolve('/api/waiting/user');
+    final response = await http.put(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+      body: json.encode({
+        "waitingSeq": waitingSeq,
+        "restaurantSeq": restaurantSeq,
+        "restaurantName": restaurantName,
+      }),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      dynamic responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return WaitingRecordModel.fromJson(responseBody);
+    }
+
+    return null;
   }
 
   Future<WaitingRecordModel?> getWaitingInfo(int waitingSeq) async {

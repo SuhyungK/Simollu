@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/root.dart';
-import 'package:simollu_front/utils/fcmSetting.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +50,9 @@ class _MyWebViewState extends State<MyWebView> {
           //   })
           // );
           if (initial == true) {
-            Get.offAll(() => LikingThings());
+            Get.offAll(() => LikingThings(
+                  isLogined: false,
+                ));
           } else {
             Get.offAll(Root());
           }

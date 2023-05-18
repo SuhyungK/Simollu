@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:simollu_front/models/notification_model.dart';
 import 'package:simollu_front/utils/token.dart';
@@ -19,8 +20,8 @@ class NotificationViewModel {
   }
 
   // 알림 리스트 조회
-  static Future<List<NotificationModel>> fetchAlerts() async {
-    List<NotificationModel> result = <NotificationModel> [];
+  Future<List<NotificationModel>> fetchAlerts() async {
+    List<NotificationModel> result = <NotificationModel>[];
     String token = await getToken();
     var url = createUrl('/alert/user/alert');
     final response = await http.get(
@@ -31,9 +32,19 @@ class NotificationViewModel {
       },
     );
 
+    if (response.statusCode == 200) {
+      print(jsonDecode(utf8.decode(response.bodyBytes)));
+      print('리스트 조회');
+      print(response.body);
+      final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
+      // final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
+      result = (decodedList as List).map((item) => NotificationModel.fromJson(item)).toList();
+    } else if (response.statusCode == 204) {
+    } else {
+      print(response.printError);
+    }
     // final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
     // result = (decodedList as List).map((item) => NotificationModel.fromJson(item)).toList();
-
     return result;
   }
 

@@ -1,47 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/widgets/restaurant_list_item.dart';
 
 class InterestingRestaurantsPage extends StatelessWidget {
   InterestingRestaurantsPage({super.key});
 
-  final List<Restaurant> restaurants = [
-    Restaurant(
-      id: "1",
-      iamgePath: "assets/basBurgerImg.png",
-      name: "바스 버거",
-      likePercentages: 80.0,
-      kind: "양식",
-      location: "역삼동",
-      isLike: false,
-    ),
-    Restaurant(
-      id: "2",
-      iamgePath: "assets/basBurgerImg.png",
-      name: "바스 버거",
-      likePercentages: 80.0,
-      kind: "양식",
-      location: "역삼동",
-      isLike: true,
-    ),
-    Restaurant(
-      id: "3",
-      iamgePath: "assets/basBurgerImg.png",
-      name: "바스 버거",
-      likePercentages: 80.0,
-      kind: "양식",
-      location: "역삼동",
-      isLike: false,
-    ),
-    Restaurant(
-      id: "3",
-      iamgePath: "assets/basBurgerImg.png",
-      name: "바스 버거",
-      likePercentages: 80.0,
-      kind: "양식",
-      location: "역삼동",
-      isLike: true,
-    ),
-  ];
+  UserViewModel userViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +15,17 @@ class InterestingRestaurantsPage extends StatelessWidget {
         color: Colors.white,
       ),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ...List.generate(
-              restaurants.length,
-              (index) => RestaurantListItem(
-                restaurant: restaurants[index],
+        child: Obx(
+          () => Column(
+            children: [
+              ...List.generate(
+                userViewModel.interestRestaurantList.value.length,
+                (index) => RestaurantListItem(
+                  restaurant: userViewModel.interestRestaurantList.value[index],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
