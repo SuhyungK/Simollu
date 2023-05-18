@@ -37,7 +37,8 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  await fcmSetting();
+  final firebaseToken = await fcmSetting();
+  print(firebaseToken);
 
   if (!kIsWeb) {
     await setupFlutterNotifications();

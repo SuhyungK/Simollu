@@ -12,12 +12,13 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  late Future<List<NotificationModel>> alerts;
+  late Future<List<NotificationModel>> alerts = Future<List<NotificationModel>>.value([]);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    alerts = NotificationViewModel.fetchAlerts();
     // NotificationViewModel.processIsRead(
     //   NotificationViewModel.fetchAlerts().then((res) => res) as List<NotificationModel>
     // );

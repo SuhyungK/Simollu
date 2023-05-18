@@ -161,6 +161,13 @@ class Root extends GetView<RootController> {
                   ? GestureDetector(
                       onTap: () {
                         print("알림 클릭");
+                        Navigator.push(
+                          context,
+                          GetPageRoute(
+                            curve: Curves.fastOutSlowIn,
+                            page: () => NotificationPage(),
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
