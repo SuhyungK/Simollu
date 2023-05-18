@@ -47,7 +47,6 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
 
-  await NotificationViewModel.fetchAlerts();
   runApp(
     MyApp(),
   );
