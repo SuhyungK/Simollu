@@ -254,73 +254,90 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
       return Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
-          '메뉴 정보가 없습니다.',
+          '등록된 메뉴 정보가 없습니다.',
           style: TextStyle(fontSize: 16),
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: menuList
-            .map(
-              (menu) => Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: menu.menuImage ??
-                          'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
-                      width: 80,
-                      // height: 80,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => CachedNetworkImage(
-                        imageUrl:
-                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: menuList
+              .map(
+                (menu) => Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: menu.menuImage ??
+                            'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                         width: 80,
                         height: 80,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => CachedNetworkImage(
+                          imageUrl:
+                              'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                          width: 80,
+                          height: 80,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Text(menu.menuName ?? ''),
-                        Text(menu.menuPrice ?? '')
-                      ],
-                    )
-                  ],
+                      Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(menu.menuName ?? ''),
+                            Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Text(menu.menuPrice ?? ''))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+        ),
       ),
     );
   }
 
   Widget _restaurantInfo(
       String restaurantBusinessHours, String restaurantPhoneNumber) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '영업 정보',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Row(
+    return Container(
+      color: Colors.white,
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(left: 10, top: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(flex: 3, child: Text('운영시간')),
-            Expanded(flex: 7, child: Text(restaurantBusinessHours ?? '')),
+            Text(
+              '영업 정보',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(flex: 3, child: Text('운영시간')),
+                Expanded(flex: 7, child: Text(restaurantBusinessHours ?? '')),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(flex: 3, child: Text('전화 번호 ')),
+                Expanded(flex: 7, child: Text(restaurantPhoneNumber ?? '')),
+              ],
+            ),
+
           ],
         ),
-        Row(
-          children: [
-            Expanded(flex: 3, child: Text('전화 번호 ')),
-            Expanded(flex: 7, child: Text(restaurantPhoneNumber ?? '')),
-          ],
-        ),
-      ],
+      ),
     );
   }
 }
