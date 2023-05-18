@@ -7,6 +7,8 @@ class RestaurantModel {
   final String restaurantAddress;
   final double distance;
   final String restaurantCategory;
+  final String restaurantX;
+  final String restaurantY;
   // 좋아요 필요할듯 - 관심식당 페이지
 
   RestaurantModel({
@@ -18,6 +20,8 @@ class RestaurantModel {
     required this.restaurantAddress,
     required this.distance,
     required this.restaurantCategory,
+    required this.restaurantX,
+    required this.restaurantY,
   });
 
   RestaurantModel.fromJSON(Map<String, dynamic> json)
@@ -28,5 +32,7 @@ class RestaurantModel {
         restaurantImage = json['restaurantImage'] ?? '',
         restaurantAddress = json['restaurantAddress'] ?? '',
         distance = json['distance'] ?? 0,
-        restaurantCategory = json['restaurantCategory'] ?? '';
+        restaurantCategory = json['restaurantCategory'] ?? '',
+        restaurantX = json['restaurantX'] ?? '0',
+        restaurantY = json['restaurantY'] ?? '0';
 }

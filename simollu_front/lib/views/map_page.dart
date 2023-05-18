@@ -29,13 +29,11 @@ class _MapPageState extends State<MapPage> {
 
   bool _locationPermission = false;
 
-  late MapViewModel mapViewModel;
+  MapViewModel mapViewModel = Get.find();
 
   @override
   void initState() {
     super.initState();
-
-    mapViewModel = Get.find();
 
     void listening() async {
       await _getCurrentLocation();
@@ -269,8 +267,9 @@ class _MapPageState extends State<MapPage> {
           Expanded(
             child: Stack(
               children: [
-                Obx(
-                  () => GoogleMap(
+                Obx(() {
+                  Set<Marker> markers = Set.from(mapViewModel.markers);
+                  return GoogleMap(
                     polylines: Set<Polyline>.of(mapViewModel.polylineList),
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
@@ -282,8 +281,8 @@ class _MapPageState extends State<MapPage> {
                     zoomControlsEnabled: false,
                     markers: mapViewModel.markers,
                     mapType: MapType.terrain,
-                  ),
-                ),
+                  );
+                }),
                 Positioned(
                   bottom: 20,
                   right: 20,
