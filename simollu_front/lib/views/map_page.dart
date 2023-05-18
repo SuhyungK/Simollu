@@ -109,7 +109,7 @@ class _MapPageState extends State<MapPage> {
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
-      mapViewModel.currentPosition.value = position;
+      // mapViewModel.currentPosition.value = position;
       Marker myLocation = await CustomMarker(
               markerId: "myLocation",
               latLng: LatLng(mapViewModel.currentPosition.value!.latitude,
@@ -132,7 +132,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onLocationChanged(Position position) async {
-    mapViewModel.currentPosition.value = position;
+    // mapViewModel.currentPosition.value = position;
     Marker myLocation = await CustomMarker(
             markerId: "myLocation",
             latLng: LatLng(mapViewModel.currentPosition.value!.latitude,

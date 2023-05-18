@@ -19,7 +19,8 @@ class MapViewModel extends GetxController {
   RxList<Polyline> polylineList = <Polyline>[].obs;
   RxMap<Place, List<Polyline>> polylineMap = <Place, List<Polyline>>{}.obs;
 
-  Rx<Position?> currentPosition = Rx<Position?>(null);
+  // Rx<Position> currentPosition = Rx<Position?>(null);
+  Rx<LatLng> currentPosition = LatLng(37.5013068, 127.0396597).obs;
 
   Rx<LatLng> start = LatLng(37.5013068, 127.0396597).obs;
   Rx<LatLng> destination = LatLng(37.5047984, 127.0434318).obs;
@@ -56,7 +57,7 @@ class MapViewModel extends GetxController {
     locationPermission.value = await Geolocator.requestPermission();
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
-      currentPosition.value = position;
+      // currentPosition.value = position;
     });
     if (locationPermission.value != LocationPermission.denied &&
         locationPermission.value != LocationPermission.deniedForever) {
