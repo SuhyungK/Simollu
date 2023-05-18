@@ -41,7 +41,6 @@ class SearchHotKeyword extends StatelessWidget {
                       child: Text(list[index].order.toString()+". ",
                         style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'Roboto',
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.normal,
@@ -58,7 +57,6 @@ class SearchHotKeyword extends StatelessWidget {
                       child: Text(list[index].keyword,
                         style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'Roboto',
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.normal,

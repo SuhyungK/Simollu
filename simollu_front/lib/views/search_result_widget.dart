@@ -180,7 +180,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
-                                fontFamily: 'Roboto',
                                 fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0,
@@ -235,7 +234,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 13,
-                                      fontFamily: 'Roboto',
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.normal,
                                       letterSpacing: 0,
@@ -292,7 +290,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 13,
-                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.normal,
                                     letterSpacing: 0,
@@ -395,7 +392,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                         '웨이팅하기',
                         style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'Roboto',
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.normal,

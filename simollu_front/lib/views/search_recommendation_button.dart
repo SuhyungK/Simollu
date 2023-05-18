@@ -31,7 +31,6 @@ class _SearchRecommendationButtonState extends State<SearchRecommendationButton>
         widget.text,
         style: TextStyle(
           color: Colors.black,
-          fontFamily: 'Roboto',
           fontSize: 13,
           fontWeight: FontWeight.bold,
           fontStyle: FontStyle.normal,
