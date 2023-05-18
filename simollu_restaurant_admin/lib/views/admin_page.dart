@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simollu_restaurant_admin/api/admin_api.dart';
@@ -9,6 +11,9 @@ class AdminPage extends StatefulWidget {
   @override
   State<AdminPage> createState() => _AdminPageState();
 }
+
+// 폴링 주기 (밀리초)
+const pollingInterval = 5000;
 
 class _AdminPageState extends State<AdminPage> {
 
@@ -33,7 +38,25 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  getList() async {
+  Timer? _timer;
+
+  void startPolling() {
+    // 타이머가 이미 실행 중인 경우 중지
+    stopPolling();
+
+    // 폴링 주기에 따라 API 호출 수행
+    _timer = Timer.periodic(Duration(milliseconds: pollingInterval), (_) {
+      getList();
+    });
+  }
+
+  void stopPolling() {
+    // 타이머가 실행 중인 경우 중지
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  Future<void> getList() async {
     AdminApi adminApi = AdminApi();
     List<WaitingUserModel> r = await adminApi.getWaitingList();
 
@@ -60,6 +83,7 @@ class _AdminPageState extends State<AdminPage> {
     // TODO: implement initState
     super.initState();
     getList();
+    startPolling();
   }
 
   @override
