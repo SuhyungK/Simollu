@@ -75,6 +75,8 @@ public class UserPreferenceService {
 
         Map<String, List<String>> preferenceMap = preferenceManager.getPreferenceMap();
 
+        List<String> preferenceKeyList = new ArrayList<>();
+
         for(UserPreference prefer : userPreferences) {
             List<String> one = preferenceMap.getOrDefault(prefer.getUserPreferenceType(), Collections.emptyList());
 
@@ -83,6 +85,8 @@ public class UserPreferenceService {
                 continue;
             }
 
+            preferenceKeyList.add(prefer.getUserPreferenceType());
+
             for (String data : one) {
                 responseList.add(data);
             }
@@ -90,7 +94,8 @@ public class UserPreferenceService {
 
         return UserPreferenceResponseDto.builder()
                 .userSeq(userSeq)
-                .userPrefernceList(responseList)
+                .userPrefernceList(preferenceKeyList)
+                .userPreferncePlaceList(responseList)
                 .build();
     }
 

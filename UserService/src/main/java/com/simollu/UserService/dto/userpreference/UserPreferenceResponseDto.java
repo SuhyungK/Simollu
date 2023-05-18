@@ -15,4 +15,6 @@ public class UserPreferenceResponseDto {
 
     private String userSeq;
     private List<String> userPrefernceList;
+    private List<String> userPreferncePlaceList;
+
 }
