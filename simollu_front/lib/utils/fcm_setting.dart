@@ -16,7 +16,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> fcmSetting() async {
   // firebase core 기능 사용을 위한 필수 initializing
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -86,7 +86,7 @@ Future<void> fcmSetting() async {
   AndroidInitializationSettings initializationSettingsAndriod = const AndroidInitializationSettings('mipmap/ic_launcher');
 
   DarwinInitializationSettings initializationSettingsIOS = const DarwinInitializationSettings(
-    requestAlertPermission: false,
+    requestAlertPermission: true,
     requestBadgePermission: false,
     requestSoundPermission: false,
   );
