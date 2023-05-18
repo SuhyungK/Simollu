@@ -71,10 +71,19 @@ class _AdminPageState extends State<AdminPage> {
     print(r);
   }
 
-  postWaitingComplete(int waitingSeq) async{
+  // 입장 완료 처리
+  Future<bool> postWaitingComplete(int waitingSeq, String userSeq, int waitingPersonCnt) async{
     AdminApi adminApi = AdminApi();
-    bool r = await adminApi.postWaitingComplete(waitingSeq);
+    bool r = await adminApi.postWaitingComplete(waitingSeq, userSeq);
     print(r);
+
+    if(r) {
+      setState(() {
+        _numberOfPeople += waitingPersonCnt;
+      });
+    }
+
+    return r;
   }
 
 
@@ -286,7 +295,10 @@ class _AdminPageState extends State<AdminPage> {
                           onPressed: () async {
                             print('입장 완료 버튼 클릭');
                             //  api 연결
-                            postWaitingComplete(user.waitingSeq);
+                            bool r = postWaitingComplete(user.waitingSeq, user.userSeq, user.waitingPersonCnt) as bool;
+                            // _numberOfPeople += user.waitingPersonCnt;
+
+
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Color(0xFFFFD200),
