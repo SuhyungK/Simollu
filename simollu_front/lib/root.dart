@@ -175,7 +175,7 @@ class Root extends GetView<RootController> {
                         ),
                       ),
                     )
-                  : Container(),
+                  : Card(),
             ],
           ),
           body: IndexedStack(
