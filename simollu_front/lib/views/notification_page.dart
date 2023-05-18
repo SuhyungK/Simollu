@@ -22,9 +22,9 @@ class _NotificationPageState extends State<NotificationPage> {
     // alerts = NotificationViewModel.fetchAlerts();
     // print(alerts);
     alerts = _notificationViewModel.fetchAlerts();
-    // NotificationViewModel.processIsRead(
-    //   NotificationViewModel.fetchAlerts().then((res) => res) as List<NotificationModel>
-    // );
+    alerts.then((res) => 
+      _notificationViewModel.processIsRead(res)
+    );
   }
 
 
@@ -64,6 +64,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   NotificationModel alert = snapshot.data![index];
+                  String? registDate = alert.alertRegistDate?.split('T')[0];
                   return Padding(
                     padding: EdgeInsets.fromLTRB(10, 8, 10, 10),
                     child: Container(
@@ -93,7 +94,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         ),
                         leading: Icon(Icons.edit_outlined, size: 40),
                         trailing: Icon(Icons.arrow_forward_ios),
-                        subtitle: Text('3일 전'),
+                        subtitle: Text(registDate as String),
                         iconColor: Colors.black,
                       ),
                     ),

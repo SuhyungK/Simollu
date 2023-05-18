@@ -19,6 +19,25 @@ class WritableReview extends StatelessWidget {
             future: reviews,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 100),
+                          Icon(Icons.speaker_notes_off_outlined,
+                            size: 90,
+                          ),
+                          SizedBox(height: 20),
+                          Text('작성 가능한 리뷰가 없습니다.',
+                            style: TextStyle(
+                                fontSize: 18
+                            ),
+                          )
+                        ],
+                      )
+                  );
+                }
                 return ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -75,7 +94,8 @@ class WritableReview extends StatelessWidget {
                                     Container(
                                       margin: EdgeInsets.only(top: 19),
                                       child: Text(
-                                        '2023-04-12 (수) 19:14',
+                                        // review.waitingCompleteDate!.split('T')[0],
+                                        '2023-05-19',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
