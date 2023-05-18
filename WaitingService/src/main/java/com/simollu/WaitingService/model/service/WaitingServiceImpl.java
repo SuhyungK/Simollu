@@ -262,7 +262,10 @@ public class WaitingServiceImpl implements WaitingService {
         // 웨이팅 미루기 완료 알림
         AlertMessage alertMessage = AlertMessage.valueOf("WAITING_CHANGE_ALERT");
         sendMessage(alertMessage, waitingDto.getUserSeq());
-        return getWaiting(waitingDto.getUserSeq());
+
+        WaitingDetailDto detailDto = getWaiting(waitingDto.getUserSeq());
+        detailDto.setWaitingNo(waitingNo);
+        return detailDto;
     }
 
     /* 웨이팅 상세정보 조회 */
