@@ -176,7 +176,7 @@ public class UserController {
     @PostMapping("preference")
     public ResponseEntity<?> registerUserPreference(@RequestHeader("userSeq") String userSeq,
                                                 @RequestBody RegisterUserPreferenceRequestDto requestDto) {
-        RegisterUserPreferenceResponseDto responseDto = userPreferenceService.registerUserPreference(userSeq, requestDto);
+        UserPreferenceResponseDto responseDto = userPreferenceService.registerUserPreference(userSeq, requestDto);
         return ResponseEntity.ok(responseDto);
     }
 

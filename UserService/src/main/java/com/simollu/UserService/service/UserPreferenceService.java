@@ -31,10 +31,8 @@ public class UserPreferenceService {
 
 
     // 회원 취향 삽입
-    public RegisterUserPreferenceResponseDto registerUserPreference(String userSeq,
+    public UserPreferenceResponseDto registerUserPreference(String userSeq,
                                                                     RegisterUserPreferenceRequestDto requestDto) {
-
-
 
         // 기존 회원 취향 삭제
         userPreferenceRepository.deleteAllByUserSeq(userSeq);
@@ -53,16 +51,7 @@ public class UserPreferenceService {
         // 저장된 취향들을 반환하기 위해 저장
         List<UserPreference> save = userPreferenceRepository.saveAll(userPreferenceList);
 
-        // 응답 DTO에 저장된 취향들을 설정
-        List<String> saveList = new ArrayList<>();
-        for (UserPreference one : save) {
-            saveList.add(one.getUserPreferenceType());
-        }
-        
-        RegisterUserPreferenceResponseDto responseDto = RegisterUserPreferenceResponseDto.builder()
-                .userSeq(userSeq)
-                .userPrefernceList(saveList)
-                .build();
+        UserPreferenceResponseDto responseDto = getUserPreference(userSeq);
 
         return responseDto;
     }
