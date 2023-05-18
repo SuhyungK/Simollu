@@ -5,6 +5,7 @@ import com.example.elasticsearch.client.UserServiceClient;
 import com.example.elasticsearch.model.dto.review.*;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListRequestDto;
 import com.example.elasticsearch.model.dto.user.GetUserInfoListResponseDto;
+import com.example.elasticsearch.model.dto.user.RegisterUserForkRequestDto;
 import com.example.elasticsearch.model.entity.Review;
 import com.example.elasticsearch.repository.jpa.RestaurantJpaRepository;
 import com.example.elasticsearch.repository.review.ReviewRepository;
@@ -41,6 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserServiceClient userServiceClient;
 
 
+
+
+
     /* 후기 작성 */
     @Override
     public Long writeReview(String userSeq, RestaurantReviewDto reviewDto) {
@@ -67,6 +71,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 작성가능리뷰 삭제
         writeableReviewRepository.deleteById(reviewDto.getWriteableSeq());
+
+        // 포크 1개 적립
+        RegisterUserForkRequestDto request = RegisterUserForkRequestDto.builder()
+                .userForkAmount(1)
+                .userForkType("적립")
+                .userForkContent("리뷰 작성")
+                .build();
+
+        userServiceClient.registerUserFork(userSeq, request);
 
         return reviewSeq;
     }
