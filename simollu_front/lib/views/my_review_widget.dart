@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/views/review_management_star_button.dart';
@@ -62,13 +63,31 @@ class MyReview extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    'assets/dongraejeong.png',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit
-                                        .cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      imageUrl: review.restaurantImg ??
+                                          'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                      errorWidget: (context, url, error) =>
+                                          CachedNetworkImage(
+                                            imageUrl:
+                                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                    ),
                                   ),
+                                  // child: Image.asset(
+                                  //   'assets/dongraejeong.png',
+                                  //   width: 80,
+                                  //   height: 80,
+                                  //   fit: BoxFit
+                                  //       .cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                                  // ),
                                 ),
                               ),
                             ),

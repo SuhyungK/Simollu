@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/models/notification_model.dart';
 import 'package:simollu_front/viewmodels/notification_view_model.dart';
+import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/widgets/custom_appBar.dart';
+
+import '../root.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -93,7 +97,21 @@ class _NotificationPageState extends State<NotificationPage> {
                           ],
                         ),
                         leading: Icon(Icons.edit_outlined, size: 40),
-                        trailing: Icon(Icons.arrow_forward_ios),
+                        trailing: alert.alertTitle == '리뷰 작성' ?
+                        IconButton(
+                            onPressed: () {
+                              RootController.to.setRootPageTitles("작성 리뷰");
+                              RootController.to.setIsMainPage(false);
+                              Navigator.push(
+                                context,
+                                GetPageRoute(
+                                  curve: Curves.fastOutSlowIn,
+                                  page: () => ReviewManagementPage(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.arrow_forward_ios)
+                        ) : null,
                         subtitle: Text(registDate as String),
                         iconColor: Colors.black,
                       ),
