@@ -72,4 +72,10 @@ public class ReviewController {
 
     }
 
+    /* 작성가능 리뷰 저장 */
+    @PostMapping("/writeable")
+    public void addWriteableReview(@RequestBody WriteableReviewDto writeableReviewDto) {
+        reviewService.addWriteableReview(writeableReviewDto);
+    }
+
 }
