@@ -84,13 +84,6 @@ class _MainPageState extends State<MainPage> {
     getData();
   }
 
-  // WaitingInfo? waitingInfo;
-  WaitingInfo? waitingInfo = WaitingInfo(
-    expectedWatingTime: 160,
-    restaurant: "바스버거ssssssssssssssssssssssssssssssssssssss",
-    waitingCount: 15,
-    waitingNumber: 2,
-  );
   List<Map<String, Object>> foodTypeIcons = [
     {
       "imagePath": "assets/icons/korean.png",
@@ -143,32 +136,6 @@ class _MainPageState extends State<MainPage> {
     }
   ];
 
-  List<Restaurant> restaurants = [
-    Restaurant(
-      name: "바스버거dddddddddddddddddddddddddddddddddddddddddddddddddd",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-    Restaurant(
-      name: "바스버거",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-    Restaurant(
-      name: "바스버거",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -363,7 +330,7 @@ class _MainPageState extends State<MainPage> {
                                                         width: 10,
                                                       ),
                                                       Text(
-                                                        "${waitingInfo!.waitingCount}",
+                                                        "${waitingViewModel.waitingCurRank.value}",
                                                       ),
                                                     ],
                                                   ),

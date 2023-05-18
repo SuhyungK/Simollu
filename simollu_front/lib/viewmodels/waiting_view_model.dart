@@ -17,6 +17,7 @@ class WaitingViewModel extends GetxController {
   RxInt waitingPersonCnt = (-1).obs;
   RxString waitingStatusRegistDate = "".obs;
   RxInt waitingStatusContent = (-1).obs;
+  RxInt waitingCurRank = (-1).obs;
 
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
@@ -27,7 +28,6 @@ class WaitingViewModel extends GetxController {
     WaitingRecordModel? res =
         await WaitingApi().delayOrder(waitingSeq.value, restaurantSeq.value);
     if (res != null) {
-      print("TestTest");
       waitingSeq.value = res.waitingSeq;
       waitingNo.value = res.waitingNo;
       waitingTime.value = res.waitingTime;
@@ -36,6 +36,7 @@ class WaitingViewModel extends GetxController {
       waitingPersonCnt.value = res.waitingPersonCnt;
       waitingStatusRegistDate.value = res.waitingStatusRegistDate;
       waitingStatusContent.value = res.waitingStatusContent;
+      waitingCurRank.value = res.waitingCurRank;
     }
   }
 
@@ -51,6 +52,8 @@ class WaitingViewModel extends GetxController {
       waitingPersonCnt.value = -1;
       waitingStatusRegistDate.value = "";
       waitingStatusContent.value = -1;
+
+      waitingCurRank.value = -1;
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('waitingSeq');
@@ -77,7 +80,10 @@ class WaitingViewModel extends GetxController {
   Future<void> getWaitingInfo() async {
     WaitingRecordModel? res =
         await WaitingApi().getWaitingInfo(waitingSeq.value);
+    print("testset");
+    print(waitingSeq.value);
     if (res != null) {
+      print('rest');
       restaurantSeq.value = res.restaurantSeq;
       waitingPersonCnt.value = res.waitingPersonCnt;
       waitingNo.value = res.waitingNo;
@@ -85,7 +91,10 @@ class WaitingViewModel extends GetxController {
       restaurantName.value = res.restaurantName;
       waitingStatusRegistDate.value = res.waitingStatusRegistDate;
       waitingStatusContent.value = res.waitingStatusContent;
+
+      waitingCurRank.value = res.waitingCurRank;
     }
+    print(waitingSeq.value);
   }
 
   // 웨이팅 내역 조회(완료)
