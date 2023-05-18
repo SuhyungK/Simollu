@@ -172,26 +172,29 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: waitingViewModel.waitingSeq.value == -1
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                RootController.to.setRootPageTitles("");
-                RootController.to.setIsMainPage(false);
-                Navigator.push(
-                  context,
-                  GetPageRoute(
-                    curve: Curves.fastOutSlowIn,
-                    page: () => MapPage(),
-                  ),
-                );
-              },
-              backgroundColor: Colors.amber,
-              icon: Icon(Icons.location_on),
-              label: Text(
-                '경로 보기',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
+      floatingActionButton: Obx(
+        () => waitingViewModel.waitingSeq.value == -1
+            ? Container()
+            : FloatingActionButton.extended(
+                onPressed: () {
+                  RootController.to.setRootPageTitles("");
+                  RootController.to.setIsMainPage(false);
+                  Navigator.push(
+                    context,
+                    GetPageRoute(
+                      curve: Curves.fastOutSlowIn,
+                      page: () => MapPage(),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.amber,
+                icon: Icon(Icons.location_on),
+                label: Text(
+                  '경로 보기',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
