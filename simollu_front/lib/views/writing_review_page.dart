@@ -7,6 +7,7 @@ import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/models/writeableModel.dart';
 import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/review_view_model.dart';
+import 'package:simollu_front/views/my_page.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
 import 'package:simollu_front/views/writing_review_button.dart';
@@ -229,13 +230,13 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                     var reviewSeq = await reviewViewModel.postReview(jsonData);
                     debugPrint(reviewSeq);
                     Future.delayed(Duration.zero, () {
-                      RootController.to.setRootPageTitles('작성 리뷰');
+                      RootController.to.setRootPageTitles("마이 페이지");
                       RootController.to.setIsMainPage(false);
                       Navigator.push(
                         context,
                         GetPageRoute(
                           curve: Curves.fastOutSlowIn,
-                          page: () => ReviewManagementPage(),
+                          page: () => MyPage(),
                         ),
                       );
                     });
