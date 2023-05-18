@@ -66,15 +66,15 @@ class MyReview extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      imageUrl: review.restaurantImg ??
-                                          'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                                      imageUrl:
+                                          'https://s3.ap-northeast-2.amazonaws.com/dongnealba.assets/stores/6388b351e5f1ee033c04fd5c/pic_1669903185757_0.jpeg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                                       width: 80,
                                       height: 80,
                                       fit: BoxFit.cover,
                                       errorWidget: (context, url, error) =>
                                           CachedNetworkImage(
                                             imageUrl:
-                                            'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                                            'https://s3.ap-northeast-2.amazonaws.com/dongnealba.assets/stores/6388b351e5f1ee033c04fd5c/pic_1669903185757_0.jpeg',
                                             width: 80,
                                             height: 80,
                                             fit: BoxFit.cover,
