@@ -25,8 +25,8 @@ class WaitingViewModel extends GetxController {
   }
 
   Future<void> delayOrder() async {
-    WaitingRecordModel? res =
-        await WaitingApi().delayOrder(waitingSeq.value, restaurantSeq.value);
+    WaitingRecordModel? res = await WaitingApi().delayOrder(
+        waitingSeq.value, restaurantSeq.value, restaurantName.value);
     if (res != null) {
       waitingSeq.value = res.waitingSeq;
       waitingNo.value = res.waitingNo;

@@ -32,7 +32,7 @@ class WaitingApi {
   }
 
   Future<WaitingRecordModel?> delayOrder(
-      int waitingSeq, int restaurantSeq) async {
+      int waitingSeq, int restaurantSeq, String restaurantName) async {
     await initialize();
 
     Uri url = baseUrl.resolve('/api/waiting/user');
@@ -45,6 +45,7 @@ class WaitingApi {
       body: json.encode({
         "waitingSeq": waitingSeq,
         "restaurantSeq": restaurantSeq,
+        "restaurantName": restaurantName,
       }),
     );
     print(response.statusCode);
