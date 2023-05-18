@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:simollu_front/models/waiting_record_model.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
+import '../root.dart';
+import '../views/review_management_page.dart';
+
 class WaitingRecordcard extends StatelessWidget {
   final bool? isCanclled;
   final WaitingRecordModel record;
@@ -48,9 +51,9 @@ class WaitingRecordcard extends StatelessWidget {
           ),
           // _buildPadding("예약일시", "2023/03/18(목) 13:45"),
           _buildPadding("예약일시", record.waitingStatusRegistDate as String),
-          _buildPadding("대기번호", "9번"),
-          _buildPadding("인원", "2명"),
-          if (isCanclled == false)
+          _buildPadding("대기번호", record.waitingNo.toString()),
+          _buildPadding("인원",  record.waitingPersonCnt.toString()),
+          if (isCanclled == true)
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Center(
@@ -61,14 +64,15 @@ class WaitingRecordcard extends StatelessWidget {
                           Size(MediaQuery.of(context).size.width * 0.95, 40),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(builder: (context) =>
-                      //         WritingReviewPage(
-                      //           record: record,
-                      //         )
-                      //     ),
-                      // );
+                      RootController.to.setRootPageTitles('작성 리뷰');
+                      RootController.to.setIsMainPage(false);
+                      Navigator.push(
+                        context,
+                        GetPageRoute(
+                          curve: Curves.fastOutSlowIn,
+                          page: () => ReviewManagementPage(),
+                        ),
+                      );
                     },
                     child: Text('리뷰 작성 하기')),
               ),

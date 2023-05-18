@@ -62,8 +62,18 @@ class _WaitingRecordPageState extends State<WaitingRecordPage> {
                   }),
                 );
               } else {
-                return Center(
-                  child: Text('취소 내역 없음!!!!!!!!!!'),
+                return Column(
+                  children: [
+                    SizedBox(height: 100),
+                    Icon(Icons.speaker_notes_off_outlined,
+                    size: 100,),
+                    SizedBox(height: 20),
+                    Text('내역이 존재하지 않습니다.',
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
+                    )
+                  ],
                 );
               }
             } else {
