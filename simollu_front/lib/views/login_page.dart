@@ -38,16 +38,15 @@ class _MyWebViewState extends State<MyWebView> {
           await prefs.setBool('initial', initial);
           var fcmToken = await fcmSetting();
           await http.post(url2,
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              "Authorization": token
-            },
-            body: jsonEncode({
-              "fcmToken": fcmToken
-            })
-          );
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": token
+              },
+              body: jsonEncode({"fcmToken": fcmToken}));
           if (initial == true) {
-            Get.offAll(() => LikingThings());
+            Get.offAll(() => LikingThings(
+                  isLogined: false,
+                ));
           } else {
             Get.offAll(Root());
           }

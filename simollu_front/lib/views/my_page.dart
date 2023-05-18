@@ -381,7 +381,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       context,
                       GetPageRoute(
                         curve: Curves.fastOutSlowIn,
-                        page: () => LikingThings(),
+                        page: () => LikingThings(isLogined: true),
                       ),
                     );
                   },

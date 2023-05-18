@@ -35,11 +35,15 @@ class PreferenceViewModel extends GetxController {
     if (response.statusCode == 200) {
       Map<String, dynamic> responseBody =
           jsonDecode(utf8.decode(response.bodyBytes));
-      List<dynamic> userPreferenceList = responseBody['userPreferenceList'];
+      List<dynamic> userPreferenceList = responseBody['userPrefernceList'];
+      List<dynamic> userPreferencePlaceList =
+          responseBody['userPreferncePlaceList'];
 
       for (dynamic preference in userPreferenceList) {
-        print(preference);
         preferences.add(preference);
+      }
+      for (dynamic place in userPreferencePlaceList) {
+        places.add(place);
       }
     } else {
       throw Exception('Failed to post preferences...');
@@ -70,6 +74,7 @@ class PreferenceViewModel extends GetxController {
           jsonDecode(utf8.decode(response.bodyBytes))['userPreferncePlaceList']
               ?.cast<String>();
       for (String place in result) {
+        print(place);
         places.add(place);
       }
       // result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));

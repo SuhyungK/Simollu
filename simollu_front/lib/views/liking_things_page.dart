@@ -8,7 +8,8 @@ import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/views/liking_things_button.dart';
 
 class LikingThings extends StatefulWidget {
-  const LikingThings({Key? key}) : super(key: key);
+  final bool isLogined;
+  const LikingThings({Key? key, required this.isLogined}) : super(key: key);
 
   @override
   State<LikingThings> createState() => _LikingThingsState();
@@ -119,7 +120,11 @@ class _LikingThingsState extends State<LikingThings> {
                         final jsonData = jsonEncode(json);
                         // print(jsonEncode(json));
                         await preferenceViewModel.postPreference(jsonData);
-                        Get.offAll(Root());
+                        if (widget.isLogined) {
+                          RootController.to.onWillPop();
+                        } else {
+                          Get.offAll(Root());
+                        }
                       }
                     // 선택된 취향이 3개보다 작으면 disabled
                     : null,

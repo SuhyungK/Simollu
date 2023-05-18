@@ -130,7 +130,7 @@ class MapViewModel extends GetxController {
   }
 
   Future<void> getPlaces(String keyword) async {
-    placeList.value = await KakaoMapAPI().getPlaces(destination.value, keyword);
+    placeList.addAll(await KakaoMapAPI().getPlaces(destination.value, keyword));
   }
 
   Future<void> searchPlaces(String keyword) async {
