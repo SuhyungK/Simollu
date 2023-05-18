@@ -17,12 +17,12 @@ class NotificationModel {
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json)
-    : alertSeq = json['alertSeq'],
-      userSeq = json['userSeq'],
-      alertTitle = json['alertTitle'],
-      alertContent = json['alertContent'],
-      alertRegistDate = json['alertRegistDate'],
-      alertIsRead = json['alertIsRead'];
+      : alertSeq = json['alertSeq'],
+        userSeq = json['userSeq'],
+        alertTitle = json['alertTitle'],
+        alertContent = json['alertContent'],
+        alertRegistDate = json['alertRegistDate'],
+        alertIsRead = json['alertIsRead'];
 
 
   Map<String, dynamic> toJson() {

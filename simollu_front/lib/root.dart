@@ -10,6 +10,7 @@ import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/main_page.dart';
 import 'package:simollu_front/views/more_page.dart';
 import 'package:simollu_front/views/my_page.dart';
+import 'package:simollu_front/views/notification_page.dart';
 import 'package:simollu_front/views/search_page.dart';
 import 'package:simollu_front/widgets/nav_bar.dart';
 import 'package:simollu_front/utils/sstack.dart';
@@ -160,6 +161,13 @@ class Root extends GetView<RootController> {
                   ? GestureDetector(
                       onTap: () {
                         print("알림 클릭");
+                        Navigator.push(
+                          context,
+                          GetPageRoute(
+                            curve: Curves.fastOutSlowIn,
+                            page: () => NotificationPage(),
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
