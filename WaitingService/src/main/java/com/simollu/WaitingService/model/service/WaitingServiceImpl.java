@@ -3,10 +3,12 @@ package com.simollu.WaitingService.model.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.simollu.WaitingService.client.AlertServiceClient;
 import com.simollu.WaitingService.client.RestaurantServiceClient;
+import com.simollu.WaitingService.client.UserServiceClient;
 import com.simollu.WaitingService.model.dto.*;
 import com.simollu.WaitingService.model.dto.alert.AlertMessage;
 import com.simollu.WaitingService.model.dto.alert.NotificationRequestDto;
 import com.simollu.WaitingService.model.dto.review.WriteableReviewDto;
+import com.simollu.WaitingService.model.dto.user.RegisterUserForkRequestDto;
 import com.simollu.WaitingService.model.entity.Waiting;
 import com.simollu.WaitingService.repository.WaitingRepository;
 import com.simollu.WaitingService.repository.WaitingStatusRepository;
@@ -36,6 +38,7 @@ public class WaitingServiceImpl implements WaitingService {
     private final RedisCacheService redisCacheService; // 추가
     private final AlertServiceClient alertServiceClient; // 알림 서버 통신
     private final RestaurantServiceClient restaurantServiceClient; // 레스토랑 서버 통신
+    private final UserServiceClient userServiceClient; // 유저 서버 통신
 
     private static final String RESTAURANT_KEY = "restaurant_no:";
     private static final int STATUS_WAITING = 0; // 웨이팅
@@ -79,6 +82,14 @@ public class WaitingServiceImpl implements WaitingService {
         // 웨이팅 등록 완료 알림
         AlertMessage alertMessage = AlertMessage.valueOf("WAITING_REGIST_ALERT");
         sendMessage(alertMessage, waitingDetailDto.getUserSeq());
+
+        // 포크
+        RegisterUserForkRequestDto requestDto = RegisterUserForkRequestDto.builder()
+                .userForkAmount(-1)
+                .userForkType("사용")
+                .userForkContent("웨이팅 신청")
+                .build();
+        userServiceClient.registerUserFork(waitingDetailDto.getUserSeq(), requestDto);
         return waitingDetailDto;
     }
 
@@ -201,12 +212,19 @@ public class WaitingServiceImpl implements WaitingService {
                                 .waitingCompleteDate(waitingStatusDto.getWaitingStatusRegistDate())
                                 .build()
                 );
+
             }else{
                 // 취소되었습니다 알림
                 // 웨이팅 취소 완료 알림
                 AlertMessage alertMessage = AlertMessage.valueOf("WAITING_CANCEL_ALERT");
                 sendMessage(alertMessage, waitingHistoryDto.getUserSeq());
-
+                // 포크
+                RegisterUserForkRequestDto requestDto = RegisterUserForkRequestDto.builder()
+                        .userForkAmount(1)
+                        .userForkType("적립")
+                        .userForkContent("웨이팅 취소")
+                        .build();
+                userServiceClient.registerUserFork(waitingHistoryDto.getUserSeq(), requestDto);
             }
         }
         waitingStatusRepository.save(waitingStatusDto.toEntity());
@@ -265,6 +283,14 @@ public class WaitingServiceImpl implements WaitingService {
 
         WaitingDetailDto detailDto = getWaiting(waitingDto.getUserSeq());
         detailDto.setWaitingNo(waitingNo);
+
+        // 포크
+        RegisterUserForkRequestDto requestDto = RegisterUserForkRequestDto.builder()
+                .userForkAmount(-1)
+                .userForkType("사용")
+                .userForkContent("웨이팅 미루기")
+                .build();
+        userServiceClient.registerUserFork(waitingDto.getUserSeq(), requestDto);
         return detailDto;
     }
 
