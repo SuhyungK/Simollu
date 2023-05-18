@@ -12,12 +12,14 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  late Future<List<NotificationModel>> alerts;
+  late Future<List<NotificationModel>> alerts = Future<List<NotificationModel>>.value([]);
+  final NotificationViewModel _notificationViewModel = NotificationViewModel();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    alerts = _notificationViewModel.fetchAlerts();
     // NotificationViewModel.processIsRead(
     //   NotificationViewModel.fetchAlerts().then((res) => res) as List<NotificationModel>
     // );
@@ -36,6 +38,24 @@ class _NotificationPageState extends State<NotificationPage> {
           future: alerts,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.notifications_off_outlined,
+                        size: 90,
+                      ),
+                      SizedBox(height: 20),
+                      Text('확인 가능한 알림이 없습니다.',
+                        style: TextStyle(
+                          fontSize: 18
+                        ),
+                      )
+                    ],
+                  )
+                );
+              }
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

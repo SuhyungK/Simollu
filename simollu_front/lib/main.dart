@@ -47,7 +47,6 @@ void main() async {
   String? token = prefs.getString('token');
 
   print(token);
-  await NotificationViewModel.fetchAlerts();
   runApp(
     MyApp(),
   );
