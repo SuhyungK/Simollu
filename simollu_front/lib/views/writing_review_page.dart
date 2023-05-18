@@ -231,7 +231,7 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                     debugPrint(reviewSeq);
                     Future.delayed(Duration.zero, () {
                       RootController.to.setRootPageTitles("마이 페이지");
-                      RootController.to.setIsMainPage(false);
+                      RootController.to.setIsMainPage(true);
                       Navigator.push(
                         context,
                         GetPageRoute(

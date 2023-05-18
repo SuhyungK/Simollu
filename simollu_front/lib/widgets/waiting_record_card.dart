@@ -5,6 +5,7 @@ import 'package:simollu_front/models/waiting_record_model.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
 import '../root.dart';
+import '../views/my_page.dart';
 import '../views/review_management_page.dart';
 
 class WaitingRecordcard extends StatelessWidget {
