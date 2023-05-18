@@ -1,5 +1,6 @@
 package com.simollu.WaitingService.controller;
 
+import com.simollu.WaitingService.model.dto.WaitingCompleteRequestDto;
 import com.simollu.WaitingService.model.dto.WaitingHistoryDto;
 import com.simollu.WaitingService.model.dto.WaitingStatusDto;
 import com.simollu.WaitingService.model.service.WaitingService;
@@ -19,12 +20,31 @@ public class WaitingRestaurantController {
 
     private final WaitingService waitingService;
 
+    private static final int STATUS_COMPLETE = 1; // 완료
+
     /* 웨이팅 리스트 조회(식당) */
     @GetMapping("{restaurantSeq}")
     public ResponseEntity<?> getWaitingList(@PathVariable("restaurantSeq") Integer restaurantSeq) {
 
         return ResponseEntity.ok(waitingService.getWaitingList(restaurantSeq));
     }
+
+    /* 웨이팅 완료 (식당) */
+    @PostMapping("/complete")
+    public ResponseEntity<?> updateStatusComplete(@RequestBody WaitingCompleteRequestDto waitingCompleteRequestDto){
+        WaitingHistoryDto waitingDto = waitingService.getWaiting(waitingCompleteRequestDto.getUserSeq()).toHistoryDto();
+        waitingDto.setWaitingStatusContent(STATUS_COMPLETE);
+        WaitingStatusDto waitingStatusDto = WaitingStatusDto.builder()
+                .waitingSeq(waitingCompleteRequestDto.getWaitingSeq())
+                .waitingStatusContent(STATUS_COMPLETE)
+                .build();
+
+        if(waitingService.updateStatus(waitingStatusDto, waitingDto)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }//updateStatus
 
     /*
      * 웨이팅 입장

@@ -194,13 +194,13 @@ public class WaitingServiceImpl implements WaitingService {
                 // 완료되었습니다 알림 (2시간 뒤 리뷰 작성해주세요 알림)
 
                 // 작성가능후기 DB 추가
-//                restaurantServiceClient.addWriteableReview(
-//                        WriteableReviewDto.builder()
-//                                .restaurantSeq(waitingHistoryDto.getRestaurantSeq())
-//                                .userSeq(waitingHistoryDto.getUserSeq())
-//                                .waitingCompleteDate(waitingStatusDto.getWaitingStatusRegistDate())
-//                                .build()
-//                );
+                restaurantServiceClient.addWriteableReview(
+                        WriteableReviewDto.builder()
+                                .restaurantSeq(waitingHistoryDto.getRestaurantSeq())
+                                .userSeq(waitingHistoryDto.getUserSeq())
+                                .waitingCompleteDate(waitingStatusDto.getWaitingStatusRegistDate())
+                                .build()
+                );
             }else{
                 // 취소되었습니다 알림
                 // 웨이팅 취소 완료 알림
