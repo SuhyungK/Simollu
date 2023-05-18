@@ -222,7 +222,6 @@ class _SearchInitialWidgetState extends State<SearchInitialWidget> {
                       Text('인기 검색어',
                         style: TextStyle(
                             fontStyle: FontStyle.normal,
-                            fontFamily: 'Roboto',
                             fontSize: 20,
                             fontWeight: FontWeight.bold
                         ),
