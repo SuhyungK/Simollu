@@ -26,7 +26,7 @@ public class RedisService {
     public void saveUserFirebaseToken(String key, String token) throws JsonProcessingException{
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
         Map<String, String> map = hashOps.entries(FCM_KEY);
-        map.put(key, objectMapper.writeValueAsString(token));
+        map.put(key, token);
         hashOps.putAll(FCM_KEY, map);
     }
 
