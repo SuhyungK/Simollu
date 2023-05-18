@@ -7,6 +7,7 @@ import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/models/writeableModel.dart';
 import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/review_view_model.dart';
+import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/views/my_page.dart';
 import 'package:simollu_front/views/my_review_widget.dart';
 import 'package:simollu_front/views/review_management_page.dart';
@@ -26,6 +27,7 @@ class WritingReviewPage extends StatefulWidget {
 class _WritingReviewPageState extends State<WritingReviewPage> {
   final reviewViewModel = ReviewViewModel();
   final preferenceViewModel = PreferenceViewModel();
+  UserViewModel userViewModel = Get.find();
 
   List<String> rating = ['아쉬워요', '기다릴만해요'];
   int _selecedRating = -1;
@@ -45,13 +47,15 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      widget.review.restaurantImg ?? 'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
+                      widget.review.restaurantImg ??
+                          'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                      errorBuilder: (context, error, stackTrace) {
+                        // 이미지 로딩 실패 시 대체 이미지 보여주기
                         return Image.network(
-                          'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                          'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20210822_175%2F1629608739877EdSeW_JPEG%2FCocsHIGyvHMjKF7YxPYLJklP.jpg',
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
@@ -229,16 +233,9 @@ class _WritingReviewPageState extends State<WritingReviewPage> {
                     // print('$preferenceList');
                     var reviewSeq = await reviewViewModel.postReview(jsonData);
                     debugPrint(reviewSeq);
+                    await userViewModel.getForkNumber();
                     Future.delayed(Duration.zero, () {
-                      RootController.to.setRootPageTitles("마이 페이지");
-                      RootController.to.setIsMainPage(true);
-                      Navigator.push(
-                        context,
-                        GetPageRoute(
-                          curve: Curves.fastOutSlowIn,
-                          page: () => MyPage(),
-                        ),
-                      );
+                      RootController.to.onWillPop();
                     });
                   }
                 : null,
