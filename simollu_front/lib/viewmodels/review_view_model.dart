@@ -74,6 +74,7 @@ class ReviewViewModel extends GetxController {
           .toList();
       reviewList.value = result;
       // print(decodedList.map((item) => ReviewModel.fromJson(item)).toList().runtimeType);
+
     } catch (error) {
       print("Exception caught: $error");
     }

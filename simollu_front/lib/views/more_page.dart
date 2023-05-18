@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
 import 'package:simollu_front/views/notification_page.dart';
 
+import '../root.dart';
+import 'my_page.dart';
+
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
 
@@ -15,6 +18,7 @@ class MorePage extends StatelessWidget {
           GestureDetector(
             onTap: () {
               debugPrint('공지사항');
+
             },
             child: Container(
               padding: EdgeInsets.all(30),
