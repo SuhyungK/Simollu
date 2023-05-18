@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/restaurant_model.dart';
+import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
 class UserAPI {
@@ -36,6 +37,29 @@ class UserAPI {
       return restaurantList;
     }
 
+    return [];
+  }
+
+  Future<List<ReviewModel>> getReviews() async {
+    await initialize();
+    Uri url = baseUrl.resolve("/api/restaurant/review");
+    final response = await http.get(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      List<ReviewModel> reviewList = [];
+
+      for (dynamic r in responseBody) {
+        reviewList.add(ReviewModel.fromJson(r));
+      }
+      return reviewList;
+    }
     return [];
   }
 

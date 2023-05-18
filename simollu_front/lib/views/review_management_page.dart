@@ -41,7 +41,14 @@ class _ReviewManagementPageState extends State<ReviewManagementPage> {
         body: CustomTabBar(
       length: 2,
       tabs: ['내 리뷰', '작성 가능 리뷰'],
-      tabViews: [MyReview(myReivews: myReviews,), WritableReview(reviews: writeableReviews,)],
+      tabViews: [
+        MyReview(
+          myReivews: myReviews,
+        ),
+        WritableReview(
+          reviews: writeableReviews,
+        )
+      ],
     ));
   }
 }

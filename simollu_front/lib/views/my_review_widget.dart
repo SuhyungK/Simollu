@@ -31,9 +31,11 @@ class MyReview extends StatelessWidget {
                     return Card(
                       elevation: 2.0, //그림자 깊이
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start, // 위젯 위쪽 정렬
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start, // 위젯 위쪽 정렬
                           children: [
                             SizedBox(
                               // height: 180,
@@ -45,7 +47,8 @@ class MyReview extends StatelessWidget {
                                     'assets/dongraejeong.png',
                                     width: 80,
                                     height: 80,
-                                    fit: BoxFit.cover, // 이미지가 Container에 꽉 차게 보이도록 설정
+                                    fit: BoxFit
+                                        .cover, // 이미지가 Container에 꽉 차게 보이도록 설정
                                   ),
                                 ),
                               ),
@@ -99,12 +102,12 @@ class MyReview extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                      padding: EdgeInsets.only(top: 6),
-                                      margin: EdgeInsets.only(top: 19),
-                                      child: _buildRating(review.reviewRating),
+                                    padding: EdgeInsets.only(top: 6),
+                                    margin: EdgeInsets.only(top: 19),
+                                    child: _buildRating(review.reviewRating),
                                     // child: ReviewStarBox(
-                                      //   text: '기다릴만해요',
-                                      // )
+                                    //   text: '기다릴만해요',
+                                    // )
                                   ),
                                 ],
                               ),
@@ -266,12 +269,10 @@ class MyReview extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
-        child: Text(review['text'],
+        child: Text(
+          review['text'],
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-            fontWeight: FontWeight.bold
-          ),
+              color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
         ),
       ),
     );

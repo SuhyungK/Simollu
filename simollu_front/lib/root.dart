@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
@@ -47,6 +48,8 @@ class RootController extends GetxController {
       userViewModel.getProfileImage();
       userViewModel.getForkNumber();
       userViewModel.getInterestRestaurant();
+      ReviewViewModel reviewViewModel = Get.find();
+      reviewViewModel.fetchReviews();
     }
   }
 
