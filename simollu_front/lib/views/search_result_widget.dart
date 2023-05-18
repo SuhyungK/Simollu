@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:simollu_front/services/waiting_api.dart';
+import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -21,6 +23,8 @@ class SearchResultWidget extends StatefulWidget {
   final int restaurantRating;
   final int numberOfPeople;
   final VoidCallback onWait;
+  final String latitude;
+  final String longitude;
 
   const SearchResultWidget({
     Key? key,
@@ -33,6 +37,8 @@ class SearchResultWidget extends StatefulWidget {
     required this.restaurantRating,
     required this.numberOfPeople,
     required this.onWait,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
@@ -41,6 +47,7 @@ class SearchResultWidget extends StatefulWidget {
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
   WaitingViewModel waitingViewModel = Get.find();
+  MapViewModel mapViewModel = Get.find();
   int _numberOfPeople = 1;
 
   void _incrementNumberOfPeople() {
@@ -61,6 +68,12 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
     bool response = await waitingViewModel.postWaiting(
         widget.restaurantSeq, _numberOfPeople, widget.name);
     if (response) {
+      mapViewModel.resetMapData();
+      mapViewModel.destination.value = LatLng(
+        double.parse(widget.latitude),
+        double.parse(widget.longitude),
+      );
+      mapViewModel.restaurantName.value = widget.name;
       RootController.to.setRootPageTitles("");
       RootController.to.setIsMainPage(false);
       RootController.to.searchKey.currentState!.push(

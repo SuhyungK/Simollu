@@ -6,6 +6,7 @@ import 'package:simollu_front/utils/token.dart';
 
 class PreferenceViewModel extends GetxController {
   RxSet<String> preferences = <String>{}.obs;
+  RxList<String> places = <String>[].obs;
 
   late String token;
 
@@ -64,6 +65,12 @@ class PreferenceViewModel extends GetxController {
           ?.cast<String>();
       for (String preference in result) {
         preferences.add(preference);
+      }
+      result =
+          jsonDecode(utf8.decode(response.bodyBytes))['userPreferncePlaceList']
+              ?.cast<String>();
+      for (String place in result) {
+        places.add(place);
       }
       // result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {

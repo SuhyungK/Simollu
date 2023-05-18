@@ -7,8 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/models/place.dart';
+import 'package:simollu_front/root.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/widgets/custom_marker.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 import 'package:simollu_front/widgets/path_recommended.dart';
@@ -59,7 +61,7 @@ class _MapPageState extends State<MapPage> {
                 lat: 0,
                 lng: 0,
                 id: "",
-                name: "동래정",
+                name: mapViewModel.restaurantName.value,
               ),
               "");
         }
