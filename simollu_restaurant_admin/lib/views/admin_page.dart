@@ -13,7 +13,7 @@ class AdminPage extends StatefulWidget {
 }
 
 // 폴링 주기 (밀리초)
-const pollingInterval = 5000;
+const pollingInterval = 2000;
 
 class _AdminPageState extends State<AdminPage> {
 
