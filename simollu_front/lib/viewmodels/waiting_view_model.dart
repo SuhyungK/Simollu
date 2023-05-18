@@ -97,6 +97,17 @@ class WaitingViewModel extends GetxController {
       waitingStatusContent.value = res.waitingStatusContent;
 
       waitingCurRank.value = res.waitingCurRank;
+    } else {
+      waitingSeq.value = -1;
+      waitingNo.value = -1;
+      waitingTime.value = -1;
+      restaurantName.value = "";
+      restaurantSeq.value = -1;
+      waitingPersonCnt.value = -1;
+      waitingStatusRegistDate.value = "";
+      waitingStatusContent.value = -1;
+
+      waitingCurRank.value = -1;
     }
   }
 
