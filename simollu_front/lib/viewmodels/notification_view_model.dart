@@ -49,7 +49,7 @@ class NotificationViewModel {
   }
 
   // 알림 읽음 처리
-  static Future<void> processIsRead(List<NotificationModel> alerts) async {
+  Future<void> processIsRead(List<NotificationModel> alerts) async {
     String token = await getToken();
     var url = createUrl('/alert/user/alert');
 

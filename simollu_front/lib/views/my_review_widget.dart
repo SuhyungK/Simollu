@@ -22,6 +22,25 @@ class MyReview extends StatelessWidget {
             future: myReivews,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 100),
+                          Icon(Icons.speaker_notes_off_outlined,
+                            size: 90,
+                          ),
+                          SizedBox(height: 20),
+                          Text('작성한 리뷰가 없습니다.',
+                            style: TextStyle(
+                                fontSize: 18
+                            ),
+                          )
+                        ],
+                      )
+                  );
+                }
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -119,7 +138,7 @@ class MyReview extends StatelessWidget {
                             Container(
                               margin: EdgeInsets.only(top: 8),
                               child: Text(
-                                '10초 전',
+                                review.reviewRegistDate!.split('T')[0],
                                 style: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 14,

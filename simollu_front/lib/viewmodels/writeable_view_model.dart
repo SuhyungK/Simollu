@@ -34,6 +34,8 @@ class WriteableViewModel {
       final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
       result = (decodedList as List).map((item) =>
         WriteableModel.fromJson(item)).toList();
+    } else if (response.statusCode == 202) {
+
     } else {
       throw Error();
     }
