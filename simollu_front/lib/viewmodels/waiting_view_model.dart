@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simollu_front/models/delay_info_model.dart';
 import 'package:simollu_front/services/waiting_api.dart';
 
 import '../utils/token.dart';
@@ -19,13 +20,19 @@ class WaitingViewModel extends GetxController {
   RxString waitingStatusRegistDate = "".obs;
   RxInt waitingStatusContent = (-1).obs;
   RxInt waitingCurRank = (-1).obs;
+  Rx<DelayInfoModel?> delayInfo = Rx<DelayInfoModel?>(null);
 
   static Uri createUrl(String apiUrl) {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
   }
 
-  Future<void> delayOrder() async {
+  Future<void> getDelayInfo() async {
+    delayInfo.value = await WaitingApi().getDelayInfo(restaurantSeq.value);
+    print(delayInfo.value!.waitingTime.toString() + "adsfsdfsdf");
+  }
+
+  Future<bool> delayOrder() async {
     WaitingRecordModel? res = await WaitingApi().delayOrder(
         waitingSeq.value, restaurantSeq.value, restaurantName.value);
     if (res != null) {
@@ -38,7 +45,9 @@ class WaitingViewModel extends GetxController {
       waitingStatusRegistDate.value = res.waitingStatusRegistDate;
       waitingStatusContent.value = res.waitingStatusContent;
       waitingCurRank.value = res.waitingCurRank;
+      return true;
     }
+    return false;
   }
 
   Future<void> cancelWaiting() async {
@@ -88,6 +97,17 @@ class WaitingViewModel extends GetxController {
       waitingStatusContent.value = res.waitingStatusContent;
 
       waitingCurRank.value = res.waitingCurRank;
+    } else {
+      waitingSeq.value = -1;
+      waitingNo.value = -1;
+      waitingTime.value = -1;
+      restaurantName.value = "";
+      restaurantSeq.value = -1;
+      waitingPersonCnt.value = -1;
+      waitingStatusRegistDate.value = "";
+      waitingStatusContent.value = -1;
+
+      waitingCurRank.value = -1;
     }
   }
 
