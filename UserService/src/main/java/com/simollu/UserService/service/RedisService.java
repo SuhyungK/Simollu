@@ -2,12 +2,12 @@ package com.simollu.UserService.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Map;
 
 @Service
@@ -16,6 +16,7 @@ public class RedisService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
     private final String FCM_KEY = "uft";
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(7);
 
     public RedisService(RedisTemplate<String, Object> redisTemplate, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
@@ -28,6 +29,7 @@ public class RedisService {
         Map<String, String> map = hashOps.entries(FCM_KEY);
         map.put(key, token);
         hashOps.putAll(FCM_KEY, map);
+        redisTemplate.expire(FCM_KEY, EXPIRATION_DURATION); // 유효기간 일주일로 설정
     }
 
     // token 조회
