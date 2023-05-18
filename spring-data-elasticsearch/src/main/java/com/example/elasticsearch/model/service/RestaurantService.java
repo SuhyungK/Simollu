@@ -111,6 +111,8 @@ public class RestaurantService {
                 .restaurantSeq(restaurant.getRestaurantSeq())
                 .restaurantPhoneNumber(restaurant.getRestaurantPhoneNumber())
                 .restaurantLike(checkUserLike(userSeq, restaurantSeq))
+                .restaurantY(restaurant.getRestaurantY())
+                .restaurantX(restaurant.getRestaurantX())
                 .build();
         return restaurantInfoResponse;
     }

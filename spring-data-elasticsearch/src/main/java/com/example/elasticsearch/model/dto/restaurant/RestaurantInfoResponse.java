@@ -18,4 +18,7 @@ public class RestaurantInfoResponse {
     private String restaurantImg;
     private int restaurantRating;
     private boolean restaurantLike;
+    private String restaurantY;
+    private String restaurantX;
+
 }
