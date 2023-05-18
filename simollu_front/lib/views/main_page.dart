@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simollu_front/services/main_api.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -60,12 +61,14 @@ class _MainPageState extends State<MainPage> {
   UserViewModel userViewModel = Get.find();
   MainViewModel mainViewModel = Get.find();
   MapViewModel mapViewModel = Get.find();
+  PreferenceViewModel preferenceViewModel = Get.find();
   WaitingViewModel waitingViewModel = Get.find();
 
   void getData() async {
     await userViewModel.getNickname();
     await mapViewModel.getLocationPermission();
     await waitingViewModel.getWaitingInfo();
+    await preferenceViewModel.getPreference();
 
     if (mapViewModel.locationPermission.value == LocationPermission.denied ||
         mapViewModel.locationPermission.value ==

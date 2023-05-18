@@ -1,60 +1,74 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:simollu_front/models/preferenceModel.dart';
 import 'package:simollu_front/utils/token.dart';
 
-class PreferenceViewModel {
+class PreferenceViewModel extends GetxController {
+  RxSet<String> preferences = <String>{}.obs;
+
   late String token;
 
   Future<void> initialize() async {
     token = await getToken();
   }
 
-  PreferenceViewModel() {
-    initialize();
+  void onChangePreferences(String preference) {
+    if (preferences.contains(preference)) {
+      preferences.remove(preference);
+    } else {
+      preferences.add(preference);
+    }
   }
-  
-  Future<PreferenceModel> postPreference(String json) async {
-    late PreferenceModel result;
-    await initialize();
-    var url = Uri.https('simollu.com', '/api/user/preference');
-    // Uri uri = Uri.parse('https://simollu.com/api/user/preference');
-    final response = await http.post(
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "Authorization" : token
-      },
-        body: json,
-      url);
 
+  Future<void> postPreference(String json) async {
+    await initialize();
+    var url = Uri.https('simollu.com', '/api/user/user/preference');
+    // Uri uri = Uri.parse('https://simollu.com/api/user/preference');
+    final response = await http.post(headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Authorization": token
+    }, body: json, url);
+
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      Map<String, dynamic> responseBody =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      List<dynamic> userPreferenceList = responseBody['userPreferenceList'];
+
+      for (dynamic preference in userPreferenceList) {
+        print(preference);
+        preferences.add(preference);
+      }
     } else {
       throw Exception('Failed to post preferences...');
     }
-    return result;
   }
 
-  Future<List<String>>getPreference() async {
+  Future<List<String>> getPreference() async {
     await initialize();
     late List<String> result;
     var url = Uri.https('simollu.com', '/api/user/user/preference');
 
-    final response = await http.get(url,
+    final response = await http.get(
+      url,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization" : token
+        "Authorization": token
       },
     );
 
     // print(response.body);
     if (response.statusCode == 200) {
-      result = jsonDecode(utf8.decode(response.bodyBytes))['userPrefernceList']?.cast<String>();
+      result = jsonDecode(utf8.decode(response.bodyBytes))['userPrefernceList']
+          ?.cast<String>();
+      for (String preference in result) {
+        preferences.add(preference);
+      }
       // result = PreferenceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to get preferences...');
     }
     return result;
-
   }
 }
