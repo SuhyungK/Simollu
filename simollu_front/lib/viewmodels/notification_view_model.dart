@@ -31,18 +31,29 @@ class NotificationViewModel {
       },
     );
 
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
-      result = (decodedList as List).map((item) => NotificationModel.fromJson(item)).toList();
-    }
+    // final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
+    // result = (decodedList as List).map((item) => NotificationModel.fromJson(item)).toList();
 
     return result;
   }
 
   // 알림 읽음 처리
-  static Future<void> processIsRead(int startSeq, int endSeq) async {
+  static Future<void> processIsRead(List<NotificationModel> alerts) async {
     String token = await getToken();
     var url = createUrl('/alert/user/alert');
+
+    int alertLength = alerts.length;
+    int endSeq = alertLength - 1;
+    int startSeq = 0;
+    for (int i = endSeq; -1 < i ; i--) {
+      if (alerts[i].alertIsRead! == true) {
+        startSeq = i+1;
+      }
+    }
+
+    if (endSeq <= startSeq) return;
+
+
     final response = await http.put(
       url,
       headers: {
