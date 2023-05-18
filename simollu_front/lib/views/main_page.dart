@@ -140,6 +140,53 @@ class _MainPageState extends State<MainPage> {
     }
   ];
 
+  Future<void> _neverSatisfied() async {
+    return showDialog<void>(
+      //다이얼로그 위젯 소환
+      context: context,
+      barrierDismissible: false, // 다이얼로그 이외의 바탕 눌러도 안꺼지도록 설정
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('정말 순서를 뒤로 미루시겠습니까?'),
+          ]),
+          content: SingleChildScrollView(
+            child: ListBody(
+              //List Body를 기준으로 Text 설정
+              children: <Widget>[
+                Obx(
+                  () => Text(
+                      "${waitingViewModel.delayInfo.value!.waitingTeam}번째 순서로 미룹니다."),
+                ),
+                Obx(
+                  () => Text(
+                      "예상 대기 시간은 ${waitingViewModel.delayInfo.value!.waitingTime}분 입니다. "),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('확인'),
+              onPressed: () async {
+                bool res = await waitingViewModel.delayOrder();
+                if (res) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -366,9 +413,10 @@ class _MainPageState extends State<MainPage> {
                                               child: Padding(
                                                 padding: EdgeInsets.all(10),
                                                 child: GestureDetector(
-                                                  onTap: () {
-                                                    waitingViewModel
-                                                        .delayOrder();
+                                                  onTap: () async {
+                                                    await waitingViewModel
+                                                        .getDelayInfo();
+                                                    _neverSatisfied();
                                                   },
                                                   child: Container(
                                                     alignment: Alignment.center,
