@@ -8,7 +8,8 @@ import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/views/liking_things_button.dart';
 
 class LikingThings extends StatefulWidget {
-  const LikingThings({Key? key}) : super(key: key);
+  final bool isLogined;
+  const LikingThings({Key? key, required this.isLogined}) : super(key: key);
 
   @override
   State<LikingThings> createState() => _LikingThingsState();
@@ -16,9 +17,7 @@ class LikingThings extends StatefulWidget {
 
 class _LikingThingsState extends State<LikingThings> {
   List<String> likings = ['독서', '걷기', '사진', '쇼핑', '노래', '휴식', '오락&게임'];
-  late List<String> selectedLikings = [];
-  final preferenceViewModel = PreferenceViewModel();
-
+  PreferenceViewModel preferenceViewModel = Get.find();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,31 +65,32 @@ class _LikingThingsState extends State<LikingThings> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                alignment: WrapAlignment.center,
-                                children:
-                                    List.generate(likings.length, (index) {
-                                  var text = likings[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: CustomButton(
-                                        text: likings[index],
-                                        onPressed: () {
-                                          setState(() {
-                                            if (selectedLikings
-                                                .contains(text)) {
-                                              selectedLikings.remove(text);
-                                            } else {
-                                              selectedLikings.add(text);
-                                            }
-                                            // print(selectedLikings);
-                                          });
-                                        }),
-                                  );
-                                }),
-                              ),
+                              child: Obx(() {
+                                print(preferenceViewModel.preferences);
+                                print(preferenceViewModel.preferences
+                                    .contains(likings[0]));
+                                return Wrap(
+                                  direction: Axis.horizontal,
+                                  alignment: WrapAlignment.center,
+                                  children:
+                                      List.generate(likings.length, (index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: CustomButton(
+                                          text: likings[index],
+                                          isPressed: preferenceViewModel
+                                              .preferences
+                                              .contains(likings[index]),
+                                          onPressed: () {
+                                            preferenceViewModel
+                                                .onChangePreferences(
+                                                    likings[index]);
+                                          }),
+                                    );
+                                  }),
+                                );
+                              }),
                             )
                           ],
                         )))
@@ -104,39 +104,48 @@ class _LikingThingsState extends State<LikingThings> {
           child: SizedBox(
             width: double.infinity,
             height: 50,
-            child: ElevatedButton(
-              onPressed: selectedLikings.length >= 3
-                  ? () async {
-                      // 완료 버튼 눌렀을 때 발생하는 일
-                      final preferenceModel =
-                          PreferenceModel(userPrefernceList: selectedLikings);
-                      final json = preferenceModel.toJson();
-                      final jsonData = jsonEncode(json);
-                      // print(jsonEncode(json));
-                      var result =
-                          await preferenceViewModel.postPreference(jsonData);
-                      debugPrint('사용자의 취향 : ${result.userPrefernceList}');
-                      Get.offAll(Root());
-                    }
-                  // 선택된 취향이 3개보다 작으면 disabled
-                  : null,
-              style: ElevatedButton.styleFrom(
-                  splashFactory: NoSplash.splashFactory,
-                  // backgroundColor: Colors.yellow
-                  backgroundColor: Color(0xFFFFD200)),
-              child: const Text('완료',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 0,
-                    wordSpacing: 0,
-                    height: 1.0,
-                    shadows: [],
-                    decoration: TextDecoration.none,
-                  )),
+            child: Obx(
+              () => ElevatedButton(
+                onPressed: preferenceViewModel.preferences.length >= 3
+                    ? () async {
+                        // 완료 버튼 눌렀을 때 발생하는 일
+                        List<String> selectedLikings = [];
+                        for (String preference
+                            in preferenceViewModel.preferences) {
+                          selectedLikings.add(preference);
+                        }
+                        final preferenceModel =
+                            PreferenceModel(userPrefernceList: selectedLikings);
+                        final json = preferenceModel.toJson();
+                        final jsonData = jsonEncode(json);
+                        // print(jsonEncode(json));
+                        await preferenceViewModel.postPreference(jsonData);
+                        if (widget.isLogined) {
+                          RootController.to.onWillPop();
+                        } else {
+                          Get.offAll(Root());
+                        }
+                      }
+                    // 선택된 취향이 3개보다 작으면 disabled
+                    : null,
+                style: ElevatedButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
+                    // backgroundColor: Colors.yellow
+                    backgroundColor: Color(0xFFFFD200)),
+                child: const Text('완료',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0,
+                      wordSpacing: 0,
+                      height: 1.0,
+                      shadows: [],
+                      decoration: TextDecoration.none,
+                    )),
+              ),
             ),
           ),
         ),

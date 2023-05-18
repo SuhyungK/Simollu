@@ -11,6 +11,7 @@ import 'package:simollu_front/widgets/custom_marker.dart';
 
 class MapViewModel extends GetxController {
   int polylineId = 0;
+  RxString restaurantName = "".obs;
   RxString dong = "내 위치 찾기".obs;
   Rx<LocationPermission> locationPermission = LocationPermission.denied.obs;
   RxList<Place> placeList = <Place>[].obs;
@@ -18,7 +19,8 @@ class MapViewModel extends GetxController {
   RxList<Polyline> polylineList = <Polyline>[].obs;
   RxMap<Place, List<Polyline>> polylineMap = <Place, List<Polyline>>{}.obs;
 
-  Rx<Position?> currentPosition = Rx<Position?>(null);
+  // Rx<Position> currentPosition = Rx<Position?>(null);
+  Rx<LatLng> currentPosition = LatLng(37.5013068, 127.0396597).obs;
 
   Rx<LatLng> start = LatLng(37.5013068, 127.0396597).obs;
   Rx<LatLng> destination = LatLng(37.5047984, 127.0434318).obs;
@@ -41,11 +43,21 @@ class MapViewModel extends GetxController {
     dong.value = newDong;
   }
 
+  void resetMapData() {
+    markers.clear();
+    pathMap.clear();
+    searchPathMap.clear();
+    polylineList.clear();
+    polylineMap.clear();
+    placeList.clear();
+    searchPlaceList.clear();
+  }
+
   Future<void> getLocationPermission() async {
     locationPermission.value = await Geolocator.requestPermission();
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
-      currentPosition.value = position;
+      // currentPosition.value = position;
     });
     if (locationPermission.value != LocationPermission.denied &&
         locationPermission.value != LocationPermission.deniedForever) {
@@ -119,7 +131,7 @@ class MapViewModel extends GetxController {
   }
 
   Future<void> getPlaces(String keyword) async {
-    placeList.value = await KakaoMapAPI().getPlaces(destination.value, keyword);
+    placeList.addAll(await KakaoMapAPI().getPlaces(destination.value, keyword));
   }
 
   Future<void> searchPlaces(String keyword) async {

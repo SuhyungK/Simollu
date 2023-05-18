@@ -18,7 +18,7 @@ class NotificationViewModel {
     Uri url = Uri.https('simollu.com', '/api$apiUrl');
     return url;
   }
-  
+
   // 알림 리스트 조회
   Future<List<NotificationModel>> fetchAlerts() async {
     List<NotificationModel> result = <NotificationModel>[];
@@ -43,6 +43,8 @@ class NotificationViewModel {
     } else {
       print(response.printError);
     }
+    // final decodedList = jsonDecode(utf8.decode(response.bodyBytes));
+    // result = (decodedList as List).map((item) => NotificationModel.fromJson(item)).toList();
     return result;
   }
 
@@ -64,17 +66,17 @@ class NotificationViewModel {
 
 
     final response = await http.put(
-      url,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "Authorization": token
-      },
-      body: jsonEncode(
-        {
-          "startSeq" : startSeq,
-          "endSeq" : endSeq
-        }
-      )
+        url,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Authorization": token
+        },
+        body: jsonEncode(
+            {
+              "startSeq" : startSeq,
+              "endSeq" : endSeq
+            }
+        )
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 String? jwtToken = '';
+String? fcmToken = '';
 
 class TokenStamp {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -23,7 +24,7 @@ class TokenStamp {
   }
 
   Future<String?> getFcmToken() async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    fcmToken = await FirebaseMessaging.instance.getToken();
     return fcmToken;
   }
 
@@ -34,7 +35,8 @@ class TokenStamp {
       try {
         final SharedPreferences prefs = await _prefs;
         if (prefs.getString('token') != null) {
-          print('asdf');
+          fcmToken = prefs.getString('token')!;
+          await tokenStamp();
         }
       } catch(e) {
         throw Error();

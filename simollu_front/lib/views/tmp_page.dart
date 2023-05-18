@@ -27,8 +27,11 @@ class TmpPage extends StatelessWidget {
                 onPressed: () {
                   debugPrint('취향 받기 페이지 이동!!!!!!!!');
                   // Get.to(LikingThings()); //페이지이동
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LikingThings()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              LikingThings(isLogined: false)));
                 },
                 style: OutlinedButton.styleFrom(
                     side: BorderSide(
@@ -81,9 +84,7 @@ class TmpPage extends StatelessWidget {
                 child: Text('임시'),
               ),
               OutlinedButton(
-                onPressed: () {
-
-                },
+                onPressed: () {},
                 child: Text('포크'),
               ),
             ],

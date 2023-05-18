@@ -1,10 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/default_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:simollu_front/services/waiting_api.dart';
+import 'package:simollu_front/viewmodels/map_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
+import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
 
 import '../root.dart';
@@ -19,6 +23,8 @@ class SearchResultWidget extends StatefulWidget {
   final int restaurantRating;
   final int numberOfPeople;
   final VoidCallback onWait;
+  final String latitude;
+  final String longitude;
 
   const SearchResultWidget({
     Key? key,
@@ -31,6 +37,8 @@ class SearchResultWidget extends StatefulWidget {
     required this.restaurantRating,
     required this.numberOfPeople,
     required this.onWait,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
@@ -39,6 +47,7 @@ class SearchResultWidget extends StatefulWidget {
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
   WaitingViewModel waitingViewModel = Get.find();
+  MapViewModel mapViewModel = Get.find();
   int _numberOfPeople = 1;
 
   void _incrementNumberOfPeople() {
@@ -56,25 +65,47 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   }
 
   registWaiting() async {
-    waitingViewModel.postWaiting(
-        widget.restaurantSeq, widget.queueSize, widget.name);
+    bool response = await waitingViewModel.postWaiting(
+        widget.restaurantSeq, _numberOfPeople, widget.name);
+    if (response) {
+      mapViewModel.resetMapData();
+      mapViewModel.destination.value = LatLng(
+        double.parse(widget.latitude),
+        double.parse(widget.longitude),
+      );
+      mapViewModel.restaurantName.value = widget.name;
+      RootController.to.setRootPageTitles("");
+      RootController.to.setIsMainPage(false);
+      RootController.to.searchKey.currentState!.push(
+        GetPageRoute(
+          page: () => MapPage(),
+          transition: Transition.cupertino,
+        ),
+      );
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("여기는 search result widget 페이지");
-    print(widget.imageUrl);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // RootController.to.setRootPageTitles(widget.name);
-        // RootController.to.setIsMainPage(false);
-        Get.to(RestaurantDetailpage(restaurantSeq: widget.restaurantSeq));
+        RootController.to.setRootPageTitles(widget.name);
+        RootController.to.setIsMainPage(false);
+        RootController.to.searchKey.currentState!.push(
+          GetPageRoute(
+            page: () =>
+                RestaurantDetailpage(restaurantSeq: widget.restaurantSeq),
+            transition: Transition.cupertino,
+          ),
+        );
+
+        // Get.to(RestaurantDetailpage(restaurantSeq: widget.restaurantSeq));
         // Navigator.push(context,
         //     MaterialPageRoute(
         //         fullscreenDialog: true,
@@ -105,21 +136,20 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       alignment: Alignment.center,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          widget.imageUrl ??
+                        child: CachedNetworkImage(
+                          imageUrl: widget.imageUrl ??
                               'https://example.com/placeholder.jpg', // imageUrl 값이 없을 경우 대체 이미지 URL 사용
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            // 이미지 로딩 실패 시 대체 이미지 보여주기
-                            return Image.network(
-                              'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            );
-                          },
+                          errorWidget: (context, url, error) =>
+                              CachedNetworkImage(
+                            imageUrl:
+                                'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       // child: ClipRRect(

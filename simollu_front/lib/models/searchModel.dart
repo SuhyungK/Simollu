@@ -10,8 +10,8 @@ class SearchModel {
   late String restaurantName;
   late int restaurantRating;
   late String restaurantImg;
-  late double restaurantX;
-  late double restaurantY;
+  late String restaurantX;
+  late String restaurantY;
   late int restaurantWaitingTime;
   late int restaurantWaitingTeam;
   late double distance;
@@ -23,17 +23,16 @@ class SearchModel {
   // "restaurantY": "37.47838349",
   // "distanceTime": 15.77473767019752
 
-  SearchModel({
-    required this.restaurantSeq,
-    required this.restaurantName,
-    required this.restaurantRating,
-    required this.restaurantImg,
-    required this.restaurantX,
-    required this.restaurantY,
-    required this.restaurantWaitingTime,
-    required this.restaurantWaitingTeam,
-    required this.distance
-  });
+  SearchModel(
+      {required this.restaurantSeq,
+      required this.restaurantName,
+      required this.restaurantRating,
+      required this.restaurantImg,
+      required this.restaurantX,
+      required this.restaurantY,
+      required this.restaurantWaitingTime,
+      required this.restaurantWaitingTeam,
+      required this.distance});
 
   SearchModel.fromMap(Map<String, dynamic>? map) {
     restaurantSeq = map?['restaurantSeq'] ?? '';
@@ -50,8 +49,8 @@ class SearchModel {
         restaurantName = json['restaurantName'] ?? '',
         restaurantRating = json['restaurantRating'],
         restaurantImg = json['restaurantImg'] ?? '',
-        restaurantX = double.parse(json['restaurantX']),
-        restaurantY = double.parse(json['restaurantY']),
+        restaurantX = json['restaurantX'] ?? '0',
+        restaurantY = json['restaurantY'] ?? '0',
         restaurantWaitingTime = json['restaurantWaitingTime'] ?? 0,
         restaurantWaitingTeam = json['restaurantWaitingTeam'] ?? 0,
         distance = json['distance'];

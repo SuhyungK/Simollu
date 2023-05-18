@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:simollu_front/root.dart';
+import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/views/fork_reward_page.dart';
 import 'package:simollu_front/views/interesting_restaurants_page.dart';
 import 'package:simollu_front/views/liking_things_page.dart';
@@ -47,6 +48,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     UserViewModel userViewModel = Get.find();
+    ReviewViewModel reviewViewModel = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -177,12 +179,14 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    userViewModel.fork.value.toString(),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+                                  Obx(
+                                    () => Text(
+                                      userViewModel.fork.value.toString(),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -211,7 +215,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "관심 식당",
                                     style: TextStyle(
@@ -219,12 +223,16 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    "2,000",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  Obx(
+                                    () => Text(
+                                      userViewModel
+                                          .interestRestaurantList.value.length
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -253,7 +261,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "작성 리뷰",
                                     style: TextStyle(
@@ -261,12 +269,15 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    "2,000",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  Obx(
+                                    () => Text(
+                                      reviewViewModel.reviewList.value.length
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -370,7 +381,7 @@ class MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       context,
                       GetPageRoute(
                         curve: Curves.fastOutSlowIn,
-                        page: () => LikingThings(),
+                        page: () => LikingThings(isLogined: true),
                       ),
                     );
                   },

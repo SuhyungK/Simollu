@@ -14,7 +14,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> fcmSetting() async {
+Future<String?> fcmSetting() async {
   // firebase core 기능 사용을 위한 필수 initializing
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -104,5 +104,6 @@ Future<void> fcmSetting() async {
     print("firebaseToken : $firebaseToken");
   }
 
+  return firebaseToken;
 }
 

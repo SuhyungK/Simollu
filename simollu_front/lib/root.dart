@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
+import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
@@ -47,20 +49,15 @@ class RootController extends GetxController {
       userViewModel.getNickname();
       userViewModel.getProfileImage();
       userViewModel.getForkNumber();
+      userViewModel.getInterestRestaurant();
+      ReviewViewModel reviewViewModel = Get.find();
+      reviewViewModel.fetchReviews();
     }
-  }
-
-  void getWaitingInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    WaitingViewModel waitingViewModel = Get.find();
-    waitingViewModel.waitingSeq.value = prefs.getInt('waitingSeq') ?? -1;
-    waitingViewModel.getWaitingInfo();
   }
 
   @override
   void onInit() {
     super.onInit();
-    getWaitingInfo();
   }
 
   Future<bool> onWillPop() async {
@@ -163,7 +160,10 @@ class Root extends GetView<RootController> {
                         print("알림 클릭");
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => NotificationPage()),
+                          GetPageRoute(
+                            curve: Curves.fastOutSlowIn,
+                            page: () => NotificationPage(),
+                          ),
                         );
                       },
                       child: Padding(
