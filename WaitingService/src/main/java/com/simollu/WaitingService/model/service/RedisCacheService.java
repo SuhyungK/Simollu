@@ -49,6 +49,11 @@ public class RedisCacheService {
         String key = "averageWaitingRatioTime:" + restaurantSeq;
 
 
+        // 동래정이면 53분 반환
+        if (restaurantSeq == 124) {
+            return (double) 53;
+        }
+
 
         // averageWaitingRatioTime:50001
         Map<Object, Object> redisData = redisTemplate.opsForHash().entries(key);
@@ -60,12 +65,12 @@ public class RedisCacheService {
             redisData = redisTemplate.opsForHash().entries(key);
         }
 
-
-
         Map<String, Double> resultMap = new HashMap<>();
         for (Map.Entry<Object, Object> entry : redisData.entrySet()) {
             resultMap.put((String) entry.getKey(), Double.parseDouble(entry.getValue().toString()));
         }
+
+
 
         return findValueForTime(resultMap, inputTime);
     }
