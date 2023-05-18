@@ -65,6 +65,7 @@ class _MainPageState extends State<MainPage> {
   void getData() async {
     await userViewModel.getNickname();
     await mapViewModel.getLocationPermission();
+    await waitingViewModel.getWaitingInfo();
 
     if (mapViewModel.locationPermission.value == LocationPermission.denied ||
         mapViewModel.locationPermission.value ==

@@ -53,17 +53,9 @@ class RootController extends GetxController {
     }
   }
 
-  void getWaitingInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    WaitingViewModel waitingViewModel = Get.find();
-    waitingViewModel.waitingSeq.value = prefs.getInt('waitingSeq') ?? -1;
-    waitingViewModel.getWaitingInfo();
-  }
-
   @override
   void onInit() {
     super.onInit();
-    getWaitingInfo();
   }
 
   Future<bool> onWillPop() async {

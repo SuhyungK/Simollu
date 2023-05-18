@@ -54,22 +54,18 @@ class WaitingViewModel extends GetxController {
       waitingStatusContent.value = -1;
 
       waitingCurRank.value = -1;
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('waitingSeq');
     }
   }
 
   Future<bool> postWaiting(
       int restaurantSeq, int waitingPersonCnt, String restaurantName) async {
+    print(waitingPersonCnt.toString() + "웨이팅 사람 수");
     WaitingRecordModel? res = await WaitingApi()
         .postWaiting(restaurantSeq, waitingPersonCnt, restaurantName);
     if (res == null) {
       return false;
     }
     waitingSeq.value = res.waitingSeq;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("waitingSeq", waitingSeq.value);
     // waitingNo.value = res.waitingNo;
     // waitingTime.value = res.waitingTime;
     // this.restaurantName.value = res.restaurantName;
@@ -80,10 +76,8 @@ class WaitingViewModel extends GetxController {
   Future<void> getWaitingInfo() async {
     WaitingRecordModel? res =
         await WaitingApi().getWaitingInfo(waitingSeq.value);
-    print("testset");
-    print(waitingSeq.value);
     if (res != null) {
-      print('rest');
+      waitingSeq.value = res.waitingSeq;
       restaurantSeq.value = res.restaurantSeq;
       waitingPersonCnt.value = res.waitingPersonCnt;
       waitingNo.value = res.waitingNo;
@@ -94,7 +88,6 @@ class WaitingViewModel extends GetxController {
 
       waitingCurRank.value = res.waitingCurRank;
     }
-    print(waitingSeq.value);
   }
 
   // 웨이팅 내역 조회(완료)

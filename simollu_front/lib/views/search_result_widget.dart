@@ -59,7 +59,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
 
   registWaiting() async {
     bool response = await waitingViewModel.postWaiting(
-        widget.restaurantSeq, widget.queueSize, widget.name);
+        widget.restaurantSeq, _numberOfPeople, widget.name);
     if (response) {
       RootController.to.setRootPageTitles("");
       RootController.to.setIsMainPage(false);
