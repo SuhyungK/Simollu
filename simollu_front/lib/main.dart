@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simollu_front/services/waiting_api.dart';
 
-import 'package:simollu_front/utils/fcmSetting.dart';
 import 'package:simollu_front/utils/fcm_setting.dart';
 import 'package:simollu_front/utils/firebase_message.dart';
 import 'package:simollu_front/utils/firebase_options.dart';
@@ -50,7 +49,8 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
 
-  // await NotificationViewModel.fetchAlerts();
+  print(token);
+
   runApp(
     MyApp(),
   );
