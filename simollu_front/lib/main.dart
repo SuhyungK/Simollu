@@ -60,6 +60,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+        fontFamily: '210_Gulim_070'
+      ),
       defaultTransition: Transition.cupertino,
       initialBinding: BindingsBuilder(
         () {
