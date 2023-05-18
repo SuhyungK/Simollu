@@ -145,7 +145,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                           errorWidget: (context, url, error) =>
                               CachedNetworkImage(
                             imageUrl:
-                                'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
+                                'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20210822_175%2F1629608739877EdSeW_JPEG%2FCocsHIGyvHMjKF7YxPYLJklP.jpg',
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,
