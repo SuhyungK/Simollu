@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class RedisService {
     private final String USER_KEY = "u_waiting";
 
     private static final String RESTAURANT_KEY = "restaurant_no:";
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(1);
 
     private static final int STATUS_WAITING = 0;
     private static final int STATUS_CHANGE = 3;
@@ -64,6 +66,7 @@ public class RedisService {
     public void putRedisList(Integer restaurantSeq,Object classType) throws JsonProcessingException {
         String key = RESTAURANT_KEY + restaurantSeq;
         redisTemplate.opsForList().rightPush(key, objectMapper.writeValueAsString(classType));
+        redisTemplate.expire(key, EXPIRATION_DURATION);
     }
 
     /* list 구하기 */
@@ -140,8 +143,9 @@ public class RedisService {
         // Redis HashOperations를 사용하여 Map 데이터를 Redis에 저장합니다.
         HashOperations<String, Object, Object> hashOps = redisTemplate.opsForHash();
         Map<String, String> map = new HashMap<>();
-        hashOps.putAll("u_waiting", map);
+        hashOps.putAll(USER_KEY, map);
         Map<Object, Object> m = hashOps.entries(key);
+        redisTemplate.expire(USER_KEY, EXPIRATION_DURATION);
     }
 
     public void saveUserWaitingToRedis(String key, Object classType) throws JsonProcessingException  {
@@ -149,6 +153,7 @@ public class RedisService {
         Map<Object, Object> map = hashOps.entries(USER_KEY);
         map.put(key, objectMapper.writeValueAsString(classType));
         hashOps.putAll(USER_KEY, map);
+        redisTemplate.expire(USER_KEY, EXPIRATION_DURATION);
     }
 
     // 순서 미루기 사용 여부 확인
