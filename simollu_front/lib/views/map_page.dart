@@ -212,8 +212,11 @@ class _MapPageState extends State<MapPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Obx(
-                () => Text.rich(
+              Obx(() {
+                if (waitingViewModel.waitingSeq.value == -1) {
+                  RootController.to.onWillPop();
+                }
+                return Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
@@ -239,8 +242,8 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ],
                   ),
-                ),
-              ),
+                );
+              }),
               SizedBox(
                 width: 24,
               ),
