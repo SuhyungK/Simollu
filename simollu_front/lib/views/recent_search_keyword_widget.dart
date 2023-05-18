@@ -59,7 +59,6 @@ class _RecentSearchKeywordWidgetState extends State<RecentSearchKeywordWidget> {
                   '모두 삭제',
                   style: TextStyle(
                     color: Colors.black,
-                    fontFamily: 'Roboto',
                     fontSize: 13,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0,
