@@ -11,6 +11,7 @@ import 'package:simollu_front/widgets/custom_marker.dart';
 
 class MapViewModel extends GetxController {
   int polylineId = 0;
+  RxString restaurantName = "".obs;
   RxString dong = "내 위치 찾기".obs;
   Rx<LocationPermission> locationPermission = LocationPermission.denied.obs;
   RxList<Place> placeList = <Place>[].obs;
@@ -39,6 +40,16 @@ class MapViewModel extends GetxController {
         currentPosition.value!.latitude, currentPosition.value!.longitude));
 
     dong.value = newDong;
+  }
+
+  void resetMapData() {
+    markers.clear();
+    pathMap.clear();
+    searchPathMap.clear();
+    polylineList.clear();
+    polylineMap.clear();
+    placeList.clear();
+    searchPlaceList.clear();
   }
 
   Future<void> getLocationPermission() async {
@@ -119,7 +130,7 @@ class MapViewModel extends GetxController {
   }
 
   Future<void> getPlaces(String keyword) async {
-    placeList.value = await KakaoMapAPI().getPlaces(destination.value, keyword);
+    placeList.addAll(await KakaoMapAPI().getPlaces(destination.value, keyword));
   }
 
   Future<void> searchPlaces(String keyword) async {

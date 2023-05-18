@@ -31,6 +31,33 @@ class WaitingApi {
     return false;
   }
 
+  Future<WaitingRecordModel?> delayOrder(
+      int waitingSeq, int restaurantSeq, String restaurantName) async {
+    await initialize();
+
+    Uri url = baseUrl.resolve('/api/waiting/user');
+    final response = await http.put(
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": token
+      },
+      url,
+      body: json.encode({
+        "waitingSeq": waitingSeq,
+        "restaurantSeq": restaurantSeq,
+        "restaurantName": restaurantName,
+      }),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      dynamic responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return WaitingRecordModel.fromJson(responseBody);
+    }
+
+    return null;
+  }
+
   Future<WaitingRecordModel?> getWaitingInfo(int waitingSeq) async {
     await initialize();
 

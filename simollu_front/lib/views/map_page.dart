@@ -7,8 +7,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simollu_front/models/path_segment.dart';
 import 'package:simollu_front/models/place.dart';
+import 'package:simollu_front/root.dart';
 
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
+import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/widgets/custom_marker.dart';
 import 'package:simollu_front/widgets/custom_tabBar.dart';
 import 'package:simollu_front/widgets/path_recommended.dart';
@@ -27,15 +30,16 @@ class _MapPageState extends State<MapPage> {
 
   late StreamSubscription<Position> positionStreamSubscription;
 
+  WaitingViewModel waitingViewModel = Get.find();
+  PreferenceViewModel preferenceViewModel = Get.find();
+
   bool _locationPermission = false;
 
-  late MapViewModel mapViewModel;
+  MapViewModel mapViewModel = Get.find();
 
   @override
   void initState() {
     super.initState();
-
-    mapViewModel = Get.find();
 
     void listening() async {
       await _getCurrentLocation();
@@ -47,8 +51,9 @@ class _MapPageState extends State<MapPage> {
         await mapViewModel.addMarker();
         // 관심 검색하는 부분
 
-        await mapViewModel.getPlaces("PC방");
-
+        for (String place in preferenceViewModel.places) {
+          await mapViewModel.getPlaces(place);
+        }
         if (mapViewModel.placeList.isNotEmpty) {
           for (Place place in mapViewModel.placeList) {
             await mapViewModel.findPaths(
@@ -61,7 +66,7 @@ class _MapPageState extends State<MapPage> {
                 lat: 0,
                 lng: 0,
                 id: "",
-                name: "동래정",
+                name: mapViewModel.restaurantName.value,
               ),
               "");
         }
@@ -207,61 +212,65 @@ class _MapPageState extends State<MapPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '대기번호',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+              Obx(
+                () => Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '대기번호',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                    WidgetSpan(
-                      child: SizedBox(
-                        width: 8,
+                      WidgetSpan(
+                        child: SizedBox(
+                          width: 8,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: '15',
-                      style: TextStyle(
-                        color: Color(0xFFFFD200),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                      TextSpan(
+                        text: waitingViewModel.waitingNo.value.toString(),
+                        style: TextStyle(
+                          color: Color(0xFFFFD200),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
                 width: 24,
               ),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '예상대기시간',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+              Obx(
+                () => Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '예상대기시간',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                    WidgetSpan(
-                      child: SizedBox(
-                        width: 8,
+                      WidgetSpan(
+                        child: SizedBox(
+                          width: 8,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: '60분',
-                      style: TextStyle(
-                        color: Color(0xFFFFD200),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                      TextSpan(
+                        text: "${waitingViewModel.waitingTime.value}분",
+                        style: TextStyle(
+                          color: Color(0xFFFFD200),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -269,8 +278,9 @@ class _MapPageState extends State<MapPage> {
           Expanded(
             child: Stack(
               children: [
-                Obx(
-                  () => GoogleMap(
+                Obx(() {
+                  Set<Marker> markers = Set.from(mapViewModel.markers);
+                  return GoogleMap(
                     polylines: Set<Polyline>.of(mapViewModel.polylineList),
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
@@ -282,8 +292,8 @@ class _MapPageState extends State<MapPage> {
                     zoomControlsEnabled: false,
                     markers: mapViewModel.markers,
                     mapType: MapType.terrain,
-                  ),
-                ),
+                  );
+                }),
                 Positioned(
                   bottom: 20,
                   right: 20,

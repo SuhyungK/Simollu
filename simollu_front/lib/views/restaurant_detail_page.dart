@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/models/waitingTimeModel.dart';
+import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:simollu_front/models/menuInfoModel.dart';
@@ -28,11 +29,24 @@ class RestaurantDetailpage extends StatefulWidget {
 class _RestaurantDetailpageState extends State<RestaurantDetailpage>
     with SingleTickerProviderStateMixin {
   RestaurantViewModel restaurantViewModel = Get.find();
+  UserViewModel userViewModel = Get.find();
   late TabController? _tabController;
   bool toggleChart = false;
 
   getRestaurantDetailInfo() async {
     await restaurantViewModel.fetchRestaurantDetail(widget.restaurantSeq);
+    _isLike = restaurantViewModel.restaurantInfo.value!.restaurantLike;
+  }
+
+  postInterestRestaurant() async {
+    bool response = await userViewModel.postInterestRestaurant(
+        restaurantViewModel.restaurantInfo.value!.restaurantSeq);
+
+    if (response) {
+      setState(() {
+        _isLike = !_isLike;
+      });
+    }
   }
 
   late List<RestaurantReviewModel> reviewList = [];
@@ -152,7 +166,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                                         ? IconButton(
                                             onPressed: () {
                                               setState(() {
-                                                _isLike = false;
+                                                postInterestRestaurant();
                                               });
                                             },
                                             icon: Icon(
@@ -162,7 +176,7 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                                         : IconButton(
                                             onPressed: () {
                                               setState(() {
-                                                _isLike = true;
+                                                postInterestRestaurant();
                                               });
                                             },
                                             icon: Icon(

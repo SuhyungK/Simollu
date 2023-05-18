@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simollu_front/services/main_api.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
 import 'package:simollu_front/views/map_page.dart';
 import 'package:simollu_front/views/restaurant_detail_page.dart';
@@ -60,11 +61,14 @@ class _MainPageState extends State<MainPage> {
   UserViewModel userViewModel = Get.find();
   MainViewModel mainViewModel = Get.find();
   MapViewModel mapViewModel = Get.find();
+  PreferenceViewModel preferenceViewModel = Get.find();
   WaitingViewModel waitingViewModel = Get.find();
 
   void getData() async {
     await userViewModel.getNickname();
     await mapViewModel.getLocationPermission();
+    await waitingViewModel.getWaitingInfo();
+    await preferenceViewModel.getPreference();
 
     if (mapViewModel.locationPermission.value == LocationPermission.denied ||
         mapViewModel.locationPermission.value ==
@@ -84,13 +88,6 @@ class _MainPageState extends State<MainPage> {
     getData();
   }
 
-  // WaitingInfo? waitingInfo;
-  WaitingInfo? waitingInfo = WaitingInfo(
-    expectedWatingTime: 160,
-    restaurant: "바스버거ssssssssssssssssssssssssssssssssssssss",
-    waitingCount: 15,
-    waitingNumber: 2,
-  );
   List<Map<String, Object>> foodTypeIcons = [
     {
       "imagePath": "assets/icons/korean.png",
@@ -143,55 +140,32 @@ class _MainPageState extends State<MainPage> {
     }
   ];
 
-  List<Restaurant> restaurants = [
-    Restaurant(
-      name: "바스버거dddddddddddddddddddddddddddddddddddddddddddddddddd",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-    Restaurant(
-      name: "바스버거",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-    Restaurant(
-      name: "바스버거",
-      imagePath: "assets/basBurgerImg.png",
-      likes: 80.0,
-      watingMinutes: 15,
-      location: "역삼동",
-      distance: 0.5,
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: waitingViewModel.waitingSeq.value == -1
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                RootController.to.setRootPageTitles("");
-                RootController.to.setIsMainPage(false);
-                Navigator.push(
-                  context,
-                  GetPageRoute(
-                    curve: Curves.fastOutSlowIn,
-                    page: () => MapPage(),
-                  ),
-                );
-              },
-              backgroundColor: Colors.amber,
-              icon: Icon(Icons.location_on),
-              label: Text(
-                '경로 보기',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
+      floatingActionButton: Obx(
+        () => waitingViewModel.waitingSeq.value == -1
+            ? Container()
+            : FloatingActionButton.extended(
+                onPressed: () {
+                  RootController.to.setRootPageTitles("");
+                  RootController.to.setIsMainPage(false);
+                  Navigator.push(
+                    context,
+                    GetPageRoute(
+                      curve: Curves.fastOutSlowIn,
+                      page: () => MapPage(),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.amber,
+                icon: Icon(Icons.location_on),
+                label: Text(
+                  '경로 보기',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -360,7 +334,7 @@ class _MainPageState extends State<MainPage> {
                                                         width: 10,
                                                       ),
                                                       Text(
-                                                        "${waitingInfo!.waitingCount}",
+                                                        "${waitingViewModel.waitingCurRank.value}",
                                                       ),
                                                     ],
                                                   ),
@@ -393,7 +367,8 @@ class _MainPageState extends State<MainPage> {
                                                 padding: EdgeInsets.all(10),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    print("순서 바꾸기");
+                                                    waitingViewModel
+                                                        .delayOrder();
                                                   },
                                                   child: Container(
                                                     alignment: Alignment.center,
@@ -417,7 +392,7 @@ class _MainPageState extends State<MainPage> {
                                                       ],
                                                     ),
                                                     child: Text(
-                                                      "순서 바꾸기",
+                                                      "순서 미루기",
                                                       style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.white,

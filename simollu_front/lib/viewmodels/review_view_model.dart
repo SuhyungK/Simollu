@@ -1,13 +1,16 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:simollu_front/models/reviewModel.dart';
 import 'package:simollu_front/utils/token.dart';
 import 'package:http/http.dart' as http;
 
-class ReviewViewModel {
+class ReviewViewModel extends GetxController {
   late int restaurantSeq;
   late int reviewRating;
   late String reviewContent;
+
+  RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
   int? reviewSeq;
 
   Uri createUrl(String apiUrl) {
@@ -66,9 +69,11 @@ class ReviewViewModel {
       // print((decodedList as List).runtimeType);
       // print(decodedList.map((item) => ReviewModel.fromJson(item)).toList().runtimeType);
 
-      result = (decodedList as List).map((item) => ReviewModel.fromJson(item)).toList();
+      result = (decodedList as List)
+          .map((item) => ReviewModel.fromJson(item))
+          .toList();
+      reviewList.value = result;
       // print(decodedList.map((item) => ReviewModel.fromJson(item)).toList().runtimeType);
-
     } catch (error) {
       print("Exception caught: $error");
     }

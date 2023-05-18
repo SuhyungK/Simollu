@@ -17,8 +17,10 @@ import 'package:simollu_front/utils/firebase_options.dart';
 import 'package:simollu_front/utils/token_stamp.dart';
 import 'package:simollu_front/viewmodels/main_view_model.dart';
 import 'package:simollu_front/viewmodels/map_view_model.dart';
+import 'package:simollu_front/viewmodels/preference_view_model.dart';
 import 'package:simollu_front/viewmodels/notification_view_model.dart';
 import 'package:simollu_front/viewmodels/restaurant_view_model.dart';
+import 'package:simollu_front/viewmodels/review_view_model.dart';
 import 'package:simollu_front/viewmodels/search_view_model.dart';
 import 'package:simollu_front/viewmodels/user_view_model.dart';
 import 'package:simollu_front/viewmodels/waiting_view_model.dart';
@@ -70,6 +72,8 @@ class MyApp extends StatelessWidget {
           Get.put(MainViewModel());
           Get.put(WaitingViewModel());
           Get.put(RestaurantViewModel());
+          Get.put(ReviewViewModel());
+          Get.put(PreferenceViewModel());
         },
       ),
       // home: Root(),

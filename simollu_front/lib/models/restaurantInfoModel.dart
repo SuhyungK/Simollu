@@ -8,7 +8,6 @@
 // "restaurantRating": 0
 
 class RestaurantInfoModel {
-
   late int restaurantSeq;
   late String restaurantName;
   late String restaurantCategory;
@@ -17,6 +16,7 @@ class RestaurantInfoModel {
   late String restaurantAddress;
   late String restaurantImg;
   late int restaurantRating;
+  late bool restaurantLike;
 
   RestaurantInfoModel({
     required this.restaurantSeq,
@@ -27,8 +27,8 @@ class RestaurantInfoModel {
     required this.restaurantAddress,
     required this.restaurantImg,
     required this.restaurantRating,
-});
-
+    required this.restaurantLike,
+  });
 
   RestaurantInfoModel.fromJSON(Map<String, dynamic> json)
       : restaurantSeq = json['restaurantSeq'],
@@ -38,6 +38,6 @@ class RestaurantInfoModel {
         restaurantPhoneNumber = json['restaurantPhoneNumber'] ?? '',
         restaurantAddress = json['restaurantAddress'] ?? '',
         restaurantImg = json['restaurantImg'],
-        restaurantRating = json['restaurantRating'];
-  }
-
+        restaurantRating = json['restaurantRating'],
+        restaurantLike = json['restaurantLike'];
+}

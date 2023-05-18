@@ -51,7 +51,9 @@ class _MyWebViewState extends State<MyWebView> {
           //   })
           // );
           if (initial == true) {
-            Get.offAll(() => LikingThings());
+            Get.offAll(() => LikingThings(
+                  isLogined: false,
+                ));
           } else {
             Get.offAll(Root());
           }
