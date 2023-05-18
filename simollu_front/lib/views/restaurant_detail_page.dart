@@ -276,23 +276,30 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => CachedNetworkImage(
+                        errorWidget: (context, url, error) =>
+                            CachedNetworkImage(
                           imageUrl:
                               'https://cdn.pixabay.com/photo/2023/04/28/07/07/cat-7956026_960_720.jpg',
                           width: 80,
                           height: 80,
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(menu.menuName ?? ''),
-                            Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Text(menu.menuPrice ?? ''))
-                          ],
+                      Expanded(
+                        // margin: EdgeInsets.only(left: 10),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                menu.menuName ?? '',
+                                maxLines: 2,
+                              ),
+                              Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Text(menu.menuPrice ?? ''))
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -334,7 +341,6 @@ class _RestaurantDetailpageState extends State<RestaurantDetailpage>
                 Expanded(flex: 7, child: Text(restaurantPhoneNumber ?? '')),
               ],
             ),
-
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simollu_front/models/writeableModel.dart';
+import 'package:simollu_front/root.dart';
 import 'package:simollu_front/views/writing_review_page.dart';
 
 class WritableReview extends StatelessWidget {
@@ -22,21 +23,20 @@ class WritableReview extends StatelessWidget {
                 if (snapshot.data!.isEmpty) {
                   return Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 100),
-                          Icon(Icons.speaker_notes_off_outlined,
-                            size: 90,
-                          ),
-                          SizedBox(height: 20),
-                          Text('작성 가능한 리뷰가 없습니다.',
-                            style: TextStyle(
-                                fontSize: 18
-                            ),
-                          )
-                        ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 100),
+                      Icon(
+                        Icons.speaker_notes_off_outlined,
+                        size: 90,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        '작성 가능한 리뷰가 없습니다.',
+                        style: TextStyle(fontSize: 18),
                       )
-                  );
+                    ],
+                  ));
                 }
                 return ListView.builder(
                     shrinkWrap: true,
@@ -47,9 +47,11 @@ class WritableReview extends StatelessWidget {
                       return Card(
                         elevation: 2.0, //그림자 깊이
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start, // 위젯 위쪽 정렬
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start, // 위젯 위쪽 정렬
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
@@ -58,7 +60,8 @@ class WritableReview extends StatelessWidget {
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) { // 이미지 로딩 실패 시 대체 이미지 보여주기
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // 이미지 로딩 실패 시 대체 이미지 보여주기
                                     return Image.network(
                                       'https://s3.ap-northeast-2.amazonaws.com/dongnealba.assets/stores/6388b351e5f1ee033c04fd5c/pic_1669903185757_0.jpeg',
                                       width: 80,
@@ -68,9 +71,12 @@ class WritableReview extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              SizedBox(width: 10,),
+                              SizedBox(
+                                width: 10,
+                              ),
                               Container(
-                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 5),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +96,6 @@ class WritableReview extends StatelessWidget {
                                         decoration: TextDecoration.none,
                                       ),
                                     ),
-
                                     Container(
                                       margin: EdgeInsets.only(top: 19),
                                       child: Text(
@@ -113,10 +118,11 @@ class WritableReview extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Expanded( // 나머지 공간을 차지하기 위한 Expanded 위젯
+                              Expanded(
+                                // 나머지 공간을 차지하기 위한 Expanded 위젯
                                 child: Container(
-                                  // width: 20,
-                                ),
+                                    // width: 20,
+                                    ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -127,12 +133,16 @@ class WritableReview extends StatelessWidget {
                                     children: [
                                       OutlinedButton(
                                         onPressed: () {
+                                          RootController.to
+                                              .setRootPageTitles("리뷰작성하기");
+                                          RootController.to
+                                              .setIsMainPage(false);
                                           Navigator.push(
                                             context,
                                             GetPageRoute(
-                                              curve: Curves.fastOutSlowIn,
-                                              page: () => WritingReviewPage(review: review)
-                                            ),
+                                                curve: Curves.fastOutSlowIn,
+                                                page: () => WritingReviewPage(
+                                                    review: review)),
                                           );
                                         },
                                         style: OutlinedButton.styleFrom(
