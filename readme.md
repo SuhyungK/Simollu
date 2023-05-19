@@ -8,5 +8,7 @@ calculator-service
 
 그 후 이를 redis에 caching 하게 됩니다.
 
+스케쥴링을 걸어 정해진 시간에 실행됩니다. 
+
 
 
