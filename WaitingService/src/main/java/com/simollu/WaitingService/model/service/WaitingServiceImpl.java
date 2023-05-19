@@ -10,6 +10,8 @@ import com.simollu.WaitingService.model.dto.alert.NotificationRequestDto;
 import com.simollu.WaitingService.model.dto.review.WriteableReviewDto;
 import com.simollu.WaitingService.model.dto.user.RegisterUserForkRequestDto;
 import com.simollu.WaitingService.model.entity.Waiting;
+import com.simollu.WaitingService.model.entity.WaitingLog;
+import com.simollu.WaitingService.repository.WaitingLogRepository;
 import com.simollu.WaitingService.repository.WaitingRepository;
 import com.simollu.WaitingService.repository.WaitingStatusRepository;
 import com.simollu.WaitingService.utils.DateTimeUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,12 +43,19 @@ public class WaitingServiceImpl implements WaitingService {
     private final RestaurantServiceClient restaurantServiceClient; // 레스토랑 서버 통신
     private final UserServiceClient userServiceClient; // 유저 서버 통신
 
+
+    private final WaitingLogRepository waitingLogRepository;
+
+
+
     private static final String RESTAURANT_KEY = "restaurant_no:";
     private static final int STATUS_WAITING = 0; // 웨이팅
     private static final int STATUS_COMPLETE = 1; // 완료
     private static final int STATUS_CANCEL = 2; // 취소
     private static final int STATUS_CHANGE = 3; // 미루기
     private static final int STATUS_DELETE = -1; // 웨이팅 삭제
+
+
 
     /* 웨이팅 걸기 */
     public WaitingDetailDto registWaiting(WaitingHistoryDto waitingHistoryDto) {
@@ -214,6 +224,18 @@ public class WaitingServiceImpl implements WaitingService {
                 );
 
 
+                // 로그 기록
+                Duration duration = Duration.between(waitingStatusDto.getWaitingStatusRegistDate()
+                        , waitingHistoryDto.getWaitingStatusRegistDate());
+                long logtime = duration.toMinutes();
+                WaitingLog.builder()
+                        .restaurantSeq(Long.valueOf(waitingHistoryDto.getRestaurantSeq()))
+                        .waitingPersonCnt(waitingHistoryDto.getWaitingPersonCnt())
+                        .waitingLogRank(waitingStatusDto.getWaitingStatusRank())
+                        .waitingLogTime(logtime)
+                        .waitingStatusRegistDate(waitingHistoryDto.getWaitingStatusRegistDate())
+                        .waitingStatusEntranceDate(waitingStatusDto.getWaitingStatusRegistDate())
+                        .build();
 
             }else{
                 // 취소되었습니다 알림
