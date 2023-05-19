@@ -3,6 +3,11 @@
 
 
 
+user-service
+카카오 소셜 로그인, 로그아웃 
+회원의 기본 정보와 닉네임, 프로필 이미지, 포크, 상태 등을 관리합니다.
+
+
 discovery-service
 port : 8761
 마이크로서비들의 이름과 ip address, port 번호를 관리하는 서비스 입니다.
@@ -22,5 +27,6 @@ spring cloud gateway로 구현했습니다.
 discovery-service를 통해 각각의 서비스들의 이름과 ip address, port를 확인합니다.
 그 이후 요청에 맞는 알맞은 경로를 설정해 줍니다.
 jwt 토큰의 유효성 검증 필터를 적용합니다.
+
 
 
