@@ -10,6 +10,8 @@ import com.simollu.WaitingService.model.dto.alert.NotificationRequestDto;
 import com.simollu.WaitingService.model.dto.review.WriteableReviewDto;
 import com.simollu.WaitingService.model.dto.user.RegisterUserForkRequestDto;
 import com.simollu.WaitingService.model.entity.Waiting;
+import com.simollu.WaitingService.model.entity.WaitingLog;
+import com.simollu.WaitingService.repository.WaitingLogRepository;
 import com.simollu.WaitingService.repository.WaitingRepository;
 import com.simollu.WaitingService.repository.WaitingStatusRepository;
 import com.simollu.WaitingService.utils.DateTimeUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +34,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaitingServiceImpl implements WaitingService {
 
+
+
+
     private final WaitingRepository waitingRepository;
     private final WaitingStatusRepository waitingStatusRepository;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -40,12 +46,19 @@ public class WaitingServiceImpl implements WaitingService {
     private final RestaurantServiceClient restaurantServiceClient; // 레스토랑 서버 통신
     private final UserServiceClient userServiceClient; // 유저 서버 통신
 
+
+    private final WaitingLogRepository waitingLogRepository;
+
+
+
     private static final String RESTAURANT_KEY = "restaurant_no:";
     private static final int STATUS_WAITING = 0; // 웨이팅
     private static final int STATUS_COMPLETE = 1; // 완료
     private static final int STATUS_CANCEL = 2; // 취소
     private static final int STATUS_CHANGE = 3; // 미루기
     private static final int STATUS_DELETE = -1; // 웨이팅 삭제
+
+
 
     /* 웨이팅 걸기 */
     public WaitingDetailDto registWaiting(WaitingHistoryDto waitingHistoryDto) {
@@ -199,8 +212,8 @@ public class WaitingServiceImpl implements WaitingService {
         // 취소/완료면 레디스에서 제거
         if(waitingStatusDto.getWaitingStatusContent() != 0) {
             waitingStatusDto.setWaitingStatusRegistDate(DateTimeUtils.nowFromZone()); // 현재 시간 설정
-                redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq()
-                        , waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
+            redisService.deleteWaiting(waitingHistoryDto.getRestaurantSeq()
+                    , waitingHistoryDto.getWaitingSeq(), STATUS_DELETE);
             if(waitingStatusDto.getWaitingStatusContent() == STATUS_COMPLETE){
                 // 완료되었습니다 알림 (2시간 뒤 리뷰 작성해주세요 알림)
 
@@ -212,6 +225,21 @@ public class WaitingServiceImpl implements WaitingService {
                                 .waitingCompleteDate(waitingStatusDto.getWaitingStatusRegistDate())
                                 .build()
                 );
+
+
+                // 로그 기록
+                Duration duration = Duration.between(waitingStatusDto.getWaitingStatusRegistDate()
+                        , waitingHistoryDto.getWaitingStatusRegistDate());
+                long logtime = duration.toMinutes();
+                WaitingLog waitingLog = WaitingLog.builder()
+                        .restaurantSeq(Long.valueOf(waitingHistoryDto.getRestaurantSeq()))
+                        .waitingPersonCnt(waitingHistoryDto.getWaitingPersonCnt())
+                        .waitingLogRank(waitingStatusDto.getWaitingStatusRank())
+                        .waitingLogTime(logtime)
+                        .waitingStatusRegistDate(waitingHistoryDto.getWaitingStatusRegistDate())
+                        .waitingStatusEntranceDate(waitingStatusDto.getWaitingStatusRegistDate())
+                        .build();
+                waitingLogRepository.save(waitingLog);
 
             }else{
                 // 취소되었습니다 알림
