@@ -18,7 +18,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration("43.200.152.213", 6379);
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration("15.165.129.83", 6379);
         redisConfig.setPassword(RedisPassword.of("12tl6qns!"));
 
         return new LettuceConnectionFactory(redisConfig);

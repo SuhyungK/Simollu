@@ -3,9 +3,6 @@
     "searchSeq": { "type": "keyword" },
     "searchWord": {
       "type": "keyword"
-    },
-    "searchRegistDate": {
-      "type": "time"
     }
   }
 }

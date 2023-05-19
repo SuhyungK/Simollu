@@ -1,4 +1,5 @@
 package com.example.elasticsearch.batch;
+
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -25,15 +26,15 @@ public class SchedulerConfig {
         return taskScheduler;
     }
 
-    @Scheduled(fixedRate = 180000) // 3분마다 실행
-    public void scheduleTask() throws IOException {
-        scheduledTask.searchHistoryTask();
-    }
-
-    @Scheduled(fixedRate = 18000000) // 3분마다 실행
-    public void scheduleTask2() throws IOException {
-        scheduledTask.saveRating();
-    }
+//    @Scheduled(fixedRate = 180000) // 3분마다 실행
+//    public void scheduleTask() throws IOException {
+//        scheduledTask.searchHistoryTask();
+//    }
+//
+//    @Scheduled(fixedRate = 18000000) // 3분마다 실행
+//    public void scheduleTask2() throws IOException {
+//        scheduledTask.saveRating();
+//    }
 
 
 }

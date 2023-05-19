@@ -2,7 +2,7 @@
 # 엔티티 document로 전환해서 ES에 저장
 # POST http://localhost:8080/api/restaurantDocuments
 POST http://localhost:8080/restaurantDocuments
-37.5013068&cy=127.0396597&size=10
+
 ###
 # 포함하는 것 찾기
 # GET http://localhost:8080/api/search/contains?description=동동쓰&cx=126.8828469&cy=37.48272445&size=10

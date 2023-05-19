@@ -1,5 +1,6 @@
 package com.example.elasticsearch.batch;
 
+
 import com.example.elasticsearch.model.dto.search.SearchRankResponse;
 import com.example.elasticsearch.model.service.RestaurantService;
 import com.example.elasticsearch.model.service.SearchService;
