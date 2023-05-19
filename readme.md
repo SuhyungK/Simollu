@@ -2,6 +2,9 @@
 
 
 
+
+알림 서비스 
+FCM 을 활용해 사용자들의 행동에 따라 알림을 제공합니다.
 calculator-service
 과거의 로그를 연산해 예상 대기 시간과 시간별 순위 예상 대기 시간 증가율을 계산합니다.
 그 후 이를 redis에 caching 하게 됩니다.
@@ -43,6 +46,7 @@ spring cloud gateway로 구현했습니다.
 discovery-service를 통해 각각의 서비스들의 이름과 ip address, port를 확인합니다.
 그 이후 요청에 맞는 알맞은 경로를 설정해 줍니다.
 jwt 토큰의 유효성 검증 필터를 적용합니다.
+
 
 
 
