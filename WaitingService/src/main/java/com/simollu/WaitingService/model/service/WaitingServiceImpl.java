@@ -34,6 +34,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaitingServiceImpl implements WaitingService {
 
+
+
+
     private final WaitingRepository waitingRepository;
     private final WaitingStatusRepository waitingStatusRepository;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -228,7 +231,7 @@ public class WaitingServiceImpl implements WaitingService {
                 Duration duration = Duration.between(waitingStatusDto.getWaitingStatusRegistDate()
                         , waitingHistoryDto.getWaitingStatusRegistDate());
                 long logtime = duration.toMinutes();
-                WaitingLog.builder()
+                WaitingLog waitingLog = WaitingLog.builder()
                         .restaurantSeq(Long.valueOf(waitingHistoryDto.getRestaurantSeq()))
                         .waitingPersonCnt(waitingHistoryDto.getWaitingPersonCnt())
                         .waitingLogRank(waitingStatusDto.getWaitingStatusRank())
@@ -236,6 +239,7 @@ public class WaitingServiceImpl implements WaitingService {
                         .waitingStatusRegistDate(waitingHistoryDto.getWaitingStatusRegistDate())
                         .waitingStatusEntranceDate(waitingStatusDto.getWaitingStatusRegistDate())
                         .build();
+                waitingLogRepository.save(waitingLog);
 
             }else{
                 // 취소되었습니다 알림
