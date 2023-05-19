@@ -26,6 +26,6 @@ GET http://localhost:8080/review/writeReviewRedis
 
 
 ###
-GET http://localhost:8081/main/37.50073944/127.0279792
+GET http://localhost:8080/main/37.50073944/127.0279792
 
 
