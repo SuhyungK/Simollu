@@ -50,9 +50,9 @@ public class RedisCacheService {
 
 
         // 동래정이면 53분 반환
-        if (restaurantSeq == 124) {
-            return (double) 53;
-        }
+        // if (restaurantSeq == 124) {
+        //     return (double) 53;
+        // }
 
 
         // averageWaitingRatioTime:50001

@@ -213,6 +213,8 @@ public class WaitingServiceImpl implements WaitingService {
                                 .build()
                 );
 
+
+
             }else{
                 // 취소되었습니다 알림
                 // 웨이팅 취소 완료 알림
