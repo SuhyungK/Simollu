@@ -6,24 +6,32 @@
 
 : 시간 가는 줄 모른다.
 
+## ✔️기획 배경
+
+![simollu-기획배경](https://github.com/chloe73/Algorithm/assets/50287759/afe6fd6e-787b-4170-a49c-b5d58f797fe3)
+
+- 맛집에 웨이팅을 신청한 뒤, 차례가 올 때까지 하염없이 가게 앞에서 기다리는 시간이 너무 무료하고 지루하지 않으신가요?
+- 이에 대해 저희 서비스는 사용자가 맛집에 웨이팅을 신청한 뒤, 사용자의 현재 위치와 가게 위치, 웨이팅 시간을 토대로 웨이팅 시간을 지루하지 않고 알차게 보낼 수 있도록 추천 경로를 제공합니다.
+
 ### 😎핵심기능
 
-1. 웨이팅 기능
+**1. 웨이팅 기능**
    : 순서 미루기 기능도 가능
 
-2. 웨이팅 시간에 따른 놀거리 추천 경로
+<img width="244" alt="스크린샷 2023-05-27 오후 10 20 53" src="https://github.com/chloe73/Algorithm/assets/50287759/18900efc-9e57-40aa-af69-b64d415bee97">
+
+
+**2. 웨이팅 시간에 따른 놀거리 추천 경로**
 
    ![추천경로](https://user-images.githubusercontent.com/50287759/233514348-6c04d800-c515-4d17-9ba6-856e54d102d6.png)
 
-3. 시간대 별 예상 대기시간 통계 (알고리즘 고도화)
+**3. 시간대 별 예상 대기시간 통계 (알고리즘 고도화)**
 
    ![image](https://user-images.githubusercontent.com/50287759/233514583-c1d5d85e-d59b-4350-8fa6-3aee4020ca7d.png)
 
-4. 실시간 인기 검색어
+**4. 실시간 인기 검색어**
 
-   - 지역 별 실시간 처리
-
-   ![image](https://user-images.githubusercontent.com/50287759/233514822-11cfa25d-4a11-4527-a65c-555b245d1200.png)
+<img width="244" alt="스크린샷 2023-05-27 오후 10 17 46" src="https://github.com/chloe73/Algorithm/assets/50287759/0c613fa4-061c-4cc9-bd39-6ee206e6f289">
 
 ## 🌈Figma
 
